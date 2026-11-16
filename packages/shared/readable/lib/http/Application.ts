@@ -3,6 +3,7 @@ import rateLimit from '@fastify/rate-limit';
 import RuntimeError from '../errors/RuntimeError';
 import ValidationError from '../errors/Validation';
 import BaseController from '../controllers/BaseController';
+import BaseGateway from '../gateway/BaseGateway';
 import { ApiError } from '@sentinel/contracts/shared/http';
 import { HttpMethod } from '@sentinel/contracts/shared/routing';
 import { LogLevel } from '../contracts/logging';
@@ -79,6 +80,7 @@ export default class Application{
         this.#registerRequestLogging();
         await this.#mountControllers(discovered.controllers);
         this.#app.get('/health', async () => ({ status: 'ok' }));
+        this.#mountGateways(discovered.gateways);
 
         return this.#app;
     }
@@ -123,6 +125,12 @@ export default class Application{
     async #mountControllers(controllers: Array<new () => BaseController>){
         for(const Controller of controllers){
             await new Controller().register(this.#app);
+        }
+    }
+
+    #mountGateways(gateways: Array<new () => BaseGateway>){
+        for(const Gateway of gateways){
+            new Gateway().register(this.#app);
         }
     }
 }

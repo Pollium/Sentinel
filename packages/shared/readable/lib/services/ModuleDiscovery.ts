@@ -1,4 +1,5 @@
 import BaseController from '../controllers/BaseController';
+import BaseGateway from '../gateway/BaseGateway';
 import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -6,6 +7,7 @@ import { pathToFileURL } from 'node:url';
 export interface Discovered{
     controllers: Array<new () => BaseController>;
     entities: Function[];
+    gateways: Array<new () => BaseGateway>;
 }
 
 export default class ModuleDiscovery{
@@ -17,11 +19,12 @@ export default class ModuleDiscovery{
             .map((entry) => entry.name)
             .sort();
 
-        const discovered: Discovered = { controllers: [], entities: [] };
+        const discovered: Discovered = { controllers: [], entities: [], gateways: [] };
 
         for(const name of names){
             discovered.controllers.push(...await this.#loadDefaults<new () => BaseController>(name, 'controllers'));
             discovered.entities.push(...await this.#loadDefaults<Function>(name, 'models'));
+            discovered.gateways.push(...await this.#loadDefaults<new () => BaseGateway>(name, 'gateways'));
         }
 
         return discovered;
