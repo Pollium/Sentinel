@@ -5,7 +5,6 @@ import { pickProvider } from '../pool/pick-provider';
 import { providerHealth } from '../pool/ProviderHealth';
 import { failureRecorder, NO_STATUS } from '../pool/FailureRecorder';
 import { GatewayFailureCause } from '@sentinel/contracts/usage/domain';
-import { config } from '@/shared/config';
 import { FastifyBaseLogger } from 'fastify';
 
 const RETRYABLE_STATUSES = new Set([401, 403, 404, 408, 429, 500, 502, 503, 504]);
@@ -23,6 +22,7 @@ interface ExecutionPlan{
     signal: AbortSignal;
     log: FastifyBaseLogger;
     caller: AttemptCaller;
+    firstByteMs: number | null;
 }
 
 export interface StreamExecution{
@@ -37,10 +37,10 @@ interface BufferedExecution{
     body: Buffer;
 }
 
-const send = async ({ url, init }: Attempt, signal: AbortSignal): Promise<Response | null> => {
+const send = async ({ url, init }: Attempt, signal: AbortSignal, firstByteMs: number | null): Promise<Response | null> => {
     const controller = new AbortController();
     const abort = () => controller.abort();
-    const timer = setTimeout(abort, config.upstreamFirstByteTimeoutMs);
+    const timer = firstByteMs === null ? undefined : setTimeout(abort, firstByteMs);
     signal.addEventListener('abort', abort);
 
     try{
@@ -88,7 +88,7 @@ export default class ProviderExecutor{
     }
 
     async #run<T extends object>(plan: ExecutionPlan, commit: (response: Response) => Promise<T | null>): Promise<{ provider: Provider } & T>{
-        const { providers, build, signal, log, caller } = plan;
+        const { providers, build, signal, log, caller, firstByteMs } = plan;
         const excluded = new Set<string>();
         let refused: Refused | null = null;
 
@@ -110,7 +110,7 @@ export default class ProviderExecutor{
             excluded.add(provider.id);
 
             const startedAt = Date.now();
-            const response = await send(build(provider), signal);
+            const response = await send(build(provider), signal, firstByteMs);
             if(response === null){
                 failed(provider, 'unreachable', NO_STATUS, startedAt);
                 continue;

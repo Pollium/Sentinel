@@ -6,6 +6,7 @@ import { activeProviders } from '../pool/active-providers';
 import { usageRecorder } from '../pool/UsageRecorder';
 import { trackInFlight } from './InFlight';
 import { secretCipher } from '@/shared/cipher';
+import { config } from '@/shared/config';
 import { authenticateClient, AuthShape } from '@/modules/keys/services/authenticate';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
@@ -45,7 +46,7 @@ export const bufferedProxyHandler = ({ kind, ingress, providerAuth, modelOf }: B
         });
 
         const model = modelOf?.(request.url) ?? kind;
-        const execution = await executor.runBuffered({ providers, build, signal: abort.signal, log: request.log, caller: { apiKeyId: apiKey.id, model } });
+        const execution = await executor.runBuffered({ providers, build, signal: abort.signal, log: request.log, caller: { apiKeyId: apiKey.id, model }, firstByteMs: config.upstreamFirstByteTimeoutMs });
 
         await usageRecorder.record({
             provider: execution.provider,

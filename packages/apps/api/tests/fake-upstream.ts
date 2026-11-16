@@ -10,6 +10,7 @@ interface ScriptedResponse{
     json?: unknown;
     sse?: string;
     raw?: { body: Buffer; contentType: string };
+    afterMs?: number;
 }
 
 interface RecordedCall{
@@ -39,7 +40,7 @@ export default class FakeUpstream{
             this.#app.route({
                 method: route.method,
                 url: route.path,
-                handler: (request, reply) => {
+                handler: async (request, reply) => {
                     this.calls.push({
                         method: request.method,
                         url: request.url,
@@ -51,6 +52,8 @@ export default class FakeUpstream{
                     if(next === undefined){
                         return reply.status(500).send({ error: 'no scripted response' });
                     }
+
+                    if(next.afterMs !== undefined) await new Promise((resolve) => setTimeout(resolve, next.afterMs));
 
                     if(next.sse !== undefined){
                         reply.header('content-type', 'text/event-stream');

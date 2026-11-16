@@ -79,6 +79,20 @@ describe('chat completions proxy', () => {
         });
     });
 
+    it('waits out a whole answer that is not streamed, however long it takes', async () => {
+        await seedChatProvider();
+        await seedChatProvider();
+        const timer = config.upstreamFirstByteTimeoutMs;
+        config.upstreamFirstByteTimeoutMs = 50;
+        upstream.enqueue({ status: 200, json: { id: 'cmpl-slow', choices: [] }, afterMs: 200 });
+
+        const res = await post({ model: 'm1', messages: [{ role: 'user', content: 'hi' }] });
+        config.upstreamFirstByteTimeoutMs = timer;
+
+        expect(res.json()).toMatchObject({ id: 'cmpl-slow' });
+        expect(upstream.calls).toHaveLength(1);
+    });
+
     it('attributes the request to the key that made it', async () => {
         const provider = await seedChatProvider();
         const key = await seedApiKey('snt_second-client', { name: 'Second client' });

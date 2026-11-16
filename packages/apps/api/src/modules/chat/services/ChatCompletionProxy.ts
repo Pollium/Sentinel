@@ -5,6 +5,7 @@ import { completionCeiling } from './CompletionCeiling';
 import { reasoningShape } from './ReasoningShape';
 import { tapSseUsage } from './StreamUsage';
 import { secretCipher } from '@/shared/cipher';
+import { config } from '@/shared/config';
 import { BEARER_AUTH, authenticateClient } from '@/modules/keys/services/authenticate';
 import { Attempt } from '@/modules/providers/contracts/domain/proxy';
 import { activeProviders } from '@/modules/providers/services/pool/active-providers';
@@ -79,7 +80,8 @@ export default class ChatCompletionProxy{
                 };
             };
 
-            const plan = { build, signal: abort.signal, log: request.log, caller: { apiKeyId: apiKey.id, model: body.model } };
+            const firstByteMs = body.stream === true ? config.upstreamFirstByteTimeoutMs : null;
+            const plan = { build, signal: abort.signal, log: request.log, caller: { apiKeyId: apiKey.id, model: body.model }, firstByteMs };
             execution = await this.#executor.runStream({ ...plan, providers: serving });
 
             if(execution.response.status === 400){
