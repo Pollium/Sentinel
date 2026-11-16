@@ -1,0 +1,11 @@
+{
+  "name": "sentinel",
+  "private": true,
+  "scripts": {
+    "infra": "docker compose -f docker-compose.dev.yml up -d --wait",
+    "dev": "pnpm infra && pnpm --parallel --filter @sentinel/api --filter @sentinel/web dev",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "lint": "pnpm -r --if-present lint",
+    "test": "pnpm -r --if-present --workspace-concurrency=1 test"
+  }
+}
