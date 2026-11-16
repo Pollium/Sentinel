@@ -1,9 +1,12 @@
+import { ACCESS_REVOKED, SESSION_EXPIRED } from '@sentinel/contracts/shared/socket';
 import { env } from '../../config/env';
+import { endSession } from '../end-session';
 import { useSessionStore } from '../../store/session';
 import { ChannelStatus, MessageHandler, OutboundFrame, StatusHandler } from '../../contracts/channel';
 
 const INITIAL_BACKOFF_MS = 500;
 const MAX_BACKOFF_MS = 10_000;
+const SESSION_ENDED = [SESSION_EXPIRED, ACCESS_REVOKED];
 
 export default class SocketChannel{
     readonly #path: string;
@@ -68,12 +71,16 @@ export default class SocketChannel{
             this.#setStatus('open');
         };
         socket.onmessage = (event) => this.#dispatch(event.data);
-        socket.onclose = () => this.#onClose();
+        socket.onclose = (event) => this.#onClose(event.code, token);
     }
 
-    #onClose(){
+    #onClose(code: number, token: string | null){
         this.#socket = null;
         if(this.#released) return;
+        if(SESSION_ENDED.includes(code) && token === useSessionStore.getState().token){
+            void endSession(token);
+            return;
+        }
         this.#scheduleReconnect();
     }
 
