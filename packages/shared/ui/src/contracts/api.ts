@@ -1,3 +1,13 @@
+export interface RequestMeta{
+    token: string | null;
+}
+
+declare module 'alova'{
+    interface AlovaCustomTypes{
+        meta: RequestMeta;
+    }
+}
+
 export type Request<A extends readonly unknown[], O> = (...args: A) => PromiseLike<O>;
 
 export type PendingArgs<A extends readonly unknown[]> = { [K in keyof A]: A[K] | undefined };

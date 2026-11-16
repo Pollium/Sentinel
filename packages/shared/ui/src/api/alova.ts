@@ -3,6 +3,8 @@ import ReactHook from 'alova/react';
 import { env } from '../config/env';
 import { ApiError } from '../services/ApiError';
 import { answerOf, NETWORK_FAILED } from './answer';
+import { requestAuth } from './request-auth';
+import { useSessionStore } from '../store/session';
 import { createAlova } from 'alova';
 
 export const alova = createAlova({
@@ -15,17 +17,20 @@ export const alova = createAlova({
 
     beforeRequest(method){
         const isJson = method.data !== undefined;
+        const token = useSessionStore.getState().token;
 
         method.config.headers['Content-Type'] = isJson ? 'application/json' : '';
+        method.meta = { token };
+        Object.assign(method.config.headers, requestAuth(token));
     },
 
     responded: {
-        async onSuccess(response){
+        async onSuccess(response, method){
             const payload = response.status === 204
                 ? undefined
                 : await response.json().catch(() => undefined);
 
-            return answerOf(response.status, response.statusText, payload);
+            return answerOf(response.status, response.statusText, payload, method.meta?.token ?? null);
         },
 
         onError(error){
