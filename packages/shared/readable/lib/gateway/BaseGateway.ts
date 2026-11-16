@@ -6,7 +6,6 @@ import { channelByGateway } from '../decorators/gateway/Channel';
 import { handlersByGateway } from '../decorators/gateway/Gateway';
 import { getClassMiddleware } from '../decorators/middleware/Middleware';
 import { GatewayError } from '../errors/Gateway';
-import { abortScope } from '../services/AbortScope';
 import { createContext } from './create-context';
 import { logger } from '../utils/Logger';
 import { ACCESS_REVOKED, SESSION_EXPIRED } from '@sentinel/contracts/shared/socket';
@@ -57,7 +56,7 @@ export default abstract class BaseGateway{
         }, REAUTHORIZE_MS);
 
         socket.on('message', (raw: Buffer) => {
-            abortScope.run(disconnected.signal, () => this.#dispatch(socket, req, raw.toString()));
+            void this.#dispatch(socket, req, raw.toString(), disconnected.signal);
         });
 
         socket.on('close', () => {
@@ -77,7 +76,6 @@ export default abstract class BaseGateway{
     async #reauthorize(socket: WebSocket, req: FastifyRequest){
         try{
             await this.#authorizations.get(req)?.();
-            await this.connections.reauthorize(socket);
         }catch(error){
             this.#closeAfterFailedCheck(socket, error);
         }
@@ -93,7 +91,7 @@ export default abstract class BaseGateway{
         socket.close(CHECK_FAILED, 'check failed');
     }
 
-    async #dispatch(socket: WebSocket, req: FastifyRequest, raw: string){
+    async #dispatch(socket: WebSocket, req: FastifyRequest, raw: string, disconnected: AbortSignal){
         const frame = this.#parseFrame(raw);
         if(!frame){
             this.#sendError(socket, GatewayError.MalformedFrame());
@@ -102,7 +100,7 @@ export default abstract class BaseGateway{
 
         const handlerName = this.#messageHandlers.get(frame.type);
         if(handlerName === undefined){
-            this.#sendError(socket, GatewayError.UnknownMessageType(), frame);
+            this.#sendError(socket, GatewayError.UnknownMessageType());
             return;
         }
 
@@ -115,8 +113,8 @@ export default abstract class BaseGateway{
                 });
             }
         }catch(error){
-            if(abortScope.signal()?.aborted === true) return;
-            this.#handleError(socket, error, frame);
+            if(disconnected.aborted) return;
+            this.#handleError(socket, error);
         }
     }
 
@@ -143,26 +141,20 @@ export default abstract class BaseGateway{
         return method.apply(this, args);
     }
 
-    #handleError(socket: WebSocket, error: unknown, frame: InboundFrame){
+    #handleError(socket: WebSocket, error: unknown){
         if(error instanceof RuntimeError){
-            this.#sendError(socket, error, frame);
+            this.#sendError(socket, error);
             return;
         }
 
-        this.#sendError(socket, GatewayError.Internal(), frame);
+        this.#sendError(socket, GatewayError.Internal());
     }
 
     #send(socket: WebSocket, message: OutboundMessage<unknown>){
         socket.send(JSON.stringify(message));
     }
 
-    #sendError(socket: WebSocket, error: RuntimeError, frame?: InboundFrame){
-        const sessionId = (frame === undefined) ? undefined : frame.sessionId;
-        const scope = (typeof sessionId === 'string') ? { sessionId } : {};
-
-        socket.send(JSON.stringify({
-            error: error.message,
-            ...scope
-        }));
+    #sendError(socket: WebSocket, error: RuntimeError){
+        socket.send(JSON.stringify({ error: error.message }));
     }
 }

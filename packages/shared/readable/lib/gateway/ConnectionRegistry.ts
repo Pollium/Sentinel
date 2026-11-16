@@ -1,22 +1,20 @@
-import { OutboundMessage, RoomAccess } from '../contracts/gateway';
-import { WebSocket } from '@fastify/websocket';
+import { OutboundMessage, Recipient } from '../contracts/gateway';
 
 export default class ConnectionsRegistry{
-    #sockets = new Set<WebSocket>();
-    #rooms = new Map<string, Set<WebSocket>>();
-    #memberships = new WeakMap<WebSocket, Set<string>>();
-    #access = new WeakMap<WebSocket, Map<string, RoomAccess>>();
+    #sockets = new Set<Recipient>();
+    #rooms = new Map<string, Set<Recipient>>();
+    #memberships = new WeakMap<Recipient, Set<string>>();
 
-    add(socket: WebSocket){
+    add(socket: Recipient){
         this.#sockets.add(socket);
     }
 
-    remove(socket: WebSocket){
+    remove(socket: Recipient){
         this.leaveAll(socket);
         this.#sockets.delete(socket);
     }
 
-    join(socket: WebSocket, room: string, access?: RoomAccess){
+    join(socket: Recipient, room: string){
         let members = this.#rooms.get(room);
         if(!members){
             members = new Set();
@@ -28,31 +26,20 @@ export default class ConnectionsRegistry{
         const memberships = this.#memberships.get(socket) ?? new Set<string>();
         memberships.add(room);
         this.#memberships.set(socket, memberships);
-
-        if(access === undefined) return;
-        const granted = this.#access.get(socket) ?? new Map<string, RoomAccess>();
-        granted.set(room, access);
-        this.#access.set(socket, granted);
     }
 
-    leave(socket: WebSocket, room: string){
+    leave(socket: Recipient, room: string){
         const members = this.#rooms.get(room);
         members?.delete(socket);
         if(members?.size === 0) this.#rooms.delete(room);
 
         this.#memberships.get(socket)?.delete(room);
-        this.#access.get(socket)?.delete(room);
     }
 
-    leaveAll(socket: WebSocket){
+    leaveAll(socket: Recipient){
         for(const room of this.#memberships.get(socket) ?? []) this.leave(socket, room);
 
         this.#memberships.delete(socket);
-        this.#access.delete(socket);
-    }
-
-    async reauthorize(socket: WebSocket){
-        for(const access of this.#access.get(socket)?.values() ?? []) await access();
     }
 
     has(room: string): boolean{
@@ -63,25 +50,13 @@ export default class ConnectionsRegistry{
         this.#send(this.#sockets, message);
     }
 
-    sendTo(socket: WebSocket, message: OutboundMessage<unknown>){
-        this.#send([socket], message);
-    }
-
     sendToRoom(room: string, message: OutboundMessage<unknown>){
         const members = this.#rooms.get(room);
         if(members) this.#send(members, message);
     }
 
-    sendToRooms(rooms: string[], message: OutboundMessage<unknown>){
-        this.#send(new Set(rooms.flatMap((room) => [...this.#rooms.get(room) ?? []])), message);
-    }
-
-    #send(sockets: Iterable<WebSocket>, message: OutboundMessage<unknown>){
+    #send(sockets: Iterable<Recipient>, message: OutboundMessage<unknown>){
         const raw = JSON.stringify(message);
         for(const socket of sockets) socket.send(raw);
-    }
-
-    get size(): number{
-        return this.#sockets.size;
     }
 }

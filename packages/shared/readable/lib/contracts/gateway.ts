@@ -8,7 +8,9 @@ export interface OutboundMessage<T>{
     data: T;
 }
 
-export type RoomAccess = () => Promise<unknown>;
+export interface Recipient{
+    send(raw: string): void;
+}
 
 export interface GatewayHandler{
     type: string;
