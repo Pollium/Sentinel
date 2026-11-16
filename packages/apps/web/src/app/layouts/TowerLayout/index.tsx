@@ -1,6 +1,7 @@
 import TowerNav from '@/app/components/TowerNav';
 import TowerTabBar from '@/app/components/TowerTabBar';
 import TowerJumpTo from '@/app/components/TowerJumpTo';
+import AccountMenu from '@/modules/auth/components/AccountMenu';
 import { usePageToolbar } from '@sentinel/ui/store/page-toolbar';
 import NavDrawer from '@sentinel/ui/components/NavDrawer';
 import NavToggle from '@sentinel/ui/components/layout/NavToggle';
@@ -49,6 +50,7 @@ const TowerLayout = () => {
 
                         <div className='flex shrink-0 items-center justify-end gap-1'>
                             <ThemeToggle />
+                            <AccountMenu operator={session.operator} onRenamed={session.reloadOperator} />
                         </div>
                     </header>
 
