@@ -1,8 +1,9 @@
 import 'reflect-metadata';
-import BaseGateway, { ACCESS_REVOKED, REAUTHORIZE_MS, SESSION_EXPIRED } from '../lib/gateway/BaseGateway';
+import BaseGateway, { CHECK_FAILED, REAUTHORIZE_MS } from '../lib/gateway/BaseGateway';
 import JWTService from '../lib/auth/JWTService';
 import { SocketAuthenticatedRoute } from '../lib/auth/SocketAuthenticatedRoute';
 import { sessionCutoffs } from '../lib/auth/verifiedSession';
+import { AuthError } from '../lib/auth/errors';
 import { configure } from '../lib/config';
 import { Channel } from '../lib/decorators/gateway/Channel';
 import { OnMessage } from '../lib/decorators/gateway/Gateway';
@@ -11,22 +12,21 @@ import { Middleware } from '../lib/decorators/middleware/Middleware';
 import websocket, { WebSocket } from '@fastify/websocket';
 import jsonwebtoken from 'jsonwebtoken';
 import Fastify, { FastifyInstance } from 'fastify';
+import { ACCESS_REVOKED, SESSION_EXPIRED } from '@sentinel/contracts/shared/socket';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const CHANNEL = '/probe';
 const JWT_SECRET = 'test-jwt-secret';
 const ROOM = 'probe:room';
 
-let roomOpen = true;
+let roomAccess = async () => {};
 
 @Channel(CHANNEL)
 @Middleware(SocketAuthenticatedRoute)
 class ProbeGateway extends BaseGateway{
     @OnMessage('probe.join')
     join(@Socket() socket: WebSocket){
-        this.connections.join(socket, ROOM, async () => {
-            if(!roomOpen) throw new Error('left the room');
-        });
+        this.connections.join(socket, ROOM, () => roomAccess());
 
         return { joined: true };
     }
@@ -76,7 +76,7 @@ describe('a live socket follows current authorization', () => {
     });
 
     beforeEach(() => {
-        roomOpen = true;
+        roomAccess = async () => {};
         vi.spyOn(sessionCutoffs, 'cutoffOf').mockResolvedValue(null);
     });
 
@@ -109,10 +109,35 @@ describe('a live socket follows current authorization', () => {
         const client = await connect(jwt.sign('user-1'));
         await joined(client);
 
-        roomOpen = false;
+        roomAccess = async () => {
+            throw AuthError.Unauthorized();
+        };
         vi.advanceTimersByTime(REAUTHORIZE_MS);
 
         expect(await client.closed).toBe(ACCESS_REVOKED);
+    });
+
+    it('closes with a code that keeps the session when the cutoff store cannot answer', async () => {
+        vi.useFakeTimers({ toFake: ['setInterval'] });
+        const client = await connect(jwt.sign('user-1'));
+
+        vi.spyOn(sessionCutoffs, 'cutoffOf').mockRejectedValue(new Error('connect ECONNREFUSED'));
+        vi.advanceTimersByTime(REAUTHORIZE_MS);
+
+        expect(await client.closed).toBe(CHECK_FAILED);
+    });
+
+    it('closes with a code that keeps the session when a room check cannot run', async () => {
+        vi.useFakeTimers({ toFake: ['setInterval'] });
+        const client = await connect(jwt.sign('user-1'));
+        await joined(client);
+
+        roomAccess = async () => {
+            throw new Error('connection terminated');
+        };
+        vi.advanceTimersByTime(REAUTHORIZE_MS);
+
+        expect(await client.closed).toBe(CHECK_FAILED);
     });
 
     it('stays open while every check still holds', async () => {

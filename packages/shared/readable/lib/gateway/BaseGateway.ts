@@ -8,12 +8,14 @@ import { getClassMiddleware } from '../decorators/middleware/Middleware';
 import { GatewayError } from '../errors/Gateway';
 import { abortScope } from '../services/AbortScope';
 import { createContext } from './create-context';
+import { logger } from '../utils/Logger';
+import { ACCESS_REVOKED, SESSION_EXPIRED } from '@sentinel/contracts/shared/socket';
 import { WebSocket } from '@fastify/websocket';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 
 export const REAUTHORIZE_MS = 30_000;
-export const SESSION_EXPIRED = 4401;
-export const ACCESS_REVOKED = 4403;
+export const CHECK_FAILED = 1011;
+const SERVER_ERROR_STATUS = 500;
 
 export default abstract class BaseGateway{
     protected readonly connections = new ConnectionsRegistry();
@@ -76,9 +78,19 @@ export default abstract class BaseGateway{
         try{
             await this.#authorizations.get(req)?.();
             await this.connections.reauthorize(socket);
-        }catch{
-            socket.close(ACCESS_REVOKED, 'access revoked');
+        }catch(error){
+            this.#closeAfterFailedCheck(socket, error);
         }
+    }
+
+    #closeAfterFailedCheck(socket: WebSocket, error: unknown){
+        if(error instanceof RuntimeError && error.statusCode < SERVER_ERROR_STATUS){
+            socket.close(ACCESS_REVOKED, 'access revoked');
+            return;
+        }
+
+        logger.error('Gateway::CheckFailed', error, { scope: 'gateway' });
+        socket.close(CHECK_FAILED, 'check failed');
     }
 
     async #dispatch(socket: WebSocket, req: FastifyRequest, raw: string){
