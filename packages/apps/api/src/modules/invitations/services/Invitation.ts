@@ -10,13 +10,12 @@ import { Session } from '@/modules/auth/contracts/domain/session';
 import { InvitationError } from '../contracts/domain/errors';
 import { CreatedInvitation } from '../contracts/domain/invitation';
 import { config } from '@/shared/config';
-import { createHash, randomBytes } from 'node:crypto';
+import { hashOf } from '@/modules/keys/utils/key-secret';
+import { randomBytes } from 'node:crypto';
 import { MoreThan } from 'typeorm';
 
 const INVITATION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 const TOKEN_BYTES = 32;
-
-const hashOf = (token: string): string => createHash('sha256').update(token).digest('hex');
 
 const unexpired = () => MoreThan(new Date());
 
