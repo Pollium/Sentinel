@@ -29,7 +29,8 @@ web ──/api──▶ api /tower/*   (operator JWT, ws /api/tower/live)
   it. Publish the api port; the web is not in the clients' path.
 - The web calls the api at `VITE_API_URL`, or at `${origin}/api` when it is empty. In dev the Vite
   proxy maps `/api` → 8080 (stripped, with the websocket); in the self-hosted stack
-  `deploy/nginx.conf` does the same.
+  `deploy/nginx.conf` does the same; on Quantum the web calls the api host cross-origin, so the api
+  gets `CORS_ORIGIN`.
 - Operators are the api's own accounts, email and password. The first one is created at `/setup`,
   which stays open only while no operator exists; the rest join by an invitation link, from the
   console or from the shell (`pnpm --filter @sentinel/api invite <email>`). Every operator can do
@@ -68,6 +69,8 @@ This file is a router, not a manual. Read the file that matches your task before
 
 - `docker-compose.yml` is the self-hosted stack (Postgres, Redis, api, web behind nginx), configured
   from the root `.env`.
+- `compose.quantum.yml` is production on Quantum, where every `${VAR}` without a default is a
+  required stack variable: `POSTGRES_PASSWORD`, `ENCRYPTION_KEY`, `JWT_SECRET`, `WEB_URL`, `API_URL`.
 - `ENCRYPTION_KEY` encrypts every provider's key. Moving a database to a new stack means moving the
   key with it; with another key no provider decrypts and the pool serves nothing.
 - Until an operator exists, anyone who reaches the api can claim the first account through setup.
