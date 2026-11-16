@@ -1,0 +1,285 @@
+@import "@heroui/styles";
+
+@source "../../../../../shared/ui/src";
+
+@theme inline {
+    --color-canvas: var(--canvas);
+}
+
+@theme static {
+    --ease-emphasized: cubic-bezier(0.22, 1, 0.36, 1);
+    --duration-quick: 140ms;
+    --duration-base: 320ms;
+    --duration-slow: 420ms;
+    --duration-page: 280ms;
+}
+
+:root,
+.light,
+[data-theme="light"],
+.dark,
+[data-theme="dark"] {
+    --accent: var(--foreground);
+    --accent-foreground: var(--canvas);
+    --accent-soft-foreground: var(--default-foreground);
+}
+
+:root,
+.light,
+[data-theme="light"] {
+    --canvas: #f5f5f5;
+    --background: rgba(245, 245, 245, 0.9);
+    --dashboard-surface: rgba(238, 238, 240, 0.75);
+    --surface: rgba(255, 255, 255, 0.75);
+    --surface-secondary: rgba(232, 232, 234, 0.8);
+    --surface-tertiary: rgba(224, 224, 227, 0.85);
+    --overlay: rgba(255, 255, 255, 0.72);
+    --field-background: rgba(255, 255, 255, 0.55);
+}
+
+:root:not(.dark, [data-theme="dark"]),
+.light,
+[data-theme="light"] {
+    --muted: oklch(0.51 0.013 286);
+    --success-soft-foreground: oklch(0.45 0.13 152);
+    --warning-soft-foreground: oklch(0.5 0.12 75);
+    --danger-soft-foreground: oklch(0.5 0.16 25);
+}
+
+.dark,
+[data-theme="dark"] {
+    --canvas: #090909;
+    --background: rgba(9, 9, 9, 0.85);
+    --dashboard-surface: rgba(20, 20, 22, 0.75);
+    --surface: rgba(28, 28, 32, 0.75);
+    --surface-secondary: rgba(42, 42, 46, 0.8);
+    --surface-tertiary: rgba(52, 52, 56, 0.85);
+    --overlay: rgba(24, 24, 27, 0.68);
+    --field-background: rgba(23, 23, 25, 0.55);
+}
+
+html.dark,
+html[data-theme="dark"] {
+    --sileo-state-success: oklch(0.48 0.13 152);
+    --sileo-state-warning: oklch(0.53 0.12 74);
+    --sileo-state-info: oklch(0.5 0.14 245);
+    --sileo-state-error: oklch(0.5 0.18 25);
+    --sileo-state-loading: oklch(0.45 0 0);
+}
+
+html {
+    background-color: var(--canvas);
+}
+
+:root,
+.light,
+[data-theme="light"],
+.dark,
+[data-theme="dark"] {
+    --glass-blur: 16px;
+    --glass-saturation: 1.2;
+    --glass-backdrop: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+}
+
+.glass-surface,
+.combo-box__popover,
+.dropdown__popover,
+.select__popover,
+.modal__dialog {
+    -webkit-backdrop-filter: var(--glass-backdrop);
+    backdrop-filter: var(--glass-backdrop);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+    :root {
+        --glass-backdrop: none;
+    }
+}
+
+:root,
+.light,
+[data-theme="light"],
+.dark,
+[data-theme="dark"] {
+    --field-shadow: 0 0 0 0 transparent inset;
+    --field-border-width: 1px;
+    --field-border: var(--border);
+}
+
+:root,
+.light,
+[data-theme="light"],
+.dark,
+[data-theme="dark"] {
+    --scrollbar-width: none;
+}
+
+* {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+    display: none;
+}
+
+.button {
+    --spacing: 0.3rem;
+}
+
+:root {
+    --page-transition-duration: var(--duration-page);
+    --layout-transition-duration: var(--duration-slow);
+    --app-header-height: 3.5rem;
+}
+
+@keyframes enter-rise {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-enter {
+    animation: enter-rise var(--duration-page) var(--ease-emphasized) both;
+}
+
+.nav-indicator {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: color-mix(in oklab, var(--foreground) 6%, transparent);
+}
+
+.app-sidebar {
+    width: 14rem;
+    transition: width var(--layout-transition-duration) var(--ease-emphasized);
+}
+
+.app-sidebar[data-state="idle"] {
+    width: 0;
+}
+
+.app-sidebar > * {
+    transition: opacity var(--duration-base) var(--ease-emphasized);
+}
+
+.app-sidebar[data-state="idle"] > * {
+    opacity: 0;
+}
+
+:root {
+    --app-tabbar-height: 0px;
+}
+
+@media (width < 64rem) {
+    :root {
+        --app-tabbar-height: calc(3.5rem + env(safe-area-inset-bottom));
+    }
+}
+
+.chrome-tabbar {
+    height: var(--app-tabbar-height);
+    transition: height var(--layout-transition-duration) var(--ease-emphasized)
+        var(--page-transition-duration);
+}
+
+.nav-drawer__backdrop {
+    opacity: 1;
+    transition: opacity var(--layout-transition-duration) var(--ease-emphasized);
+}
+
+.nav-drawer__panel {
+    opacity: 1;
+    transform: translateX(0);
+    transition:
+        opacity var(--layout-transition-duration) var(--ease-emphasized),
+        transform var(--layout-transition-duration) var(--ease-emphasized);
+}
+
+@starting-style {
+    .nav-drawer__backdrop {
+        opacity: 0;
+    }
+
+    .nav-drawer__panel {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nav-drawer__panel {
+        transform: none;
+    }
+
+    .nav-drawer__backdrop,
+    .nav-drawer__panel {
+        transition-duration: var(--duration-quick);
+    }
+}
+
+.chrome-frame {
+    padding: 0.5rem;
+    transition: padding var(--layout-transition-duration) var(--ease-emphasized);
+}
+
+.chrome-surface {
+    border-radius: 1rem;
+    transition: border-radius var(--layout-transition-duration) var(--ease-emphasized);
+}
+
+.dark .chrome-surface,
+[data-theme="dark"] .chrome-surface {
+    background: var(--background);
+}
+
+@media (width < 64rem) {
+    .chrome-frame {
+        padding: 0;
+    }
+
+    .chrome-surface {
+        border-radius: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .animate-enter {
+        animation: none;
+    }
+
+    .app-sidebar,
+    .app-sidebar > *,
+    .chrome-frame,
+    .chrome-surface {
+        transition: none;
+    }
+}
+
+html [data-sileo-viewport] {
+    z-index: 80;
+}
+
+html [data-sileo-title] {
+    text-transform: none;
+}
+
+html [data-sileo-viewport][data-theme="dark"] [data-sileo-description] {
+    color: rgba(0, 0, 0, 0.68);
+}
+
+html [data-sileo-viewport][data-theme="light"] [data-sileo-description] {
+    color: rgba(255, 255, 255, 0.72);
+}
+
+@media (width < 64rem) {
+    html [data-sileo-viewport][data-position^="bottom"] {
+        bottom: calc(3.5rem + env(safe-area-inset-bottom, 0px));
+    }
+}
