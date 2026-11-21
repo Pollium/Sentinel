@@ -60,6 +60,7 @@ const ProvidersLayout = () => {
                                 shares={overview.data?.providers ?? []}
                                 selectedId={selectedId}
                                 isAllSelected={selectedId === undefined}
+                                onChanged={providers.reload}
                             />
                         )}
                     </QueryState>
