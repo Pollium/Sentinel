@@ -1,4 +1,6 @@
 export interface PageToolbarState{
-    slot: HTMLElement | null;
-    setSlot: (slot: HTMLElement | null) => void;
+    titleSlot: HTMLElement | null;
+    actionsSlot: HTMLElement | null;
+    setTitleSlot: (slot: HTMLElement | null) => void;
+    setActionsSlot: (slot: HTMLElement | null) => void;
 }

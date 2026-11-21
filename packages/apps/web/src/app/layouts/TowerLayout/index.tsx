@@ -15,7 +15,8 @@ import { Outlet, useOutletContext } from 'react-router-dom';
 const TowerLayout = () => {
     const [isDrawerOpen, setDrawerOpen] = useState(false);
     const collapsed = useSidebarStore((state) => state.collapsed);
-    const setSlot = usePageToolbar((state) => state.setSlot);
+    const setTitleSlot = usePageToolbar((state) => state.setTitleSlot);
+    const setActionsSlot = usePageToolbar((state) => state.setActionsSlot);
     const session = useOutletContext<SessionOutlet>();
 
     return (
@@ -38,19 +39,25 @@ const TowerLayout = () => {
 
             <div className='chrome-frame flex min-w-0 flex-1'>
                 <div className='chrome-surface flex min-w-0 flex-1 flex-col overflow-hidden bg-[var(--dashboard-surface)]'>
-                    <header className='flex h-[var(--app-header-height)] shrink-0 items-center gap-2 px-4 lg:px-6'>
-                        <div className='flex shrink-0 items-center gap-0.5'>
-                            <NavToggle onOpen={() => setDrawerOpen(true)} />
-                            <SidebarToggle />
-                        </div>
+                    <header className='flex h-[var(--app-header-height)] shrink-0 items-center gap-2 px-4 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(max-content,1fr)] lg:gap-4 lg:px-6'>
+                        <div className='flex min-w-0 flex-1 items-center gap-2'>
+                            <div className='flex shrink-0 items-center gap-0.5'>
+                                <NavToggle onOpen={() => setDrawerOpen(true)} />
+                                <SidebarToggle />
+                            </div>
 
-                        <div ref={setSlot} className='flex min-w-0 flex-1 items-center gap-3' />
+                            <div ref={setTitleSlot} className='flex min-w-0 flex-1 items-center' />
+                        </div>
 
                         <TowerJumpTo className='hidden w-64 lg:flex' />
 
-                        <div className='flex shrink-0 items-center justify-end gap-1'>
-                            <ThemeToggle />
-                            <AccountMenu operator={session.operator} onRenamed={session.reloadOperator} />
+                        <div className='flex shrink-0 items-center justify-end gap-2'>
+                            <div ref={setActionsSlot} className='flex items-center gap-2 empty:hidden' />
+
+                            <div className='flex shrink-0 items-center gap-1'>
+                                <ThemeToggle />
+                                <AccountMenu operator={session.operator} onRenamed={session.reloadOperator} />
+                            </div>
                         </div>
                     </header>
 
