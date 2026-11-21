@@ -1,12 +1,16 @@
+import ContextMenu from '@sentinel/ui/components/ContextMenu';
 import ListGroup from '@sentinel/ui/components/ListGroup';
 import ListRow from '@sentinel/ui/components/ListRow';
 import StatusDot from '@sentinel/ui/components/StatusDot';
 import { GatewayKind, PublicGatewayProvider } from '@sentinel/contracts/providers/domain';
 import { GatewayShare } from '@sentinel/contracts/usage/domain';
+import { copyText } from '@sentinel/ui/services/clipboard';
 import { compact, usd } from '@sentinel/ui/utils/format/format-metrics';
+import { errorCopy } from '@/modules/tower/utils/error-copy';
 import { KIND_LABEL, KINDS } from '@/modules/tower/utils/kinds';
 import { modelPath } from '@/modules/tower/utils/paths';
 import { unpricedRoutes } from '@/modules/tower/utils/prices';
+import { DropdownItem } from '@heroui/react';
 
 const NO_TRAFFIC = '—';
 
@@ -49,14 +53,18 @@ const ModelList = ({ shares, providers, selected, isAllSelected }: ModelListProp
                             const unpricedOn = unpriced.get(entry.id);
 
                             return (
-                                <ListRow
+                                <ContextMenu
                                     key={entry.id}
-                                    to={modelPath(entry.id)}
-                                    label={entry.id}
-                                    isSelected={entry.id === selected}
-                                    leading={unpricedOn === undefined ? undefined : <StatusDot tone='warning' label={`No price on ${unpricedOn}`} />}
-                                    trailing={<span className='shrink-0 text-[0.75rem] tabular-nums text-muted'>{trailingOf(entry)}</span>}
-                                />
+                                    menu={<DropdownItem onAction={() => { void copyText(entry.id, errorCopy); }}>Copy id</DropdownItem>}
+                                >
+                                    <ListRow
+                                        to={modelPath(entry.id)}
+                                        label={entry.id}
+                                        isSelected={entry.id === selected}
+                                        leading={unpricedOn === undefined ? undefined : <StatusDot tone='warning' label={`No price on ${unpricedOn}`} />}
+                                        trailing={<span className='shrink-0 text-[0.75rem] tabular-nums text-muted'>{trailingOf(entry)}</span>}
+                                    />
+                                </ContextMenu>
                             );
                         })}
                     </ListGroup>
