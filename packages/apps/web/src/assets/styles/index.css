@@ -8,8 +8,6 @@
 
 @theme static {
     --ease-emphasized: cubic-bezier(0.22, 1, 0.36, 1);
-    --duration-quick: 140ms;
-    --duration-base: 320ms;
     --duration-slow: 420ms;
     --duration-page: 280ms;
 }
@@ -35,8 +33,6 @@
     --surface-tertiary: rgba(224, 224, 227, 0.85);
     --overlay: rgba(255, 255, 255, 0.72);
     --field-background: rgba(255, 255, 255, 0.55);
-    --nav-pill: #ffffff;
-    --nav-pill-shadow: 0 1px 2px rgba(24, 24, 27, 0.08), 0 0 0 1px rgba(24, 24, 27, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 :root:not(.dark, [data-theme="dark"]),
@@ -58,8 +54,6 @@
     --surface-tertiary: rgba(52, 52, 56, 0.85);
     --overlay: rgba(24, 24, 27, 0.68);
     --field-background: rgba(23, 23, 25, 0.55);
-    --nav-pill: #2e2e33;
-    --nav-pill-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.07);
 }
 
 html.dark,
@@ -152,49 +146,6 @@ html {
     animation: enter-rise var(--duration-page) var(--ease-emphasized) both;
 }
 
-.nav-tabs {
-    background: color-mix(in oklab, var(--foreground) 4.5%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--foreground) 7%, transparent);
-}
-
-.nav-tabs__pill,
-.nav-tabs__ghost {
-    position: absolute;
-    top: 3px;
-    left: 0;
-    height: calc(100% - 6px);
-    border-radius: 0.5625rem;
-    pointer-events: none;
-}
-
-.nav-tabs__pill {
-    background: var(--nav-pill);
-    box-shadow: var(--nav-pill-shadow);
-}
-
-.nav-tabs__ghost {
-    background: color-mix(in oklab, var(--foreground) 5%, transparent);
-    opacity: 0;
-    transition: opacity var(--duration-quick);
-}
-
-.nav-tabs__ghost[data-on] {
-    opacity: 1;
-}
-
-.nav-tabs[data-ready] .nav-tabs__pill {
-    transition:
-        transform var(--duration-slow) var(--ease-emphasized),
-        width var(--duration-slow) var(--ease-emphasized);
-}
-
-.nav-tabs[data-ready] .nav-tabs__ghost[data-on] {
-    transition:
-        transform var(--duration-base) var(--ease-emphasized),
-        width var(--duration-base) var(--ease-emphasized),
-        opacity var(--duration-quick);
-}
-
 :root {
     --app-tabbar-height: 0px;
 }
@@ -237,9 +188,7 @@ html {
     }
 
     .chrome-frame,
-    .chrome-surface,
-    .nav-tabs__pill,
-    .nav-tabs__ghost {
+    .chrome-surface {
         transition: none;
     }
 }
