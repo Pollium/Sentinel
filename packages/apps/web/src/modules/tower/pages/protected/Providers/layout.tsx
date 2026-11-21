@@ -31,14 +31,10 @@ const ProvidersLayout = () => {
 
     return (
         <>
-            <PageToolbar title={(
-                <>
-                    Providers
-                    {providers.data === null ? null : (
-                        <span className='ml-1.5 hidden font-normal tabular-nums text-muted sm:inline'>{count(serving)} of {count(providers.data.length)} serving</span>
-                    )}
-                </>
-            )}>
+            <PageToolbar title='Providers'>
+                {providers.data === null ? null : (
+                    <span className='hidden text-[0.8125rem] tabular-nums text-muted sm:inline'>{count(serving)} of {count(providers.data.length)} serving</span>
+                )}
                 <AddProviderMenu onAdded={providers.reload} />
                 <TowerPeriodMenu />
             </PageToolbar>
