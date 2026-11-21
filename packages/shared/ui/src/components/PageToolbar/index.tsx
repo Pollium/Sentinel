@@ -8,15 +8,18 @@ interface PageToolbarProps{
 }
 
 const PageToolbar = ({ title, children }: PageToolbarProps) => {
-    const slot = usePageToolbar((state) => state.slot);
-    if(slot === null) return null;
+    const titleSlot = usePageToolbar((state) => state.titleSlot);
+    const actionsSlot = usePageToolbar((state) => state.actionsSlot);
+    if(titleSlot === null || actionsSlot === null) return null;
 
-    return createPortal(
+    return (
         <>
-            <h1 className='min-w-0 truncate text-[0.9375rem] font-semibold tracking-tight text-foreground'>{title}</h1>
-            <div className='ms-auto flex shrink-0 items-center gap-2'>{children}</div>
-        </>,
-        slot
+            {createPortal(
+                <h1 className='min-w-0 truncate text-[0.9375rem] font-semibold tracking-tight text-foreground'>{title}</h1>,
+                titleSlot
+            )}
+            {createPortal(children, actionsSlot)}
+        </>
     );
 };
 

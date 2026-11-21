@@ -33,7 +33,7 @@ const JumpBox = ({ label, destinations, className = '' }: JumpBoxProps) => {
             fullWidth
         >
             <ComboBox.InputGroup>
-                <Input ref={input} placeholder={`${label}   ⌘K`} />
+                <Input ref={input} placeholder={`${label}   ⌘K`} className='bg-transparent' />
             </ComboBox.InputGroup>
 
             <ComboBox.Popover className='max-w-[calc(100vw_-_2rem)]'>
