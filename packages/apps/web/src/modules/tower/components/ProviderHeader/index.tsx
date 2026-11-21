@@ -1,10 +1,7 @@
-import ProviderForm from '@/modules/tower/components/ProviderForm';
-import RecordActions from '@sentinel/ui/components/RecordActions';
+import ProviderActions from '@/modules/tower/components/ProviderActions';
 import StatusDot from '@sentinel/ui/components/StatusDot';
 import { PublicGatewayProvider } from '@sentinel/contracts/providers/domain';
 import { useCoolingDown } from '@/modules/tower/hooks/use-cooling-down';
-import { towerApi } from '@/modules/tower/api/api';
-import { errorCopy } from '@/modules/tower/utils/error-copy';
 import { formatAgo } from '@sentinel/ui/utils/format/format-date';
 import { KIND_LABEL } from '@/modules/tower/utils/kinds';
 import { lookOf } from '@/modules/tower/utils/provider-look';
@@ -33,25 +30,7 @@ const ProviderHeader = ({ provider, share, onChanged, onRemoved }: ProviderHeade
                 </p>
             </div>
 
-            <RecordActions
-                name={provider.name}
-                noun='provider'
-                isActive={provider.isActive}
-                editTitle={`Edit ${provider.name}`}
-                editWidth={provider.kind === 'chat' ? 'wide' : 'default'}
-                errorCopy={errorCopy}
-                onSetActive={(isActive) => towerApi.updateProvider(provider.id, { isActive })}
-                remove={{
-                    label: 'Delete',
-                    description: 'The gateway stops routing to this upstream and its stored key is gone. This cannot be undone.',
-                    run: async () => {
-                        await towerApi.removeProvider(provider.id);
-                        onRemoved();
-                    }
-                }}
-                onChanged={onChanged}
-                renderForm={(onSaved) => <ProviderForm kind={provider.kind} provider={provider} onSaved={onSaved} />}
-            />
+            <ProviderActions provider={provider} onChanged={onChanged} onRemoved={onRemoved} />
         </header>
     );
 };
