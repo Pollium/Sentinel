@@ -1,9 +1,6 @@
-import ApiKeyForm from '@/modules/tower/components/ApiKeyForm';
-import RecordActions from '@sentinel/ui/components/RecordActions';
+import KeyActions from '@/modules/tower/components/KeyActions';
 import StatusDot from '@sentinel/ui/components/StatusDot';
 import { PublicGatewayApiKey } from '@sentinel/contracts/keys/domain';
-import { towerApi } from '@/modules/tower/api/api';
-import { errorCopy } from '@/modules/tower/utils/error-copy';
 import { formatAgo } from '@sentinel/ui/utils/format/format-date';
 
 interface KeyHeaderProps{
@@ -25,24 +22,7 @@ const KeyHeader = ({ apiKey, onChanged, onRevoked }: KeyHeaderProps) => {
                 </p>
             </div>
 
-            <RecordActions
-                name={apiKey.name}
-                noun='key'
-                isActive={apiKey.isActive}
-                editTitle={`Edit ${apiKey.name}`}
-                errorCopy={errorCopy}
-                onSetActive={(isActive) => towerApi.updateKey(apiKey.id, { isActive })}
-                remove={{
-                    label: 'Revoke',
-                    description: 'Every request presenting this key starts answering 401 immediately. This cannot be undone.',
-                    run: async () => {
-                        await towerApi.removeKey(apiKey.id);
-                        onRevoked();
-                    }
-                }}
-                onChanged={onChanged}
-                renderForm={(onSaved) => <ApiKeyForm apiKey={apiKey} onDone={onSaved} />}
-            />
+            <KeyActions apiKey={apiKey} onChanged={onChanged} onRevoked={onRevoked} />
         </header>
     );
 };
