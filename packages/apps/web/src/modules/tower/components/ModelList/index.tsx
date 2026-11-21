@@ -1,11 +1,13 @@
 import ContextMenu from '@sentinel/ui/components/ContextMenu';
 import ListGroup from '@sentinel/ui/components/ListGroup';
 import ListRow from '@sentinel/ui/components/ListRow';
+import ShareMeter from '@sentinel/ui/components/ShareMeter';
 import StatusDot from '@sentinel/ui/components/StatusDot';
 import { GatewayKind, PublicGatewayProvider } from '@sentinel/contracts/providers/domain';
 import { GatewayShare } from '@sentinel/contracts/usage/domain';
 import { copyText } from '@sentinel/ui/services/clipboard';
 import { compact, usd } from '@sentinel/ui/utils/format/format-metrics';
+import { sum } from '@sentinel/ui/utils/metrics/period';
 import { errorCopy } from '@/modules/tower/utils/error-copy';
 import { KIND_LABEL, KINDS } from '@/modules/tower/utils/kinds';
 import { modelPath } from '@/modules/tower/utils/paths';
@@ -34,6 +36,8 @@ const trailingOf = (entry: ModelEntry): string => {
     return entry.kind === 'chat' ? usd(entry.share.costUsd) : compact(entry.share.requests);
 };
 
+const fractionOf = (entry: ModelEntry, total: number): number => total === 0 ? 0 : figureOf(entry) / total;
+
 const ModelList = ({ shares, providers, selected, isAllSelected }: ModelListProps) => {
     const byId = new Map(shares.map((share) => [share.id, share]));
     const routed = providers.filter((provider) => provider.kind === 'chat').flatMap((provider) => provider.models.map((model) => model.id));
@@ -42,10 +46,14 @@ const ModelList = ({ shares, providers, selected, isAllSelected }: ModelListProp
 
     return (
         <>
-            <ListRow to='/models/all' label='All models' isSelected={isAllSelected} />
+            <div className='lg:hidden'>
+                <ListRow to='/models/all' label='All models' isSelected={isAllSelected} />
+            </div>
             {KINDS.map((kind) => {
                 const own = entries.filter((entry) => entry.kind === kind).sort((a, b) => figureOf(b) - figureOf(a));
                 if(own.length === 0) return null;
+
+                const total = sum(own.map(figureOf));
 
                 return (
                     <ListGroup key={kind} label={KIND_LABEL[kind]} total={own.length} tone={null}>
@@ -62,7 +70,7 @@ const ModelList = ({ shares, providers, selected, isAllSelected }: ModelListProp
                                         label={entry.id}
                                         isSelected={entry.id === selected}
                                         leading={unpricedOn === undefined ? undefined : <StatusDot tone='warning' label={`No price on ${unpricedOn}`} />}
-                                        trailing={<span className='shrink-0 text-[0.75rem] tabular-nums text-muted'>{trailingOf(entry)}</span>}
+                                        trailing={<ShareMeter fraction={fractionOf(entry, total)} label={trailingOf(entry)} isLabelShown={entry.id === selected} />}
                                     />
                                 </ContextMenu>
                             );

@@ -44,7 +44,7 @@ const KeysLayout = () => {
                         isEmpty={(loaded) => !loaded?.length}
                         empty={<EmptyState icon={KeyRound} title='No keys issued yet' description='Nobody can reach the gateway until one exists.' />}
                     >
-                        {(loaded) => <KeyList keys={loaded} selectedId={params.id} isAllSelected={params.id === undefined} onChanged={keys.reload} />}
+                        {(loaded) => <KeyList keys={loaded} shares={overview.data?.keys ?? []} selectedId={params.id} isAllSelected={params.id === undefined} onChanged={keys.reload} />}
                     </QueryState>
                 )}
                 detail={<Outlet context={context} />}
