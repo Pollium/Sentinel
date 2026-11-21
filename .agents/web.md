@@ -56,10 +56,10 @@ modules/<name>/       api/api.ts (calls), components/<Name>/index.tsx, hooks/use
   relative imports), kebab-case file names except `Component/index.tsx`, one default-exported
   component per file, no comments, no `!important`.
 - **Look.** Calm and flat: gray selection, one-line rows, no badges or colour for decoration, glass
-  (`glass-surface`) only on floating chrome. The header tabs are the one raised element: a white pill
-  (`--nav-pill`) that slides to the active page. Reach for an `@sentinel/ui` component (`PanelGrid`,
-  `PanelCell`, `ListGroup`, `ListRow`, `FactList`, `SplitView`, `PageToolbar`, `ConfirmDialog`,
-  `CopyOnce`, …) before writing markup again.
+  (`glass-surface`) only on floating chrome. The header tabs are text only: the active page in the
+  foreground colour, the rest muted, with no fill behind either. Reach for an `@sentinel/ui`
+  component (`PanelGrid`, `PanelCell`, `ListGroup`, `ListRow`, `FactList`, `SplitView`,
+  `PageToolbar`, `ConfirmDialog`, `CopyOnce`, …) before writing markup again.
 
 ## Checking your work
 
