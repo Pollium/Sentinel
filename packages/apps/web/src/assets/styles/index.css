@@ -234,11 +234,6 @@ html {
     transition: border-radius var(--layout-transition-duration) var(--ease-emphasized);
 }
 
-.dark .chrome-surface,
-[data-theme="dark"] .chrome-surface {
-    background: var(--background);
-}
-
 @media (width < 64rem) {
     .chrome-frame {
         padding: 0;
