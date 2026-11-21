@@ -10,10 +10,7 @@ interface NavEntry{
 export const NAV_ENTRIES: NavEntry[] = [
     { label: 'Overview', to: '/overview', icon: LayoutDashboard },
     { label: 'Providers', to: '/providers', icon: Server },
-    { label: 'Models', to: '/models', icon: Boxes }
-];
-
-export const FOOTER_ENTRIES: NavEntry[] = [
+    { label: 'Models', to: '/models', icon: Boxes },
     { label: 'API keys', to: '/keys', icon: KeyRound },
     { label: 'Operators', to: '/operators', icon: Users }
 ];

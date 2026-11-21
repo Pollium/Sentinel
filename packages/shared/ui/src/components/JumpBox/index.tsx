@@ -1,6 +1,7 @@
 import { JumpDestination } from '../../contracts/jump';
 import { useJumpShortcut } from '../../hooks/chrome/use-jump-shortcut';
-import { ComboBox, Input, ListBox, ListBoxItem } from '@heroui/react';
+import { ComboBox, Input, Kbd, ListBox, ListBoxItem } from '@heroui/react';
+import { Search } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -32,8 +33,13 @@ const JumpBox = ({ label, destinations, className = '' }: JumpBoxProps) => {
             className={className}
             fullWidth
         >
-            <ComboBox.InputGroup>
-                <Input ref={input} placeholder={`${label}   ⌘K`} className='bg-transparent' />
+            <ComboBox.InputGroup className='relative'>
+                <Search aria-hidden='true' className='pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted' />
+                <Input ref={input} placeholder={label} className='bg-transparent pl-9 pr-16' />
+                <span aria-hidden='true' className='pointer-events-none absolute right-2 top-1/2 flex -translate-y-1/2 gap-1'>
+                    <Kbd className='h-5 min-w-5 justify-center px-1 text-[0.6875rem]'><Kbd.Abbr keyValue='command' /></Kbd>
+                    <Kbd className='h-5 min-w-5 justify-center px-1 text-[0.6875rem]'>K</Kbd>
+                </span>
             </ComboBox.InputGroup>
 
             <ComboBox.Popover className='max-w-[calc(100vw_-_2rem)]'>

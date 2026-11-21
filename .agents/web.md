@@ -10,7 +10,7 @@ come from `@sentinel/ui`; the app itself is the shell and three modules.
 main.tsx              mounts the router with mountApp (@sentinel/ui/app/mount) after importing the theme
 app/                  composition root: router.tsx (assembleRouter), routes.ts (page discovery),
                       layouts/TowerLayout, components/TowerNav · TowerTabBar · TowerJumpTo,
-                      navigation/items.ts (sidebar and footer entries)
+                      navigation/items.ts (the header tabs and the phone tab bar)
 assets/styles/        index.css: the whole theme (HeroUI import, tokens, light/dark, glass, chrome motion)
 modules/<name>/       api/api.ts (calls), components/<Name>/index.tsx, hooks/use-*.ts,
                       pages/{guest,protected}/**/{index,layout}.tsx, utils/*.ts, contracts/*.ts
@@ -25,7 +25,8 @@ modules/<name>/       api/api.ts (calls), components/<Name>/index.tsx, hooks/use
   `SessionGate` and `TowerLayout`, which send a visitor without a session to `/sign-in?next=`. A
   `layout.tsx` wraps its sibling pages through `<Outlet>` and passes them a typed context
   (`contracts/tower-outlet.ts`). Add the route to `app/navigation/items.ts` only when it belongs in
-  the sidebar.
+  the header tabs. There is no sidebar: the tabs sit in the header from `lg`, the jump box joins them
+  from `xl`, and below `lg` the tab bar at the bottom takes over.
 - **Data.** Each module's `api/api.ts` wraps `call(route, { path, query, body })` from
   `@sentinel/ui/api/call` around a contracts route-table row. Read with
   `useQuery(api.fn, [arg1, arg2])` (`@sentinel/ui/hooks/api/use-query` — an `undefined` arg keeps it
@@ -39,8 +40,8 @@ modules/<name>/       api/api.ts (calls), components/<Name>/index.tsx, hooks/use
   `useLiveOverview(window)` and `useLiveProviders` overlay the pushed frames on the loaded data.
   When the socket closes with `SESSION_EXPIRED` or `ACCESS_REVOKED` for the current token, the
   session ends and the console goes back to sign-in.
-- **Session.** The token lives in `localStorage` under `sentinel.session` (theme `sentinel.theme`,
-  sidebar `sentinel.sidebar`), and every tab follows it through the `storage` event, so a token one
+- **Session.** The token lives in `localStorage` under `sentinel.session` (theme `sentinel.theme`),
+  and every tab follows it through the `storage` event, so a token one
   tab rotates or drops reaches the others. `SessionGate` reads `/tower/me` once and hands the
   operator down as the `SessionOutlet` context. A `401` with `Auth::Unauthorized` or
   `Auth::InvalidToken` ends the session of the token that call carried, and only while it is still
@@ -55,7 +56,8 @@ modules/<name>/       api/api.ts (calls), components/<Name>/index.tsx, hooks/use
   relative imports), kebab-case file names except `Component/index.tsx`, one default-exported
   component per file, no comments, no `!important`.
 - **Look.** Calm and flat: gray selection, one-line rows, no badges or colour for decoration, glass
-  (`glass-surface`) only on floating chrome. Reach for an `@sentinel/ui` component (`PanelGrid`,
+  (`glass-surface`) only on floating chrome. The header tabs are the one raised element: a white pill
+  (`--nav-pill`) that slides to the active page. Reach for an `@sentinel/ui` component (`PanelGrid`,
   `PanelCell`, `ListGroup`, `ListRow`, `FactList`, `SplitView`, `PageToolbar`, `ConfirmDialog`,
   `CopyOnce`, …) before writing markup again.
 
