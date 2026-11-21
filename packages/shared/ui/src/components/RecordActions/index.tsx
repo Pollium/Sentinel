@@ -1,11 +1,12 @@
 import ActionMenu from '../ActionMenu';
 import ConfirmDialog from '../ConfirmDialog';
+import ContextMenu from '../ContextMenu';
 import Modal from '../Modal';
 import { ErrorCopy } from '../../contracts/errors';
 import { useMutation } from '../../hooks/api/use-mutation';
 import { notifyWith } from '../../services/notify';
 import { DropdownItem } from '@heroui/react';
-import { ReactNode, useState } from 'react';
+import { ComponentProps, ReactNode, useState } from 'react';
 
 interface RecordRemoval{
     label: string;
@@ -24,6 +25,7 @@ interface RecordActionsProps{
     remove: RecordRemoval;
     onChanged: () => void;
     renderForm: (onSaved: () => void) => ReactNode;
+    children?: ComponentProps<typeof ContextMenu>['children'];
 }
 
 const RecordActions = ({
@@ -36,7 +38,8 @@ const RecordActions = ({
     onSetActive,
     remove,
     onChanged,
-    renderForm
+    renderForm,
+    children
 }: RecordActionsProps) => {
     const [editing, setEditing] = useState(false);
     const [removing, setRemoving] = useState(false);
@@ -62,13 +65,22 @@ const RecordActions = ({
         onChanged();
     };
 
+    const isBusy = update.loading || discard.loading;
+    const items = (
+        <>
+            <DropdownItem isDisabled={isBusy} onAction={() => setEditing(true)}>Edit</DropdownItem>
+            <DropdownItem isDisabled={isBusy} onAction={toggleActive}>{isActive ? 'Deactivate' : 'Activate'}</DropdownItem>
+            <DropdownItem isDisabled={isBusy} variant='danger' onAction={() => setRemoving(true)}>{remove.label}</DropdownItem>
+        </>
+    );
+
     return (
         <>
-            <ActionMenu subject={name} isDisabled={update.loading || discard.loading}>
-                <DropdownItem onAction={() => setEditing(true)}>Edit</DropdownItem>
-                <DropdownItem onAction={toggleActive}>{isActive ? 'Deactivate' : 'Activate'}</DropdownItem>
-                <DropdownItem variant='danger' onAction={() => setRemoving(true)}>{remove.label}</DropdownItem>
-            </ActionMenu>
+            {children === undefined ? (
+                <ActionMenu subject={name} isDisabled={isBusy}>{items}</ActionMenu>
+            ) : (
+                <ContextMenu menu={items}>{children}</ContextMenu>
+            )}
 
             <Modal isOpen={editing} onOpenChange={setEditing} title={editTitle} width={editWidth}>
                 {renderForm(closeForm)}
