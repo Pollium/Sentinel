@@ -1,4 +1,4 @@
-import InviteForm from '@/modules/operators/components/InviteForm';
+import InviteButton from '@/modules/operators/components/InviteButton';
 import InvitationRow from '@/modules/operators/components/InvitationRow';
 import OperatorRow from '@/modules/operators/components/OperatorRow';
 import ListGroup from '@sentinel/ui/components/ListGroup';
@@ -21,13 +21,13 @@ const Operators = () => {
 
     return (
         <div className='mx-auto flex w-full max-w-3xl flex-col gap-8'>
-            <PageToolbar title='Operators' />
+            <PageToolbar title='Operators'>
+                <InviteButton joinedEmails={operators.data?.map(({ email }) => email) ?? []} onInvited={invitations.reload} />
+            </PageToolbar>
 
             <p className='px-3 text-[0.875rem] text-muted'>
                 Everyone here can change providers, keys and operators. Nobody can remove themselves.
             </p>
-
-            <InviteForm joinedEmails={operators.data?.map(({ email }) => email) ?? []} onInvited={invitations.reload} />
 
             <QueryState
                 query={operators}
