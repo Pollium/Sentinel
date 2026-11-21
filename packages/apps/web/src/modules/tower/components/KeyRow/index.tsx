@@ -1,18 +1,23 @@
 import KeyActions from '@/modules/tower/components/KeyActions';
 import ListRow from '@sentinel/ui/components/ListRow';
+import ShareMeter from '@sentinel/ui/components/ShareMeter';
 import StatusDot from '@sentinel/ui/components/StatusDot';
 import { PublicGatewayApiKey } from '@sentinel/contracts/keys/domain';
-import { formatAgo } from '@sentinel/ui/utils/format/format-date';
+import { count } from '@sentinel/ui/utils/format/format-metrics';
 import { keyPath } from '@/modules/tower/utils/paths';
 import { useNavigate } from 'react-router-dom';
 
 interface KeyRowProps{
     apiKey: PublicGatewayApiKey;
+    requests: number;
+    fraction: number;
     isSelected: boolean;
     onChanged: () => void;
 }
 
-const KeyRow = ({ apiKey, isSelected, onChanged }: KeyRowProps) => {
+const requestsLabel = (requests: number): string => `${count(requests)} ${requests === 1 ? 'request' : 'requests'}`;
+
+const KeyRow = ({ apiKey, requests, fraction, isSelected, onChanged }: KeyRowProps) => {
     const navigate = useNavigate();
 
     return (
@@ -28,7 +33,7 @@ const KeyRow = ({ apiKey, isSelected, onChanged }: KeyRowProps) => {
                 label={apiKey.name}
                 isSelected={isSelected}
                 leading={apiKey.isActive ? undefined : <StatusDot tone='neutral' label='Off' />}
-                trailing={<span className='shrink-0 text-[0.75rem] tabular-nums text-muted'>{apiKey.lastUsedAt === null ? 'Never' : formatAgo(apiKey.lastUsedAt)}</span>}
+                trailing={<ShareMeter fraction={fraction} label={requestsLabel(requests)} isLabelShown={isSelected} />}
             />
         </KeyActions>
     );
