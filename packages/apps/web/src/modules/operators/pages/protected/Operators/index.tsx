@@ -25,10 +25,6 @@ const Operators = () => {
                 <InviteButton joinedEmails={operators.data?.map(({ email }) => email) ?? []} onInvited={invitations.reload} />
             </PageToolbar>
 
-            <p className='px-3 text-[0.875rem] text-muted'>
-                Everyone here can change providers, keys and operators. Nobody can remove themselves.
-            </p>
-
             <QueryState
                 query={operators}
                 errorTitle='The operators could not be loaded'
