@@ -2,7 +2,7 @@
 
 The suites are **Vitest** running through each package's `vite.config.ts` — the same plugins and
 transforms the api runs with. Tests live in `packages/apps/api` (the HTTP, proxy and socket
-behaviour) and `packages/shared/readable` (the framework). The web and ui have no test stack.
+behaviour); the framework is tested in its own repo. The web and ui have no test stack.
 
 ## Why Vitest is load-bearing, not a preference
 
@@ -51,9 +51,8 @@ packages/apps/api/
         seed.ts                 # seedProvider(), seedApiKey() (CLIENT_SECRET), seedUsage(), seedFailure(), pricedModel()
         fake-upstream.ts        # a local Fastify that scripts upstream responses and records every call
         wait-for-usage.ts       # waitForUsage() / waitForFailure(): the rows are written after the reply
-        session-cutoffs.ts      # the in-memory SessionCutoffStore
+        session-cutoffs.ts      # keeps readable's session cutoffs in memory
     src/modules/<name>/tests/   # the module's suites (*.test.ts)
-packages/shared/readable/tests/ # the framework's own suites
 ```
 
 **Never put a `.test.ts` inside `controllers/`, `models/` or `gateways/`** — discovery imports every
@@ -67,7 +66,7 @@ per test seed → `request()` → assert:
 
 ```ts
 import Operator from '../models/Operator';
-import { expectError, request } from '@readable/testing/request';
+import { expectError, request } from '@pollium/readable/testing/request';
 import { operatorRoutes } from '@sentinel/contracts/operators/routes';
 import { useApp } from '@tests/harness';
 import { seedOperator } from '@tests/operators';
@@ -119,8 +118,6 @@ proxy side what the upstream received, what the caller got back, and the `Usage`
 
 - **Pure services** (`pickProvider`, `ProviderHealth`, `UsageRecorder`, `OverviewPushes`): plain
   unit tests in the module's `tests/`.
-- **The framework** (`define-errors`, `SecretCipher`, `Hidden`, `EventBus`, the gateway's frame
-  limit and re-authorization): `packages/shared/readable/tests/`.
 
 ## Do NOT
 

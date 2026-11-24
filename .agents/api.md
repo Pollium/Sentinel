@@ -5,9 +5,9 @@
 serves whoever holds one of the API keys it issued, and the operators who configure it from the web.
 Read [../AGENTS.md](../AGENTS.md) first for the data flow.
 
-The HTTP host is **`packages/shared/readable`** — `ModuleDiscovery`, `BaseController`,
-`BaseGateway`, `BaseModel`, `SecretCipher`, JWT and passwords. Import it as `@readable/...`; never
-re-declare a second copy here.
+The HTTP host is **[`@pollium/readable`](https://github.com/Pollium/Readable)** from npm — `ModuleDiscovery`,
+`BaseController`, `BaseGateway`, `BaseModel`, `SecretCipher`, JWT and passwords. Import it as
+`@pollium/readable/...`; never re-declare a second copy here.
 
 ## The 10-second model
 
@@ -30,13 +30,15 @@ scripts/invite.ts  # pnpm --filter @sentinel/api invite <email> prints ${WEB_URL
 
 Each error table is declared in `@sentinel/contracts/<domain>/errors` and bound in the module that
 throws it (`contracts/domain/errors.ts`): `Pool` and `Provider` in providers, `ApiKey` in keys,
-`Operator`, `Invitation`; `Auth` comes from `@readable/auth/errors`. The web's error copy is keyed
-by the same codes, so a new failure is a new cause in a table, never a new string.
+`Operator`, `Invitation`, `Auth` in auth; readable's own `AuthError` throws the same `Unauthorized`.
+The web's error copy is keyed by the same codes, so a new failure is a new cause in a table, never a
+new string.
 
 `GET /health` is mounted by readable `Application`. A new kind is a new module with a
-`controllers/` default export — no registry line. Vendor paths live at the root and send the
-vendor body from an overridden `register()` (see `chat/controllers/Chat.ts`). The `/tower/*` routes
-keep the `{ data }` envelope; the web unwraps it through `@sentinel/ui`.
+`controllers/` default export — no registry line. A controller mounts under `/<module>`; the
+`/tower/*` ones declare `@Controller('/tower')`. Vendor paths live at the root and send the vendor
+body from an overridden `register()` (see `chat/controllers/Chat.ts`). The `/tower/*` routes keep
+the `{ data }` envelope; the web unwraps it through `@sentinel/ui`.
 
 **There is no pool entity.** A pool is just "the active providers of a kind", read by
 `activeProviders(kind)`. Nobody configures pools; operators configure providers.
@@ -163,7 +165,7 @@ rewrite the model through the provider's `modelMap` on the way out.
 ## Do NOT
 
 - **Don't add a second `SecretCipher`, `BaseModel`, or error factory** — they live in
-  `packages/shared/readable`.
+  `@pollium/readable`.
 - **Don't parse or reshape streamed chat bytes** — the SSE passthrough must stay byte-identical;
   only tap for `usage`.
 - **Don't store provider keys in plaintext** — always `SecretCipher.encrypt` on write, decrypt at
