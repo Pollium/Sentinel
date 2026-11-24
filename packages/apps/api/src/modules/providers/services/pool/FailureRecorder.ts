@@ -1,6 +1,6 @@
 import Failure from '../../models/Failure';
 import Provider from '../../models/Provider';
-import { eventBus } from '@readable/events/EventBus';
+import { eventBus } from '@pollium/readable/events/EventBus';
 import { GatewayFailureCause } from '@sentinel/contracts/usage/domain';
 import { FastifyBaseLogger } from 'fastify';
 

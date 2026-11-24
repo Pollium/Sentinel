@@ -1,6 +1,6 @@
 import Provider from '@/modules/providers/models/Provider';
 import FakeUpstream from '@tests/fake-upstream';
-import SecretCipher from '@readable/services/SecretCipher';
+import { SecretCipher } from '@pollium/readable/auth/secrets';
 import { config } from '@/shared/config';
 import { useApp } from '@tests/harness';
 import { CLIENT_SECRET, seedApiKey, seedProvider } from '@tests/seed';

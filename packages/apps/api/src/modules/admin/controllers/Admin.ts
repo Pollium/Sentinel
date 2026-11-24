@@ -3,11 +3,9 @@ import ModelDiscoveryService from '../services/ModelDiscovery';
 import OverviewService from '../services/Overview';
 import UsageSliceService from '../services/UsageSlice';
 import ProviderAdminService from '../services/ProviderAdmin';
-import BaseController from '@readable/controllers/BaseController';
-import { Body, IdParam, Param, Query } from '@readable/decorators/controllers/RequestParams';
-import { Route } from '@readable/decorators/controllers/Route';
-import { Status } from '@readable/decorators/controllers/Status';
-import { Middleware } from '@readable/decorators/middleware/Middleware';
+import BaseController, { Controller, Route, Status } from '@pollium/readable/http/Controller';
+import { Body, IdParam, Param, Query } from '@pollium/readable/http/params';
+import { Middleware } from '@pollium/readable/http/middleware';
 import { CreateApiKeyInput, UpdateApiKeyInput } from '@sentinel/contracts/keys/http';
 import { keyRoutes } from '@sentinel/contracts/keys/routes';
 import { GatewayKind } from '@sentinel/contracts/providers/domain';
@@ -17,6 +15,7 @@ import { usageWindowOf } from '@sentinel/contracts/usage/domain';
 import { usageRoutes } from '@sentinel/contracts/usage/routes';
 import { OperatorRoute } from '@/modules/operators/middlewares/OperatorRoute';
 
+@Controller('/tower')
 @Middleware(OperatorRoute)
 export default class AdminController extends BaseController{
     #providers = new ProviderAdminService();

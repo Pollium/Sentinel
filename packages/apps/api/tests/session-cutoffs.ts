@@ -1,15 +1,12 @@
-import { SessionCutoffStore } from '@readable/contracts/session';
+import { sessionCutoffs } from '@pollium/readable/auth/sessions';
+import { vi } from 'vitest';
 
 const cutoffs = new Map<string, number>();
 
-export const clearSessionCutoffs = () => cutoffs.clear();
-
-export default class MemorySessionCutoffStore implements SessionCutoffStore{
-    async cutoffOf(userId: string): Promise<number | null>{
-        return cutoffs.get(userId) ?? null;
-    }
-
-    async cut(userId: string){
+export const keepSessionCutoffsInMemory = () => {
+    cutoffs.clear();
+    vi.spyOn(sessionCutoffs, 'cutoffOf').mockImplementation(async (userId) => cutoffs.get(userId) ?? null);
+    vi.spyOn(sessionCutoffs, 'cut').mockImplementation(async (userId) => {
         cutoffs.set(userId, Math.floor(Date.now() / 1000));
-    }
-}
+    });
+};

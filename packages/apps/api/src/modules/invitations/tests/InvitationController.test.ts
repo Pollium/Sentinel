@@ -1,6 +1,6 @@
 import Invitation from '../models/Invitation';
 import Operator from '@/modules/operators/models/Operator';
-import { expectError, request } from '@readable/testing/request';
+import { expectError, request } from '@pollium/readable/testing/request';
 import { authRoutes } from '@sentinel/contracts/auth/routes';
 import { invitationRoutes } from '@sentinel/contracts/invitations/routes';
 import { uuid } from '@tests/uuid';

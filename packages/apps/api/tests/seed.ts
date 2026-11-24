@@ -2,7 +2,7 @@ import ApiKey from '@/modules/keys/models/ApiKey';
 import Failure from '@/modules/providers/models/Failure';
 import Provider from '@/modules/providers/models/Provider';
 import Usage from '@/modules/providers/models/Usage';
-import SecretCipher from '@readable/services/SecretCipher';
+import { SecretCipher } from '@pollium/readable/auth/secrets';
 import { GatewayKind, ProviderModel } from '@sentinel/contracts/providers/domain';
 import { config } from '@/shared/config';
 import { ObjectLiteral, Repository } from 'typeorm';

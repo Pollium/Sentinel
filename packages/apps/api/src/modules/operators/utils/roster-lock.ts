@@ -1,4 +1,4 @@
-import { advisoryLock } from '@readable/utils/models/advisory-lock';
+import { advisoryLock } from '@pollium/readable/database/queries';
 import { EntityManager } from 'typeorm';
 
 const ROSTER_LOCK_NAMESPACE = 4101;

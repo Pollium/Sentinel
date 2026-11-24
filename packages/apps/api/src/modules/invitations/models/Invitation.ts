@@ -1,5 +1,4 @@
-import BaseModel from '@readable/models/BaseModel';
-import { Hidden } from '@readable/models/Hidden';
+import { BaseModel, Hidden } from '@pollium/readable/database/models';
 import { Column, Entity } from 'typeorm';
 
 @Entity()

@@ -1,6 +1,6 @@
 import Usage from '@/modules/providers/models/Usage';
 import FakeUpstream from '@tests/fake-upstream';
-import SecretCipher from '@readable/services/SecretCipher';
+import { SecretCipher } from '@pollium/readable/auth/secrets';
 import { config } from '@/shared/config';
 import { usageRecorder } from '@/modules/providers/services/pool/UsageRecorder';
 import { useApp } from '@tests/harness';

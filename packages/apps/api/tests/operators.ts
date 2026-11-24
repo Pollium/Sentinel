@@ -1,6 +1,6 @@
 import Operator from '@/modules/operators/models/Operator';
-import JWTService from '@readable/auth/JWTService';
-import PasswordService from '@readable/auth/PasswordService';
+import { JWTService } from '@pollium/readable/auth/sessions';
+import { PasswordService } from '@pollium/readable/auth/credentials';
 import { uuid } from './uuid';
 import { vi } from 'vitest';
 

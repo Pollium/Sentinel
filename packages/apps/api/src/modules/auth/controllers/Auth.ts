@@ -1,12 +1,11 @@
 import AuthService from '../services/Auth';
-import BaseController from '@readable/controllers/BaseController';
-import { Body } from '@readable/decorators/controllers/RequestParams';
-import { Route } from '@readable/decorators/controllers/Route';
-import { Status } from '@readable/decorators/controllers/Status';
-import { RateLimit } from '@readable/decorators/middleware/RateLimit';
+import BaseController, { Controller, Route, Status } from '@pollium/readable/http/Controller';
+import { Body } from '@pollium/readable/http/params';
+import { RateLimit } from '@pollium/readable/http/middleware';
 import { SetupInput, SignInInput } from '@sentinel/contracts/auth/http';
 import { authRoutes } from '@sentinel/contracts/auth/routes';
 
+@Controller('/tower')
 export default class AuthController extends BaseController{
     #service = new AuthService();
 

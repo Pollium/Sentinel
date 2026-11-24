@@ -1,13 +1,12 @@
 import InvitationService from '../services/Invitation';
-import BaseController from '@readable/controllers/BaseController';
-import { Body, IdParam } from '@readable/decorators/controllers/RequestParams';
-import { Route } from '@readable/decorators/controllers/Route';
-import { Status } from '@readable/decorators/controllers/Status';
-import { Middleware } from '@readable/decorators/middleware/Middleware';
+import BaseController, { Controller, Route, Status } from '@pollium/readable/http/Controller';
+import { Body, IdParam } from '@pollium/readable/http/params';
+import { Middleware } from '@pollium/readable/http/middleware';
 import { InviteInput } from '@sentinel/contracts/invitations/http';
 import { invitationRoutes } from '@sentinel/contracts/invitations/routes';
 import { OperatorRoute } from '@/modules/operators/middlewares/OperatorRoute';
 
+@Controller('/tower')
 @Middleware(OperatorRoute)
 export default class InvitationController extends BaseController{
     #service = new InvitationService();

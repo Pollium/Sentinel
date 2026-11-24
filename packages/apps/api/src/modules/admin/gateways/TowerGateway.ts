@@ -1,12 +1,14 @@
 import OverviewPushes from '../services/OverviewPushes';
 import OverviewService from '../services/Overview';
-import BaseGateway from '@readable/gateway/BaseGateway';
-import { CurrentUser } from '@readable/auth/CurrentUser';
-import { Channel } from '@readable/decorators/gateway/Channel';
-import { OnMessage } from '@readable/decorators/gateway/Gateway';
-import { Payload, Socket } from '@readable/decorators/gateway/Params';
-import { Middleware } from '@readable/decorators/middleware/Middleware';
-import { eventBus } from '@readable/events/EventBus';
+import BaseGateway, {
+    Channel,
+    OnMessage,
+    Payload,
+    Socket
+} from '@pollium/readable/gateway/Gateway';
+import { CurrentUser } from '@pollium/readable/auth/params';
+import { Middleware } from '@pollium/readable/http/middleware';
+import { eventBus } from '@pollium/readable/events/EventBus';
 import { GatewayOverview, UsageWindow, usageWindowOf } from '@sentinel/contracts/usage/domain';
 import { ProviderHealthChange, towerGateway, TowerOverviewFrame, TowerProviderHealthFrame, TowerWatchPayload } from '@sentinel/contracts/live/gateway';
 import { operatorOf } from '@/modules/operators/middlewares/OperatorRoute';

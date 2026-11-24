@@ -1,5 +1,5 @@
 import Operator from '@/modules/operators/models/Operator';
-import JWTService from '@readable/auth/JWTService';
+import { JWTService } from '@pollium/readable/auth/sessions';
 import { Session } from '../contracts/domain/session';
 
 export default class SessionService{

@@ -1,5 +1,5 @@
 import Provider from '@/modules/providers/models/Provider';
-import { findOrThrow } from '@readable/utils/models/find-or-throw';
+import { findOrThrow } from '@pollium/readable/database/queries';
 import { DiscoveredModels, ProviderModel } from '@sentinel/contracts/providers/domain';
 import { DiscoverModelsInput } from '@sentinel/contracts/providers/http';
 import { config } from '@/shared/config';
