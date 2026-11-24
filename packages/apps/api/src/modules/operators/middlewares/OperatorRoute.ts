@@ -1,8 +1,8 @@
 import Operator from '../models/Operator';
-import { bearerPrincipal } from '@readable/auth/bearerPrincipal';
-import { AuthError } from '@readable/auth/errors';
-import { MiddlewareFn } from '@readable/decorators/middleware/Middleware';
-import { findOrThrow } from '@readable/utils/models/find-or-throw';
+import { bearerPrincipal } from '@pollium/readable/auth/guards';
+import { AuthError } from '@pollium/readable/app/errors';
+import { MiddlewareFn } from '@pollium/readable/http/middleware';
+import { findOrThrow } from '@pollium/readable/database/queries';
 
 export const OperatorRoute: MiddlewareFn = async (req) => {
     const principal = await bearerPrincipal(req);

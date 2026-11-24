@@ -1,4 +1,4 @@
-import BaseController from '@readable/controllers/BaseController';
+import BaseController from '@pollium/readable/http/Controller';
 import ChatCompletionProxy, { CHAT_BODY_LIMIT } from '../services/ChatCompletionProxy';
 import { FastifyInstance } from 'fastify';
 

@@ -1,6 +1,6 @@
 import Provider from '../../models/Provider';
 import Usage from '../../models/Usage';
-import { eventBus } from '@readable/events/EventBus';
+import { eventBus } from '@pollium/readable/events/EventBus';
 import { costOfTokens } from '@sentinel/contracts/providers/pricing';
 import { GatewayKind } from '@sentinel/contracts/providers/domain';
 import { FastifyBaseLogger } from 'fastify';

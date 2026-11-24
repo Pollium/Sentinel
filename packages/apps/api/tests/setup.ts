@@ -18,13 +18,11 @@ Object.assign(process.env, {
     LOG_PRETTY: 'false'
 });
 
-vi.mock('@readable/services/RedisSessionCutoffStore', () => import('./session-cutoffs'));
-
 const client = new Client({ connectionString: databaseUrl });
 await client.connect();
 await client.query(`DROP SCHEMA IF EXISTS "${schema}" CASCADE`);
 await client.query(`CREATE SCHEMA "${schema}"`);
 await client.end();
 
-const { rateLimitStore } = await import('@readable/testing/rate-limit');
+const { rateLimitStore } = await import('@pollium/readable/testing/rate-limit');
 vi.spyOn(rateLimitStore, 'incr').mockImplementation((_key, done) => done(null, { current: 1, ttl: 60_000 }));

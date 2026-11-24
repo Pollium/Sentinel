@@ -1,6 +1,10 @@
-import { configure } from '@readable/config';
-import { redisFromEnv, serviceConfig } from '@readable/service-config';
-import { optionalEnv, requiredEnv } from '@readable/utils/env';
+import {
+    configure,
+    redisFromEnv,
+    serviceConfig,
+    optionalEnv,
+    requiredEnv
+} from '@pollium/readable/app/config';
 
 const DEV_WEB_URL = 'https://localhost:5175';
 
@@ -14,6 +18,8 @@ export const config = {
 };
 
 configure({
+    name: 'sentinel',
     jwtSecret: config.jwtSecret,
-    redis: config.redis
+    redis: config.redis,
+    storage: null
 });

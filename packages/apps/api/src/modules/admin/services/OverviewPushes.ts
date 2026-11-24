@@ -1,4 +1,4 @@
-import { logger } from '@readable/utils/Logger';
+import { logger } from '@pollium/readable/app/logger';
 import { GatewayOverview, UsageWindow } from '@sentinel/contracts/usage/domain';
 
 export const OVERVIEW_PUSH_INTERVAL_MS = 2000;

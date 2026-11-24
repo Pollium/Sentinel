@@ -1,5 +1,5 @@
 import { Operator } from '../operators/domain';
-import { get, patch, post } from '../shared/routing';
+import { get, patch, post } from '@pollium/readable-contracts/routing';
 import { Session, SetupStatus } from './domain';
 import { ChangePasswordInput, SetupInput, SignInInput, UpdateProfileInput } from './http';
 

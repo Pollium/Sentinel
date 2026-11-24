@@ -1,5 +1,5 @@
 import Operator from '../models/Operator';
-import { expectError, request } from '@readable/testing/request';
+import { expectError, request } from '@pollium/readable/testing/request';
 import { operatorRoutes } from '@sentinel/contracts/operators/routes';
 import { uuid } from '@tests/uuid';
 import { useApp } from '@tests/harness';

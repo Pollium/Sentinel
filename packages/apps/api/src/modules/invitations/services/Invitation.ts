@@ -1,9 +1,9 @@
 import Invitation from '../models/Invitation';
 import Operator from '@/modules/operators/models/Operator';
 import SessionService from '@/modules/auth/services/Session';
-import PasswordService from '@readable/auth/PasswordService';
-import { sessionCutoffs } from '@readable/auth/verifiedSession';
-import { findOrThrow } from '@readable/utils/models/find-or-throw';
+import { PasswordService } from '@pollium/readable/auth/credentials';
+import { sessionCutoffs } from '@pollium/readable/auth/sessions';
+import { findOrThrow } from '@pollium/readable/database/queries';
 import { InvitationPreview } from '@sentinel/contracts/invitations/domain';
 import { AcceptInvitationInput, InviteInput } from '@sentinel/contracts/invitations/http';
 import { Session } from '@/modules/auth/contracts/domain/session';

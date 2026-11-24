@@ -1,4 +1,4 @@
-import { get } from '../shared/routing';
+import { get } from '@pollium/readable-contracts/routing';
 import { GatewayOverview, GatewayUsageSlice } from './domain';
 
 export const usageRoutes = {

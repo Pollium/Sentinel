@@ -1,5 +1,5 @@
 import Provider from '@/modules/providers/models/Provider';
-import SecretCipher from '@readable/services/SecretCipher';
+import { SecretCipher } from '@pollium/readable/auth/secrets';
 import { PublicGatewayProvider } from '@sentinel/contracts/providers/domain';
 import { config } from '@/shared/config';
 import { providerHealth } from '@/modules/providers/services/pool/ProviderHealth';

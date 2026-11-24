@@ -1,5 +1,5 @@
 import Provider from '@/modules/providers/models/Provider';
-import RuntimeError from '@readable/errors/RuntimeError';
+import { RuntimeError } from '@pollium/readable/app/errors';
 import { ChatCompletionRequest, CompletionUsage } from '../contracts/domain/completion';
 import { completionCeiling } from './CompletionCeiling';
 import { reasoningShape } from './ReasoningShape';

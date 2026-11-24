@@ -1,4 +1,4 @@
-import BaseController from '@readable/controllers/BaseController';
+import BaseController from '@pollium/readable/http/Controller';
 import { TOKEN_AUTH } from '@/modules/keys/services/authenticate';
 import { bufferedProxyHandler } from '@/modules/providers/services/proxy/buffered-proxy';
 import { FastifyInstance } from 'fastify';

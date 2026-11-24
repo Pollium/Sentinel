@@ -1,4 +1,4 @@
-import { eventBus } from '@readable/events/EventBus';
+import { eventBus } from '@pollium/readable/events/EventBus';
 import { GatewayProviderHealth } from '@sentinel/contracts/providers/domain';
 
 const FAILURE_THRESHOLD = 3;

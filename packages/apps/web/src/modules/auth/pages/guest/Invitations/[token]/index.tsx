@@ -5,7 +5,7 @@ import AuthHeading from '@/modules/auth/components/AuthHeading';
 import InvitationForm from '@/modules/auth/components/InvitationForm';
 import { InvitationErrorCode } from '@sentinel/contracts/invitations/errors';
 import { AcceptInvitationInput } from '@sentinel/contracts/invitations/http';
-import { baseCodeOf } from '@sentinel/contracts/shared/errors';
+import { baseCodeOf } from '@pollium/readable-contracts/errors';
 import { useQuery } from '@sentinel/ui/hooks/api/use-query';
 import { toError } from '@sentinel/ui/utils/format/errors';
 import { authApi } from '@/modules/auth/api/api';

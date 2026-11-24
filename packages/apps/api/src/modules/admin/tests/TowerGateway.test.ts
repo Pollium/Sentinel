@@ -3,8 +3,7 @@ import OverviewService from '../services/Overview';
 import OverviewPushes, { OVERVIEW_PUSH_INTERVAL_MS } from '../services/OverviewPushes';
 import { usageRecorder } from '@/modules/providers/services/pool/UsageRecorder';
 import { providerHealth } from '@/modules/providers/services/pool/ProviderHealth';
-import { eventBus } from '@readable/events/EventBus';
-import { REAUTHORIZE_MS } from '@readable/gateway/BaseGateway';
+import { eventBus } from '@pollium/readable/events/EventBus';
 import { ACCESS_REVOKED } from '@sentinel/contracts/shared/socket';
 import { UsageWindow } from '@sentinel/contracts/usage/domain';
 import { GatewayProviderHealth } from '@sentinel/contracts/providers/domain';
@@ -116,7 +115,7 @@ describe('TowerGateway', () => {
         const closed = new Promise<number>((resolve) => visitor.socket.on('close', (code) => resolve(code)));
 
         await Operator.delete({ id: OPERATOR_ID });
-        vi.advanceTimersByTime(REAUTHORIZE_MS);
+        vi.advanceTimersByTime(30_000);
 
         expect(await closed).toBe(ACCESS_REVOKED);
     });

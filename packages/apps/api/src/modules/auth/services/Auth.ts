@@ -1,7 +1,7 @@
 import Operator from '@/modules/operators/models/Operator';
 import SessionService from './Session';
-import PasswordService from '@readable/auth/PasswordService';
-import { AuthError } from '@readable/auth/errors';
+import { PasswordService } from '@pollium/readable/auth/credentials';
+import { AuthError } from '../contracts/domain/errors';
 import { SetupStatus } from '@sentinel/contracts/auth/domain';
 import { SetupInput, SignInInput } from '@sentinel/contracts/auth/http';
 import { Session } from '../contracts/domain/session';

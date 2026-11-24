@@ -1,5 +1,5 @@
 import { AuthErrorCode } from '@sentinel/contracts/auth/errors';
-import { baseCodeOf } from '@sentinel/contracts/shared/errors';
+import { baseCodeOf } from '@pollium/readable-contracts/errors';
 import { useSessionStore } from '../store/session';
 import { invalidateCache } from 'alova';
 

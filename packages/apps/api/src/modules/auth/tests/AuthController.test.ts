@@ -1,7 +1,7 @@
 import Operator from '@/modules/operators/models/Operator';
-import PasswordService from '@readable/auth/PasswordService';
-import { rateLimitStore } from '@readable/testing/rate-limit';
-import { expectError, request } from '@readable/testing/request';
+import { PasswordService } from '@pollium/readable/auth/credentials';
+import { rateLimitStore } from '@pollium/readable/testing/rate-limit';
+import { expectError, request } from '@pollium/readable/testing/request';
 import { authRoutes } from '@sentinel/contracts/auth/routes';
 import { useApp } from '@tests/harness';
 import { OPERATOR_PASSWORD, seedOperator } from '@tests/operators';

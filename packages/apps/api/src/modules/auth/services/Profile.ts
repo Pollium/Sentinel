@@ -1,8 +1,8 @@
 import Operator from '@/modules/operators/models/Operator';
 import SessionService from './Session';
-import PasswordService from '@readable/auth/PasswordService';
-import { AuthError } from '@readable/auth/errors';
-import { sessionCutoffs } from '@readable/auth/verifiedSession';
+import { PasswordService } from '@pollium/readable/auth/credentials';
+import { AuthError } from '../contracts/domain/errors';
+import { sessionCutoffs } from '@pollium/readable/auth/sessions';
 import { ChangePasswordInput, UpdateProfileInput } from '@sentinel/contracts/auth/http';
 import { Session } from '../contracts/domain/session';
 

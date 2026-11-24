@@ -1,6 +1,6 @@
 import { ApiKeyErrorCode } from '@sentinel/contracts/keys/errors';
 import { ProviderErrorCode } from '@sentinel/contracts/providers/errors';
-import { RequestErrorCode } from '@sentinel/contracts/shared/errors';
+import { RequestErrorCode } from '@pollium/readable-contracts/errors';
 import { ClipboardErrorCode } from '@sentinel/ui/services/clipboard';
 import { lookupError } from '@sentinel/ui/utils/format/lookup-error';
 import { SHARED_ERROR_COPY } from '@sentinel/ui/utils/format/shared-error-copy';

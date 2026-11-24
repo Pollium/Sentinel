@@ -1,6 +1,6 @@
 import ApiKey from '@/modules/keys/models/ApiKey';
 import Usage from '@/modules/providers/models/Usage';
-import { findOrThrow } from '@readable/utils/models/find-or-throw';
+import { findOrThrow } from '@pollium/readable/database/queries';
 import { IssuedGatewayApiKey, PublicGatewayApiKey } from '@sentinel/contracts/keys/domain';
 import { CreateApiKeyInput, UpdateApiKeyInput } from '@sentinel/contracts/keys/http';
 import { hashOf, newSecret, previewOf } from '@/modules/keys/utils/key-secret';

@@ -1,11 +1,10 @@
 {
-  "extends": "../../shared/readable/tsconfig.base.json",
+  "extends": "../tsconfig.api.base.json",
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*"],
-      "@readable/*": ["../../shared/readable/lib/*"],
       "@tests/*": ["./tests/*"]
     }
   },
-  "include": ["src", "tests", "scripts", "vite.config.ts", "../../shared/readable/lib/auth/fastify.d.ts", "../../shared/readable/lib/testing/rate-limit-store.d.ts"]
+  "include": ["src", "tests", "scripts", "vite.config.ts"]
 }

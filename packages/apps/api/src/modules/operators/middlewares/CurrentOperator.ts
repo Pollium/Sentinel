@@ -1,5 +1,5 @@
-import { AuthError } from '@readable/auth/errors';
-import { createParamDecorator } from '@readable/decorators/controllers/Params';
+import { AuthError } from '@pollium/readable/app/errors';
+import { createParamDecorator } from '@pollium/readable/http/params';
 
 export const CurrentOperator = (): ParameterDecorator =>
     createParamDecorator((req) => {

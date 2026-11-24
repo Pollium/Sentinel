@@ -1,6 +1,6 @@
 import Operator from '../models/Operator';
-import { AuthError } from '@readable/auth/errors';
-import { sessionCutoffs } from '@readable/auth/verifiedSession';
+import { AuthError } from '@pollium/readable/app/errors';
+import { sessionCutoffs } from '@pollium/readable/auth/sessions';
 import { OperatorError } from '../contracts/domain/errors';
 import { lockRoster } from '../utils/roster-lock';
 

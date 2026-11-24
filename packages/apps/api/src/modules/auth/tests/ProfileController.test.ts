@@ -1,5 +1,5 @@
 import Operator from '@/modules/operators/models/Operator';
-import { expectError, request } from '@readable/testing/request';
+import { expectError, request } from '@pollium/readable/testing/request';
 import { authRoutes } from '@sentinel/contracts/auth/routes';
 import { useApp } from '@tests/harness';
 import { bearer, OPERATOR_PASSWORD, seedOperator, tokenIssuedEarlier } from '@tests/operators';

@@ -1,5 +1,5 @@
 import OverviewPushes, { LIVE_REFRESH_MS, OVERVIEW_PUSH_INTERVAL_MS } from '../services/OverviewPushes';
-import { logger } from '@readable/utils/Logger';
+import { logger } from '@pollium/readable/app/logger';
 import { GatewayOverview, GatewayTotals, UsageWindow } from '@sentinel/contracts/usage/domain';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
