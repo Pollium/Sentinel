@@ -1,4 +1,4 @@
-import { ErrorCode, ErrorTable } from '@sentinel/contracts/shared/errors';
+import { ErrorCode, ErrorTable } from '@pollium/readable-contracts/errors';
 import { ErrorCopy } from '../contracts/errors';
 import { defineErrors } from '../errors/define-errors';
 import { notifyError } from './notify';

@@ -1,4 +1,4 @@
-import { Endpoint } from '@sentinel/contracts/shared/routing';
+import { Endpoint } from '@pollium/readable-contracts/routing';
 import { CallOptions, PathValues } from '../contracts/api';
 import { defineErrors } from '../errors/define-errors';
 import { alova } from './alova';

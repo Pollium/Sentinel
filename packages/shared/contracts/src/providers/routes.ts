@@ -1,4 +1,4 @@
-import { del, get, patch, post } from '../shared/routing';
+import { del, get, patch, post } from '@pollium/readable-contracts/routing';
 import { DiscoveredModels, PublicGatewayProvider } from './domain';
 import { CreateProviderInput, DiscoverModelsInput, UpdateProviderInput } from './http';
 

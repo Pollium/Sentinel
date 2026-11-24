@@ -1,4 +1,4 @@
-import { del, get } from '../shared/routing';
+import { del, get } from '@pollium/readable-contracts/routing';
 import { Operator } from './domain';
 
 export const operatorRoutes = {

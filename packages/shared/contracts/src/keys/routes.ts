@@ -1,4 +1,4 @@
-import { del, get, patch, post } from '../shared/routing';
+import { del, get, patch, post } from '@pollium/readable-contracts/routing';
 import { IssuedGatewayApiKey, PublicGatewayApiKey } from './domain';
 import { CreateApiKeyInput, UpdateApiKeyInput } from './http';
 

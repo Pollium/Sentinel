@@ -1,4 +1,4 @@
-import { baseCodeOf } from '@sentinel/contracts/shared/errors';
+import { baseCodeOf } from '@pollium/readable-contracts/errors';
 import { ErrorCopy } from '../../contracts/errors';
 
 export const lookupError = <C extends string>(messages: Partial<Record<C, string>>): ErrorCopy =>

@@ -1,4 +1,4 @@
-import { ApiError as ApiErrorPayload, ApiResponse } from '@sentinel/contracts/shared/http';
+import { ApiError as ApiErrorPayload, ApiResponse } from '@pollium/readable-contracts/http';
 import { ApiError } from '../services/ApiError';
 import { endSession, isSessionExpired } from '../services/end-session';
 

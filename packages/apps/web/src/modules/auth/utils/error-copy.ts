@@ -1,5 +1,5 @@
 import { AuthErrorCode } from '@sentinel/contracts/auth/errors';
-import { RateLimitErrorCode, RequestErrorCode } from '@sentinel/contracts/shared/errors';
+import { RateLimitErrorCode, RequestErrorCode } from '@pollium/readable-contracts/errors';
 import { lookupError } from '@sentinel/ui/utils/format/lookup-error';
 import { SHARED_ERROR_COPY } from '@sentinel/ui/utils/format/shared-error-copy';
 

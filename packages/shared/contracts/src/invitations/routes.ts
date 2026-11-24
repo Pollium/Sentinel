@@ -1,5 +1,5 @@
 import { Session } from '../auth/domain';
-import { del, get, post } from '../shared/routing';
+import { del, get, post } from '@pollium/readable-contracts/routing';
 import { CreatedInvitation, Invitation, InvitationPreview } from './domain';
 import { AcceptInvitationInput, InviteInput } from './http';
 
