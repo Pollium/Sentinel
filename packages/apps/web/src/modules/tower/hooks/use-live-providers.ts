@@ -1,38 +1,33 @@
-import { GatewayProviderHealth, PublicGatewayProvider } from '@sentinel/contracts/providers/domain';
+import { GatewayKind, PublicGatewayProvider } from '@sentinel/contracts/providers/domain';
 import { towerGateway } from '@sentinel/contracts/live/gateway';
-import { Query } from '@sentinel/ui/contracts/api';
-import { useQuery } from '@sentinel/ui/hooks/api/use-query';
-import { useKeyedState } from '@sentinel/ui/hooks/selection/use-keyed-state';
-import { useChannel } from '@sentinel/ui/hooks/socket/use-channel';
-import { towerApi } from '@/modules/tower/api/api';
-import '@/modules/tower/contracts/channel';
-import { invalidateCache } from 'alova';
+import { providerRoutes } from '@sentinel/contracts/providers/routes';
+import { useChannel } from '@pollium/readable-react/live/useChannel';
+import { Query, useQuery } from '@pollium/readable-react/query/useQuery';
+import { LiveProviders } from '@/modules/tower/contracts/tower-outlet';
+import { KINDS } from '@/modules/tower/utils/kinds';
 
-export const useLiveProviders = (): Query<PublicGatewayProvider[]> => {
-    const loaded = useQuery(towerApi.providers, []);
-    const [health, setHealth] = useKeyedState<Record<string, GatewayProviderHealth>>(loaded.data, () => ({}));
+export const useLiveProviders = (): LiveProviders => {
+    const byKind: Record<GatewayKind, Query<PublicGatewayProvider[]>> = {
+        chat: useQuery(providerRoutes.providers, { path: { kind: 'chat' } }),
+        voice: useQuery(providerRoutes.providers, { path: { kind: 'voice' } }),
+        search: useQuery(providerRoutes.providers, { path: { kind: 'search' } })
+    };
+    const lists = KINDS.map((kind) => byKind[kind]);
 
-    useChannel(towerGateway.channel, {
-        'tower.provider.health': (change) => {
-            void invalidateCache();
-            setHealth((current) => ({
-                ...current,
-                [change.providerId]: change.health
-            }));
+    useChannel(towerGateway, {
+        'tower.provider.health': ({ providerId, health }) => {
+            for(const list of lists){
+                if(list.data?.some((provider) => provider.id === providerId)){
+                    list.set(list.data.map((provider) => provider.id === providerId ? { ...provider, ...health } : provider));
+                }
+            }
         }
     });
 
-    if(loaded.data === null) return loaded;
-
     return {
-        ...loaded,
-        data: loaded.data.map((provider) => ({
-            ...provider,
-            ...health[provider.id]
-        })),
-        reload: () => {
-            void invalidateCache();
-            loaded.reload();
-        }
+        data: lists.every((list) => list.data !== null) ? lists.flatMap((list) => list.data ?? []) : null,
+        loading: lists.some((list) => list.loading),
+        error: lists.find((list) => list.error !== undefined)?.error,
+        reload: () => lists.forEach((list) => list.reload())
     };
 };

@@ -16,16 +16,15 @@ interface ProviderPanelProps{
     provider: PublicGatewayProvider;
     slice: GatewayUsageSlice;
     share: string;
-    onChanged: () => void;
     onRemoved: () => void;
 }
 
-const ProviderPanel = ({ provider, slice, share, onChanged, onRemoved }: ProviderPanelProps) => {
+const ProviderPanel = ({ provider, slice, share, onRemoved }: ProviderPanelProps) => {
     const isChat = provider.kind === 'chat';
 
     return (
         <div className='flex flex-col gap-10'>
-            <ProviderHeader provider={provider} share={share} onChanged={onChanged} onRemoved={onRemoved} />
+            <ProviderHeader provider={provider} share={share} onRemoved={onRemoved} />
 
             <PanelGrid>
                 <RequestsCell slice={slice} caption={trendCaption(slice.window)} />

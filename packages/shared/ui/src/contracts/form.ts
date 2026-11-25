@@ -1,4 +1,5 @@
 import { IValidation } from 'typia';
+import { FieldBinding } from '@pollium/readable-react/forms/useForm';
 import { FormEvent } from 'react';
 
 type Validator<T = unknown> = (input: T) => IValidation<unknown>;
@@ -8,15 +9,6 @@ export interface FormOptions<T>{
     initialValues: T;
     onSubmit: (values: T) => void | Promise<void>;
     submitErrorMessage: (error: Error) => string | null;
-}
-
-export interface FieldBinding<V>{
-    name: string;
-    value: V;
-    onChange: (value: V) => void;
-    onBlur: () => void;
-    isInvalid: boolean;
-    errorMessage: string | undefined;
 }
 
 export interface FormApi<T>{

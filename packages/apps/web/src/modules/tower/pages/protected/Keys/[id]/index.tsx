@@ -4,9 +4,9 @@ import EmptyState from '@sentinel/ui/components/EmptyState';
 import QueryState from '@sentinel/ui/components/QueryState';
 import Skeleton from '@sentinel/ui/components/Skeleton';
 import { KeysOutlet } from '@/modules/tower/contracts/tower-outlet';
-import { useQuery } from '@sentinel/ui/hooks/api/use-query';
+import { usageRoutes } from '@sentinel/contracts/usage/routes';
+import { useQuery } from '@pollium/readable-react/query/useQuery';
 import { parseRouteId } from '@sentinel/ui/utils/routing/parse-route-id';
-import { towerApi } from '@/modules/tower/api/api';
 import { usePeriod } from '@/modules/tower/hooks/use-period';
 import { SearchX } from 'lucide-react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
@@ -19,7 +19,7 @@ const ApiKey = () => {
     const id = parseRouteId(params.id);
     const [window] = usePeriod();
     const { keys } = useOutletContext<KeysOutlet>();
-    const usage = useQuery(towerApi.keyUsage, [id, window]);
+    const usage = useQuery(usageRoutes.keyUsage, { path: { id }, query: { window } });
     const apiKey = keys.data?.find((entry) => entry.id === id);
     const isMissing = id === undefined || (keys.data !== null && apiKey === undefined);
 
@@ -35,12 +35,7 @@ const ApiKey = () => {
                         <KeyPanel
                             apiKey={apiKey}
                             slice={slice}
-                            onChanged={() => {
-                                keys.reload();
-                                usage.reload();
-                            }}
                             onRevoked={() => {
-                                keys.reload();
                                 void navigate('/keys');
                             }}
                         />

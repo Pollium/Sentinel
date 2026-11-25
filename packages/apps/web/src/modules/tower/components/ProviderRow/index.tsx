@@ -13,17 +13,15 @@ interface ProviderRowProps{
     share: string;
     fraction: number;
     isSelected: boolean;
-    onChanged: () => void;
 }
 
-const ProviderRow = ({ provider, share, fraction, isSelected, onChanged }: ProviderRowProps) => {
+const ProviderRow = ({ provider, share, fraction, isSelected }: ProviderRowProps) => {
     const navigate = useNavigate();
     const look = lookOf(provider, useCoolingDown(provider.cooldownUntil));
 
     return (
         <ProviderActions
             provider={provider}
-            onChanged={onChanged}
             onRemoved={() => {
                 if(isSelected) void navigate('/providers');
             }}

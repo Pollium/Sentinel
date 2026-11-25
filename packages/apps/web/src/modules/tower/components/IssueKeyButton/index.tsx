@@ -9,11 +9,7 @@ import { useState } from 'react';
 
 const KEY_SHOWN_ONCE = 'This is the only time the gateway shows it. Paste it into the client that will call the gateway — as a bearer token for chat, a Deepgram token for voice, or the subscription token for search.';
 
-interface IssueKeyButtonProps{
-    onIssued: () => void;
-}
-
-const IssueKeyButton = ({ onIssued }: IssueKeyButtonProps) => {
+const IssueKeyButton = () => {
     const [isOpen, setOpen] = useState(false);
     const [issued, setIssued] = useState<IssuedGatewayApiKey | null>(null);
 
@@ -31,13 +27,7 @@ const IssueKeyButton = ({ onIssued }: IssueKeyButtonProps) => {
 
             <Modal isOpen={isOpen} onOpenChange={(next) => next ? setOpen(true) : close()} title={issued === null ? 'Issue an API key' : 'Copy the key now'}>
                 {issued === null ? (
-                    <ApiKeyForm
-                        apiKey={null}
-                        onDone={(next) => {
-                            setIssued(next);
-                            onIssued();
-                        }}
-                    />
+                    <ApiKeyForm apiKey={null} onDone={setIssued} />
                 ) : (
                     <CopyOnce
                         value={issued.secret}

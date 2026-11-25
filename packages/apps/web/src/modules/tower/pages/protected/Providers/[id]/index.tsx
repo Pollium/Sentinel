@@ -4,9 +4,9 @@ import EmptyState from '@sentinel/ui/components/EmptyState';
 import QueryState from '@sentinel/ui/components/QueryState';
 import Skeleton from '@sentinel/ui/components/Skeleton';
 import { TowerOutlet } from '@/modules/tower/contracts/tower-outlet';
-import { useQuery } from '@sentinel/ui/hooks/api/use-query';
+import { usageRoutes } from '@sentinel/contracts/usage/routes';
+import { useQuery } from '@pollium/readable-react/query/useQuery';
 import { parseRouteId } from '@sentinel/ui/utils/routing/parse-route-id';
-import { towerApi } from '@/modules/tower/api/api';
 import { usePeriod } from '@/modules/tower/hooks/use-period';
 import { kindShare } from '@/modules/tower/utils/shares';
 import { SearchX } from 'lucide-react';
@@ -20,7 +20,7 @@ const Provider = () => {
     const id = parseRouteId(params.id);
     const [window] = usePeriod();
     const { providers, overview } = useOutletContext<TowerOutlet>();
-    const usage = useQuery(towerApi.providerUsage, [id, window]);
+    const usage = useQuery(usageRoutes.providerUsage, { path: { id }, query: { window } });
     const provider = providers.data?.find((entry) => entry.id === id);
     const isMissing = id === undefined || (providers.data !== null && provider === undefined);
 
@@ -37,10 +37,6 @@ const Provider = () => {
                             provider={provider}
                             slice={slice}
                             share={kindShare(provider, providers.data ?? [], overview.data?.providers ?? [])}
-                            onChanged={() => {
-                                providers.reload();
-                                usage.reload();
-                            }}
                             onRemoved={() => {
                                 void navigate('/providers');
                             }}

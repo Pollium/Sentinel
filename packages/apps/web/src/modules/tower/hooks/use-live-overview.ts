@@ -1,35 +1,20 @@
 import { GatewayOverview, UsageWindow } from '@sentinel/contracts/usage/domain';
 import { towerGateway } from '@sentinel/contracts/live/gateway';
-import { Query } from '@sentinel/ui/contracts/api';
-import { useQuery } from '@sentinel/ui/hooks/api/use-query';
-import { useChannel } from '@sentinel/ui/hooks/socket/use-channel';
-import { towerApi } from '@/modules/tower/api/api';
-import '@/modules/tower/contracts/channel';
-import { useEffect, useState } from 'react';
+import { usageRoutes } from '@sentinel/contracts/usage/routes';
+import { useChannel } from '@pollium/readable-react/live/useChannel';
+import { Query, useQuery } from '@pollium/readable-react/query/useQuery';
 
 export const useLiveOverview = (window: UsageWindow): Query<GatewayOverview> => {
-    const loaded = useQuery(towerApi.overview, [window]);
-    const [pushed, setPushed] = useState<GatewayOverview | null>(null);
+    const overview = useQuery(usageRoutes.overview, { query: { window } });
 
-    const keep = (overview: GatewayOverview) => {
-        if(overview.window === window) setPushed(overview);
+    const keep = (pushed: GatewayOverview) => {
+        if(pushed.window === window) overview.set(pushed);
     };
 
-    const { send, status } = useChannel(towerGateway.channel, {
+    useChannel(towerGateway, {
         'tower.watch': keep,
         'tower.overview': keep
-    });
+    }, { join: ['tower.watch', { window }] });
 
-    useEffect(() => {
-        if(status === 'open') send('tower.watch', { window });
-    }, [send, status, window]);
-
-    if(pushed === null || pushed.window !== window) return loaded;
-
-    return {
-        data: pushed,
-        loading: false,
-        error: undefined,
-        reload: loaded.reload
-    };
+    return overview;
 };

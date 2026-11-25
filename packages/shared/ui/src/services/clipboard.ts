@@ -1,18 +1,13 @@
-import { ErrorCode, ErrorTable } from '@pollium/readable-contracts/errors';
-import { ErrorCopy } from '../contracts/errors';
-import { defineErrors } from '../errors/define-errors';
 import { notifyError } from './notify';
+import { defineErrors } from '@pollium/readable-contracts/errors';
+import { ErrorCopy } from '@pollium/readable-react/errors/copy';
 
-const ClipboardErrors = {
+const ClipboardErrors = defineErrors({
     domain: 'Clipboard',
     causes: {
         WriteBlocked: 403
     }
-} as const satisfies ErrorTable;
-
-const ClipboardError = defineErrors(ClipboardErrors);
-
-export type ClipboardErrorCode = ErrorCode<typeof ClipboardErrors>;
+});
 
 export const copyText = async (source: string, copy: ErrorCopy): Promise<boolean> => {
     try{
@@ -20,7 +15,7 @@ export const copyText = async (source: string, copy: ErrorCopy): Promise<boolean
 
         return true;
     }catch{
-        notifyError(ClipboardError.WriteBlocked(), copy, { title: 'Couldn\'t copy' });
+        notifyError(ClipboardErrors.WriteBlocked(), copy, { title: 'Couldn\'t copy' });
 
         return false;
     }

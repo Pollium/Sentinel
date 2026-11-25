@@ -21,6 +21,7 @@
     "typia": "^12.1.1"
   },
   "devDependencies": {
+    "@pollium/readable-contracts": "^0.4.0",
     "@types/node": "^26.1.1",
     "@types/pg": "^8.20.0",
     "@types/ws": "^8.18.1",

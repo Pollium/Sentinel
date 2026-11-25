@@ -3,8 +3,9 @@ import Field from '@sentinel/ui/components/Field';
 import Form from '@sentinel/ui/components/Form';
 import { CreatedInvitation } from '@sentinel/contracts/invitations/domain';
 import { InviteInput } from '@sentinel/contracts/invitations/http';
+import { invitationRoutes } from '@sentinel/contracts/invitations/routes';
+import { useMutation } from '@pollium/readable-react/query/useMutation';
 import { useForm } from '@sentinel/ui/hooks/forms/use-form';
-import { operatorsApi } from '@/modules/operators/api/api';
 import { errorCopy } from '@/modules/operators/utils/error-copy';
 import { Button } from '@heroui/react';
 
@@ -19,12 +20,13 @@ interface InviteFormProps{
 }
 
 const InviteForm = ({ joinedEmails, onDone }: InviteFormProps) => {
+    const invite = useMutation(invitationRoutes.create);
     const form = useForm<InviteInput>({
         validate,
         submitErrorMessage: errorCopy,
         initialValues: { email: '' },
         onSubmit: async (values) => {
-            onDone(await operatorsApi.invite(values));
+            onDone(await invite.run({ body: values }));
         }
     });
     const resets = joinedEmails.includes(form.values.email.toLowerCase());

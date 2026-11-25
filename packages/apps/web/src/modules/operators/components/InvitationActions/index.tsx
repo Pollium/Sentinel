@@ -1,24 +1,21 @@
 import ActionMenu from '@sentinel/ui/components/ActionMenu';
 import ConfirmDialog from '@sentinel/ui/components/ConfirmDialog';
 import { Invitation } from '@sentinel/contracts/invitations/domain';
-import { useMutation } from '@sentinel/ui/hooks/api/use-mutation';
-import { operatorsApi } from '@/modules/operators/api/api';
+import { invitationRoutes } from '@sentinel/contracts/invitations/routes';
+import { useMutation } from '@pollium/readable-react/query/useMutation';
 import { errorCopy } from '@/modules/operators/utils/error-copy';
 import { DropdownItem } from '@heroui/react';
 import { useState } from 'react';
 
 interface InvitationActionsProps{
     invitation: Invitation;
-    onRevoked: () => void;
 }
 
-const InvitationActions = ({ invitation, onRevoked }: InvitationActionsProps) => {
+const InvitationActions = ({ invitation }: InvitationActionsProps) => {
     const [confirming, setConfirming] = useState(false);
-    const revoke = useMutation(operatorsApi.revoke, {
-        onSuccess: () => {
-            setConfirming(false);
-            onRevoked();
-        }
+    const revoke = useMutation(invitationRoutes.revoke, {
+        path: { invitationId: invitation.id },
+        onSuccess: () => setConfirming(false)
     });
 
     return (
@@ -37,7 +34,7 @@ const InvitationActions = ({ invitation, onRevoked }: InvitationActionsProps) =>
                 confirmLabel='Revoke'
                 isPending={revoke.loading}
                 error={errorCopy(revoke.error)}
-                onConfirm={() => { void revoke.run(invitation.id).catch(() => undefined); }}
+                onConfirm={() => { void revoke.run().catch(() => undefined); }}
             />
         </>
     );

@@ -12,10 +12,9 @@ interface ProviderListProps{
     shares: GatewayShare[];
     selectedId: string | undefined;
     isAllSelected: boolean;
-    onChanged: () => void;
 }
 
-const ProviderList = ({ providers, shares, selectedId, isAllSelected, onChanged }: ProviderListProps) => {
+const ProviderList = ({ providers, shares, selectedId, isAllSelected }: ProviderListProps) => {
     const now = Date.now();
 
     return (
@@ -38,7 +37,6 @@ const ProviderList = ({ providers, shares, selectedId, isAllSelected, onChanged 
                                 share={kindShare(provider, providers, shares)}
                                 fraction={kindFraction(provider, providers, shares)}
                                 isSelected={provider.id === selectedId}
-                                onChanged={onChanged}
                             />
                         ))}
                     </ListGroup>

@@ -4,10 +4,10 @@ import OverviewPushes, { OVERVIEW_PUSH_INTERVAL_MS } from '../services/OverviewP
 import { usageRecorder } from '@/modules/providers/services/pool/UsageRecorder';
 import { providerHealth } from '@/modules/providers/services/pool/ProviderHealth';
 import { eventBus } from '@pollium/readable/events/EventBus';
-import { ACCESS_REVOKED } from '@sentinel/contracts/shared/socket';
 import { UsageWindow } from '@sentinel/contracts/usage/domain';
 import { GatewayProviderHealth } from '@sentinel/contracts/providers/domain';
 import { TowerFrame, towerGateway } from '@sentinel/contracts/live/gateway';
+import { SocketClose } from '@pollium/readable-contracts/gateway';
 import { uuid } from '@tests/uuid';
 import { useApp } from '@tests/harness';
 import { seedApiKey, seedProvider } from '@tests/seed';
@@ -117,7 +117,7 @@ describe('TowerGateway', () => {
         await Operator.delete({ id: OPERATOR_ID });
         vi.advanceTimersByTime(30_000);
 
-        expect(await closed).toBe(ACCESS_REVOKED);
+        expect(await closed).toBe(SocketClose.AccessRevoked);
     });
 
     it('answers a watch with the overview of that window', async () => {

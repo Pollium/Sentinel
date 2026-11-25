@@ -2,8 +2,9 @@ import typia from 'typia';
 import Field from '@sentinel/ui/components/Field';
 import Form from '@sentinel/ui/components/Form';
 import { UpdateProfileInput } from '@sentinel/contracts/auth/http';
+import { authRoutes } from '@sentinel/contracts/auth/routes';
+import { useMutation } from '@pollium/readable-react/query/useMutation';
 import { useForm } from '@sentinel/ui/hooks/forms/use-form';
-import { authApi } from '@/modules/auth/api/api';
 import { errorCopy } from '@/modules/auth/utils/error-copy';
 import { Button } from '@heroui/react';
 
@@ -15,12 +16,13 @@ interface NameFormProps{
 }
 
 const NameForm = ({ name, onSaved }: NameFormProps) => {
+    const update = useMutation(authRoutes.updateProfile);
     const form = useForm<UpdateProfileInput>({
         validate,
         submitErrorMessage: errorCopy,
         initialValues: { name },
         onSubmit: async (values) => {
-            await authApi.updateProfile(values);
+            await update.run({ body: values });
             onSaved();
         }
     });

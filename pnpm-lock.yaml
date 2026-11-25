@@ -38,6 +38,9 @@ importers:
         specifier: ^12.1.1
         version: 12.1.1(@types/node@26.1.1)(typescript@6.0.3)
     devDependencies:
+      '@pollium/readable-contracts':
+        specifier: ^0.4.0
+        version: 0.4.0
       '@types/node':
         specifier: ^26.1.1
         version: 26.1.1
@@ -77,18 +80,15 @@ importers:
       '@heroui/styles':
         specifier: ^3.2.2
         version: 3.2.2(tailwind-merge@3.4.0)(tailwindcss@4.3.3)
-      '@pollium/readable-contracts':
-        specifier: ^0.2.0
-        version: 0.2.0
+      '@pollium/readable-react':
+        specifier: ^0.4.0
+        version: 0.4.0(react-dom@19.2.7(react@19.2.7))(react-router-dom@7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(typia@12.1.1(@types/node@26.1.1)(typescript@6.0.3))(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0))(vitest@4.1.10(@types/node@26.1.1)(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0)))
       '@sentinel/contracts':
         specifier: workspace:*
         version: link:../../shared/contracts
       '@sentinel/ui':
         specifier: workspace:*
         version: link:../../shared/ui
-      alova:
-        specifier: ^3.5.2
-        version: 3.5.2
       lucide-react:
         specifier: ^1.24.0
         version: 1.24.0(react@19.2.7)
@@ -138,12 +138,15 @@ importers:
       vite:
         specifier: ^8.1.5
         version: 8.1.5(@types/node@26.1.1)(jiti@2.7.0)
+      vitest:
+        specifier: ^4.1.10
+        version: 4.1.10(@types/node@26.1.1)(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0))
 
   packages/shared/contracts:
     dependencies:
       '@pollium/readable-contracts':
-        specifier: ^0.2.0
-        version: 0.2.0
+        specifier: ^0.4.0
+        version: 0.4.0
     devDependencies:
       oxlint:
         specifier: ^1.71.0
@@ -158,14 +161,14 @@ importers:
         specifier: ^3.2.2
         version: 3.2.2(@react-spectrum/provider@3.11.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(tailwindcss@4.3.3)
       '@pollium/readable-contracts':
-        specifier: ^0.2.0
-        version: 0.2.0
+        specifier: ^0.4.0
+        version: 0.4.0
+      '@pollium/readable-react':
+        specifier: ^0.4.0
+        version: 0.4.0(react-dom@19.2.7(react@19.2.7))(react-router-dom@7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(typia@12.1.1(@types/node@26.1.1)(typescript@6.0.3))(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0))(vitest@4.1.10(@types/node@26.1.1)(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0)))
       '@sentinel/contracts':
         specifier: workspace:*
         version: link:../contracts
-      alova:
-        specifier: ^3.5.2
-        version: 3.5.2
       lucide-react:
         specifier: ^1.24.0
         version: 1.24.0(react@19.2.7)
@@ -226,9 +229,6 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
       react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
-
-  '@alova/shared@1.3.3':
-    resolution: {integrity: sha512-sIXqkoG6gs/KlnpTOLQAxui5jocnJclkPJw0Gk2gT7kHxFLyTFiaMkZFqw4zTZciDRscBA+VUkyGBrMFlu5NIg==}
 
   '@aws-sdk/checksums@3.1002.7':
     resolution: {integrity: sha512-J2L1/AdkQOyAEt440r+U4vdh3UcyDk+ybwGd0hWLTNCbS+t2TykGcp3/tNK2H8zHjIzsrsF2B/5YiGCt5tl5yA==}
@@ -582,6 +582,26 @@ packages:
 
   '@pollium/readable-contracts@0.2.0':
     resolution: {integrity: sha512-WzBFRNhCnjFOxFbcZz7SX6Kp+q+DqkpMQfOwxFP/dK+IxHUf6tXaTRcMxuUGxPpoy8Qfp7V3PYsab1VyObTR9A==}
+
+  '@pollium/readable-contracts@0.4.0':
+    resolution: {integrity: sha512-6PJV4HYCs2nCXRVPK+AORIY/KmYIvEKVWD1BKnesu3foVA40M71zTfibJJJSrYSHO/+xqpL7jzy+/P8hDkKyhA==}
+
+  '@pollium/readable-react@0.4.0':
+    resolution: {integrity: sha512-ebeSpqtH49QYlGYAXSVPF67uZfho7bb98mHsLil3ivb2+3Wn7HZKUFW0mFuzjwLk1hbRULxLLOHWi/OcJie8gA==}
+    peerDependencies:
+      react: ^19.2.0
+      react-dom: ^19.2.0
+      react-router-dom: ^7.18.0
+      typia: ^12.1.1
+      vite: ^8.1.5
+      vitest: ^4.1.10
+    peerDependenciesMeta:
+      typia:
+        optional: true
+      vite:
+        optional: true
+      vitest:
+        optional: true
 
   '@pollium/readable@0.2.0':
     resolution: {integrity: sha512-K3Cvxnf3KhalcXLb8pvfvtslE9r6WQCo+OysyXRl4TEmAJWGF8ZN/jKYvl4ogGTHkVYa+IstCYQA+gJEX7lCcw==}
@@ -1107,10 +1127,6 @@ packages:
 
   ajv@8.20.0:
     resolution: {integrity: sha512-Thbli+OlOj+iMPYFBVBfJ3OmCAnaSyNn4M1vz9T6Gka5Jt9ba/HIR56joy65tY6kx/FCF5VXNB819Y7/GUrBGA==}
-
-  alova@3.5.2:
-    resolution: {integrity: sha512-rrI4QLiHekeyf9AwBPhxCd5m46jJvn+jAc81PAytHROEEKeVeaN5vubaeA/WQVa4tHRjcs/FYluLL+SBRU/JhA==}
-    engines: {node: '>= 18.0.0'}
 
   ansi-escapes@4.3.2:
     resolution: {integrity: sha512-gKXj5ALrKWQLsYG9jlTRmR/xKluxHV+Z9QEwNIgCfM1/uwPMCuzVVnh5mwTd+OuBZcwSIMbqssNWRm1lE51QaQ==}
@@ -1956,9 +1972,6 @@ packages:
     resolution: {integrity: sha512-U+5l2KrcMNOUPYvazA3h5ekF80FHTUG+87SEAmHZmolh1M+i/WyTCxVzmi+tidIa1tM4BSe8g2Y/D3loWDjj+w==}
     engines: {node: '>=4'}
 
-  rate-limiter-flexible@5.0.5:
-    resolution: {integrity: sha512-+/dSQfo+3FYwYygUs/V2BBdwGa9nFtakDwKt4l0bnvNB53TNT++QSFewwHX9qXrZJuMe9j+TUaU21lm5ARgqdQ==}
-
   react-aria-components@1.22.1:
     resolution: {integrity: sha512-UTHaYHOaM71bOCjGPF50DcLywlrwAodE63IP64LB4kO+OizatQEL8TesVEOM8+TkBeSgHoflJ45388IlJfa7aw==}
     peerDependencies:
@@ -2509,8 +2522,6 @@ snapshots:
       react-transition-group: 4.4.5(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       use-sync-external-store: 1.7.0(react@19.2.7)
 
-  '@alova/shared@1.3.3': {}
-
   '@aws-sdk/checksums@3.1002.7':
     dependencies:
       '@aws-sdk/core': 3.981.2
@@ -2931,6 +2942,23 @@ snapshots:
   '@pinojs/redact@0.4.0': {}
 
   '@pollium/readable-contracts@0.2.0': {}
+
+  '@pollium/readable-contracts@0.4.0': {}
+
+  '@pollium/readable-react@0.4.0(react-dom@19.2.7(react@19.2.7))(react-router-dom@7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(typia@12.1.1(@types/node@26.1.1)(typescript@6.0.3))(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0))(vitest@4.1.10(@types/node@26.1.1)(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0)))':
+    dependencies:
+      '@pollium/readable-contracts': 0.4.0
+      '@typia/unplugin': 12.1.1(typia@12.1.1(@types/node@26.1.1)(typescript@6.0.3))(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0))
+      react: 19.2.7
+      react-dom: 19.2.7(react@19.2.7)
+      react-router-dom: 7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+    optionalDependencies:
+      typia: 12.1.1(@types/node@26.1.1)(typescript@6.0.3)
+      vite: 8.1.5(@types/node@26.1.1)(jiti@2.7.0)
+      vitest: 4.1.10(@types/node@26.1.1)(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0))
+    transitivePeerDependencies:
+      - rollup
+      - svelte
 
   '@pollium/readable@0.2.0(@types/node@26.1.1)(fastify@5.12.5)(pg@8.22.0)(typeorm@1.1.0(ioredis@5.11.1)(pg@8.22.0))(typescript@6.0.3)(vitest@4.1.10(@types/node@26.1.1)(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0)))':
     dependencies:
@@ -3413,11 +3441,6 @@ snapshots:
       fast-uri: 3.1.9
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
-
-  alova@3.5.2:
-    dependencies:
-      '@alova/shared': 1.3.3
-      rate-limiter-flexible: 5.0.5
 
   ansi-escapes@4.3.2:
     dependencies:
@@ -4193,8 +4216,6 @@ snapshots:
     dependencies:
       drange: 1.1.1
       ret: 0.2.2
-
-  rate-limiter-flexible@5.0.5: {}
 
   react-aria-components@1.22.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
     dependencies:

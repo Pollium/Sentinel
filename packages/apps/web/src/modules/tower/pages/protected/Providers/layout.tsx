@@ -35,7 +35,7 @@ const ProvidersLayout = () => {
                 {providers.data === null ? null : (
                     <span className='hidden text-[0.8125rem] tabular-nums text-muted sm:inline'>{count(serving)} of {count(providers.data.length)} serving</span>
                 )}
-                <AddProviderMenu onAdded={providers.reload} />
+                <AddProviderMenu />
                 <TowerPeriodMenu />
             </PageToolbar>
 
@@ -47,7 +47,6 @@ const ProvidersLayout = () => {
                         errorTitle='The providers could not be loaded'
                         errorDescription='Something interrupted the request. Check that the gateway is running and try again.'
                         skeleton={<SkeletonList count={SKELETON_ROWS} className='flex flex-col gap-2 px-3' itemClassName='h-7 w-full rounded-lg' />}
-                        isEmpty={(loaded) => loaded !== null && loaded.length === 0}
                         empty={<EmptyState compact icon={Server} title='No providers yet' description='Every request the gateway is asked for answers 503 until one serves it.' />}
                     >
                         {(loaded) => (
@@ -56,7 +55,6 @@ const ProvidersLayout = () => {
                                 shares={overview.data?.providers ?? []}
                                 selectedId={selectedId}
                                 isAllSelected={selectedId === undefined}
-                                onChanged={providers.reload}
                             />
                         )}
                     </QueryState>

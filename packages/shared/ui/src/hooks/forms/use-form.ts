@@ -1,49 +1,8 @@
-import { IValidation } from 'typia';
-import { ErrorMap, FieldBinding, FormApi, FormOptions, TouchedMap } from '../../contracts/form';
-import { ApiError } from '../../services/ApiError';
-import { toError } from '../../utils/format/errors';
+import { ErrorMap, FormApi, FormOptions, TouchedMap } from '../../contracts/form';
+import { ApiError, toError } from '@pollium/readable-react/http/ApiError';
+import { FieldBinding } from '@pollium/readable-react/forms/useForm';
+import { fieldOf, messageOf } from '@pollium/readable-react/forms/messages';
 import { useRef, useState, FormEvent } from 'react';
-
-const fieldErrorsFromBody = (body: unknown): ErrorMap | null => {
-    if(!body || typeof body !== 'object') return null;
-    const detail = (body as { errors?: unknown }).errors;
-    if(!detail || typeof detail !== 'object') return null;
-
-    const map: ErrorMap = {};
-    for(const [key, value] of Object.entries(detail as Record<string, unknown>)){
-        if(typeof value === 'string') map[key] = value;
-    }
-    return Object.keys(map).length > 0 ? map : null;
-};
-
-const WHOLE_NUMBER = /Type<"u?int(32|64)?">/;
-
-const messageFor = ({ expected, value, description }: IValidation.IError): string => {
-    if(description !== undefined) return description;
-
-    const length = typeof value === 'string' ? value.length : null;
-
-    const min = expected.match(/MinLength<(\d+)>/);
-    if(min && length !== null && length < Number(min[1])){
-        return min[1] === '1' ? 'Required' : `At least ${min[1]} characters`;
-    }
-
-    const max = expected.match(/MaxLength<(\d+)>/);
-    if(max && length !== null && length > Number(max[1])){
-        return `At most ${max[1]} characters`;
-    }
-
-    if(expected.includes('Format<"email">')) return 'Invalid email';
-    if(expected.includes('Pattern<')) return 'Invalid format';
-    if(typeof value === 'number' && Number.isNaN(value)) return 'Required';
-
-    const minimum = expected.match(/Minimum<(\d+)>/);
-    if(minimum && typeof value === 'number' && value < Number(minimum[1])) return `At least ${minimum[1]}`;
-    if(WHOLE_NUMBER.test(expected) && typeof value === 'number' && !Number.isInteger(value)) return 'Must be a whole number';
-    return 'Invalid value';
-};
-
-const fieldKeyOf = (path: string): string => path.replace(/^\$input\./, '').split(/[.[]/)[0];
 
 export const useForm = <T extends object>({
     validate: validateInput,
@@ -79,8 +38,8 @@ export const useForm = <T extends object>({
 
         const map: ErrorMap = {};
         for(const error of result.errors){
-            const key = fieldKeyOf(error.path);
-            if(!(key in map)) map[key] = messageFor(error);
+            const key = fieldOf(error.path);
+            if(!(key in map)) map[key] = messageOf(error);
         }
         return map;
     };
@@ -111,10 +70,7 @@ export const useForm = <T extends object>({
         const message = submitErrorMessage(error);
         if(message === null) return;
 
-        if(error instanceof ApiError){
-            const fieldErrors = fieldErrorsFromBody(error.body);
-            if(fieldErrors) setErrors((prev) => ({ ...prev, ...fieldErrors }));
-        }
+        if(error instanceof ApiError) setErrors((prev) => ({ ...prev, ...error.fields }));
 
         setSubmitError(message);
     };

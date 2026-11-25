@@ -5,30 +5,31 @@ import AuthHeading from '@/modules/auth/components/AuthHeading';
 import InvitationForm from '@/modules/auth/components/InvitationForm';
 import { InvitationErrorCode } from '@sentinel/contracts/invitations/errors';
 import { AcceptInvitationInput } from '@sentinel/contracts/invitations/http';
-import { baseCodeOf } from '@pollium/readable-contracts/errors';
-import { useQuery } from '@sentinel/ui/hooks/api/use-query';
-import { toError } from '@sentinel/ui/utils/format/errors';
-import { authApi } from '@/modules/auth/api/api';
-import { startSession } from '@/modules/auth/utils/start-session';
+import { invitationRoutes } from '@sentinel/contracts/invitations/routes';
+import { ApiError } from '@pollium/readable-react/http/ApiError';
+import { call } from '@pollium/readable-react/http/call';
+import { useQuery } from '@pollium/readable-react/query/useQuery';
+import { session } from '@pollium/readable-react/session/session';
 import { Button } from '@heroui/react';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const GONE: InvitationErrorCode = 'Invitation::NotFound';
 
-const isGone = (error: Error | undefined): boolean => error !== undefined && baseCodeOf(error.message) === GONE;
+const isGone = (error: unknown): boolean => error instanceof ApiError && error.code === GONE;
 
 const Invitation = () => {
     const navigate = useNavigate();
-    const { token = '' } = useParams();
-    const preview = useQuery(authApi.previewInvitation, [token]);
+    const { token } = useParams();
+    const preview = useQuery(invitationRoutes.preview, { path: { token } });
     const [expired, setExpired] = useState(false);
 
     const accept = async (values: AcceptInvitationInput) => {
         try{
-            await startSession(await authApi.acceptInvitation(token, values));
+            const accepted = await call(invitationRoutes.accept, { path: { token }, body: values });
+            session.start(accepted.token);
         }catch(error: unknown){
-            if(!isGone(toError(error))) throw error;
+            if(!isGone(error)) throw error;
             setExpired(true);
         }
     };

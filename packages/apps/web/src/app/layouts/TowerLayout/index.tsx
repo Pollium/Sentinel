@@ -2,15 +2,35 @@ import TowerNav from '@/app/components/TowerNav';
 import TowerTabBar from '@/app/components/TowerTabBar';
 import TowerJumpTo from '@/app/components/TowerJumpTo';
 import AccountMenu from '@/modules/auth/components/AccountMenu';
-import { usePageToolbar } from '@sentinel/ui/store/page-toolbar';
+import ErrorState from '@sentinel/ui/components/ErrorState';
+import Loader from '@sentinel/ui/components/Loader';
 import ThemeToggle from '@sentinel/ui/components/layout/ThemeToggle';
+import { authRoutes } from '@sentinel/contracts/auth/routes';
+import { useQuery } from '@pollium/readable-react/query/useQuery';
+import { usePageToolbar } from '@sentinel/ui/store/page-toolbar';
 import { SessionOutlet } from '@sentinel/ui/contracts/session';
-import { Outlet, useOutletContext } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 const TowerLayout = () => {
     const setTitleSlot = usePageToolbar((state) => state.setTitleSlot);
     const setActionsSlot = usePageToolbar((state) => state.setActionsSlot);
-    const session = useOutletContext<SessionOutlet>();
+    const operator = useQuery(authRoutes.me);
+
+    if(operator.error){
+        return (
+            <div className='flex h-dvh items-center justify-center bg-background px-4'>
+                <ErrorState
+                    title='Something went wrong'
+                    description='We could not check your session. Try again.'
+                    onRetry={operator.reload}
+                />
+            </div>
+        );
+    }
+
+    if(operator.data === null) return <Loader label='Checking your session' className='h-dvh bg-canvas' />;
+
+    const session: SessionOutlet = { operator: operator.data };
 
     return (
         <div className='flex h-dvh bg-background text-foreground'>
@@ -28,7 +48,7 @@ const TowerLayout = () => {
 
                             <div className='flex shrink-0 items-center gap-1'>
                                 <ThemeToggle />
-                                <AccountMenu operator={session.operator} onRenamed={session.reloadOperator} />
+                                <AccountMenu operator={session.operator} />
                             </div>
                         </div>
                     </header>

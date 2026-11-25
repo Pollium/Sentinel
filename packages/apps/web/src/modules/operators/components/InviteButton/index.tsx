@@ -10,10 +10,9 @@ import { useState } from 'react';
 
 interface InviteButtonProps{
     joinedEmails: string[];
-    onInvited: () => void;
 }
 
-const InviteButton = ({ joinedEmails, onInvited }: InviteButtonProps) => {
+const InviteButton = ({ joinedEmails }: InviteButtonProps) => {
     const [isOpen, setOpen] = useState(false);
     const [created, setCreated] = useState<CreatedInvitation | null>(null);
 
@@ -31,13 +30,7 @@ const InviteButton = ({ joinedEmails, onInvited }: InviteButtonProps) => {
 
             <Modal isOpen={isOpen} onOpenChange={(next) => next ? setOpen(true) : close()} title={created === null ? 'Invite an operator' : 'Copy the link now'}>
                 {created === null ? (
-                    <InviteForm
-                        joinedEmails={joinedEmails}
-                        onDone={(next) => {
-                            setCreated(next);
-                            onInvited();
-                        }}
-                    />
+                    <InviteForm joinedEmails={joinedEmails} onDone={setCreated} />
                 ) : (
                     <CopyOnce
                         value={created.url}
