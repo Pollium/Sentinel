@@ -39,8 +39,8 @@ importers:
         version: 12.1.1(@types/node@26.1.1)(typescript@6.0.3)
     devDependencies:
       '@pollium/readable-contracts':
-        specifier: ^0.4.0
-        version: 0.4.0
+        specifier: ^0.4.3
+        version: 0.4.3
       '@types/node':
         specifier: ^26.1.1
         version: 26.1.1
@@ -81,8 +81,8 @@ importers:
         specifier: ^3.2.2
         version: 3.2.2(tailwind-merge@3.4.0)(tailwindcss@4.3.3)
       '@pollium/readable-react':
-        specifier: ^0.4.0
-        version: 0.4.0(react-dom@19.2.7(react@19.2.7))(react-router-dom@7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(typia@12.1.1(@types/node@26.1.1)(typescript@6.0.3))(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0))(vitest@4.1.10(@types/node@26.1.1)(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0)))
+        specifier: ^0.4.3
+        version: 0.4.3(react-dom@19.2.7(react@19.2.7))(react-router-dom@7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(typia@12.1.1(@types/node@26.1.1)(typescript@6.0.3))(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0))(vitest@4.1.10(@types/node@26.1.1)(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0)))
       '@sentinel/contracts':
         specifier: workspace:*
         version: link:../../shared/contracts
@@ -145,8 +145,8 @@ importers:
   packages/shared/contracts:
     dependencies:
       '@pollium/readable-contracts':
-        specifier: ^0.4.0
-        version: 0.4.0
+        specifier: ^0.4.3
+        version: 0.4.3
     devDependencies:
       oxlint:
         specifier: ^1.71.0
@@ -161,11 +161,11 @@ importers:
         specifier: ^3.2.2
         version: 3.2.2(@react-spectrum/provider@3.11.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(tailwindcss@4.3.3)
       '@pollium/readable-contracts':
-        specifier: ^0.4.0
-        version: 0.4.0
+        specifier: ^0.4.3
+        version: 0.4.3
       '@pollium/readable-react':
-        specifier: ^0.4.0
-        version: 0.4.0(react-dom@19.2.7(react@19.2.7))(react-router-dom@7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(typia@12.1.1(@types/node@26.1.1)(typescript@6.0.3))(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0))(vitest@4.1.10(@types/node@26.1.1)(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0)))
+        specifier: ^0.4.3
+        version: 0.4.3(react-dom@19.2.7(react@19.2.7))(react-router-dom@7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(typia@12.1.1(@types/node@26.1.1)(typescript@6.0.3))(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0))(vitest@4.1.10(@types/node@26.1.1)(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0)))
       '@sentinel/contracts':
         specifier: workspace:*
         version: link:../contracts
@@ -583,11 +583,11 @@ packages:
   '@pollium/readable-contracts@0.2.0':
     resolution: {integrity: sha512-WzBFRNhCnjFOxFbcZz7SX6Kp+q+DqkpMQfOwxFP/dK+IxHUf6tXaTRcMxuUGxPpoy8Qfp7V3PYsab1VyObTR9A==}
 
-  '@pollium/readable-contracts@0.4.0':
-    resolution: {integrity: sha512-6PJV4HYCs2nCXRVPK+AORIY/KmYIvEKVWD1BKnesu3foVA40M71zTfibJJJSrYSHO/+xqpL7jzy+/P8hDkKyhA==}
+  '@pollium/readable-contracts@0.4.3':
+    resolution: {integrity: sha512-zUN7ye1WL695kDoN0B/RYJe0FwRweTmwhs9iGKULBZaEL/akTXUZv/b2lCHqfXZno33V/SWVHtelo4XrF2rRFw==}
 
-  '@pollium/readable-react@0.4.0':
-    resolution: {integrity: sha512-ebeSpqtH49QYlGYAXSVPF67uZfho7bb98mHsLil3ivb2+3Wn7HZKUFW0mFuzjwLk1hbRULxLLOHWi/OcJie8gA==}
+  '@pollium/readable-react@0.4.3':
+    resolution: {integrity: sha512-u3PNXJ4gdm1+ld3OfiIZcPdFKg4IWy6XA44urJygcAJEBjFJIogwf6w7S0aaiWFPPwyXhE8OkMukRgFZrZwbvg==}
     peerDependencies:
       react: ^19.2.0
       react-dom: ^19.2.0
@@ -2943,11 +2943,11 @@ snapshots:
 
   '@pollium/readable-contracts@0.2.0': {}
 
-  '@pollium/readable-contracts@0.4.0': {}
+  '@pollium/readable-contracts@0.4.3': {}
 
-  '@pollium/readable-react@0.4.0(react-dom@19.2.7(react@19.2.7))(react-router-dom@7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(typia@12.1.1(@types/node@26.1.1)(typescript@6.0.3))(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0))(vitest@4.1.10(@types/node@26.1.1)(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0)))':
+  '@pollium/readable-react@0.4.3(react-dom@19.2.7(react@19.2.7))(react-router-dom@7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(typia@12.1.1(@types/node@26.1.1)(typescript@6.0.3))(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0))(vitest@4.1.10(@types/node@26.1.1)(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0)))':
     dependencies:
-      '@pollium/readable-contracts': 0.4.0
+      '@pollium/readable-contracts': 0.4.3
       '@typia/unplugin': 12.1.1(typia@12.1.1(@types/node@26.1.1)(typescript@6.0.3))(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0))
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
