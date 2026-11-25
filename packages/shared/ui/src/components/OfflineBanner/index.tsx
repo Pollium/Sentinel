@@ -1,4 +1,4 @@
-import { useOnline } from '../../hooks/chrome/use-online';
+import { useOnline } from '@pollium/readable-react/states/useOnline';
 import { WifiOff } from 'lucide-react';
 
 const OfflineBanner = () => {
