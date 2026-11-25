@@ -17,7 +17,6 @@
     "@pollium/readable-react": "^0.4.0",
     "@sentinel/contracts": "workspace:*",
     "@sentinel/ui": "workspace:*",
-    "alova": "^3.5.2",
     "lucide-react": "^1.24.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",

@@ -1,20 +1,7 @@
 import { IValidation } from 'typia';
 import { ErrorMap, FieldBinding, FormApi, FormOptions, TouchedMap } from '../../contracts/form';
-import { ApiError } from '../../services/ApiError';
-import { toError } from '../../utils/format/errors';
+import { ApiError, toError } from '@pollium/readable-react/http/ApiError';
 import { useRef, useState, FormEvent } from 'react';
-
-const fieldErrorsFromBody = (body: unknown): ErrorMap | null => {
-    if(!body || typeof body !== 'object') return null;
-    const detail = (body as { errors?: unknown }).errors;
-    if(!detail || typeof detail !== 'object') return null;
-
-    const map: ErrorMap = {};
-    for(const [key, value] of Object.entries(detail as Record<string, unknown>)){
-        if(typeof value === 'string') map[key] = value;
-    }
-    return Object.keys(map).length > 0 ? map : null;
-};
 
 const WHOLE_NUMBER = /Type<"u?int(32|64)?">/;
 
@@ -111,10 +98,7 @@ export const useForm = <T extends object>({
         const message = submitErrorMessage(error);
         if(message === null) return;
 
-        if(error instanceof ApiError){
-            const fieldErrors = fieldErrorsFromBody(error.body);
-            if(fieldErrors) setErrors((prev) => ({ ...prev, ...fieldErrors }));
-        }
+        if(error instanceof ApiError) setErrors((prev) => ({ ...prev, ...error.fields }));
 
         setSubmitError(message);
     };

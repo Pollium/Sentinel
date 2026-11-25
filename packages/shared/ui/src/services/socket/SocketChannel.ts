@@ -1,6 +1,5 @@
 import { ACCESS_REVOKED, SESSION_EXPIRED } from '@sentinel/contracts/shared/socket';
 import { env } from '../../config/env';
-import { endSession } from '../end-session';
 import { session } from '@pollium/readable-react/session/session';
 import { ChannelStatus, MessageHandler, OutboundFrame, StatusHandler } from '../../contracts/channel';
 
@@ -78,7 +77,7 @@ export default class SocketChannel{
         this.#socket = null;
         if(this.#released) return;
         if(SESSION_ENDED.includes(code) && token === session.token){
-            void endSession(token);
+            session.end(token);
             return;
         }
         this.#scheduleReconnect();

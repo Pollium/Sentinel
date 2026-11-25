@@ -20,7 +20,6 @@
     "@pollium/readable-contracts": "^0.4.0",
     "@pollium/readable-react": "^0.4.0",
     "@sentinel/contracts": "workspace:*",
-    "alova": "^3.5.2",
     "lucide-react": "^1.24.0",
     "react-aria-components": "^1.22.1",
     "react-router-dom": "^7.18.1",

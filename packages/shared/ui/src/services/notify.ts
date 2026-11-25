@@ -1,6 +1,6 @@
 import { ErrorCopy } from '../contracts/errors';
 import { ErrorNotice } from '../contracts/notice';
-import { toError } from '../utils/format/errors';
+import { toError } from '@pollium/readable-react/http/ApiError';
 import { sileo, SileoOptions } from 'sileo';
 
 const LIFETIME_MS = 10_000;
