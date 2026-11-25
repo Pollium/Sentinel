@@ -2,7 +2,6 @@ import ProviderModelHeader from '@sentinel/ui/components/ProviderModelHeader';
 import ProviderModelRow from '@sentinel/ui/components/ProviderModelRow';
 import { blankRoute, ModelRoute } from '@/modules/tower/utils/model-routes';
 import { Button, Fieldset, Label } from '@heroui/react';
-import { Plus, RefreshCw } from 'lucide-react';
 
 interface ModelRoutesDetect{
     isPending: boolean;
@@ -34,19 +33,15 @@ const ModelRoutesEditor = ({ routes, detect, onChange }: ModelRoutesEditorProps)
                 <span className='flex shrink-0 items-center gap-1'>
                     <Button
                         size='sm'
-                        variant='ghost'
+                        variant='outline'
                         isDisabled={!detect.isReady}
                         isPending={detect.isPending}
                         onPress={detect.onDetect}
                     >
-                        <RefreshCw className='size-4' />
                         Detect
                     </Button>
 
-                    <Button size='sm' variant='ghost' onPress={() => onChange([...routes, blankRoute()])}>
-                        <Plus className='size-4' />
-                        Add a model
-                    </Button>
+                    <Button size='sm' variant='outline' onPress={() => onChange([...routes, blankRoute()])}>Add a model</Button>
                 </span>
             </Fieldset.Legend>
 

@@ -1,7 +1,7 @@
 import KeyActions from '@/modules/tower/components/KeyActions';
 import ListRow from '@sentinel/ui/components/ListRow';
 import ShareMeter from '@sentinel/ui/components/ShareMeter';
-import StatusDot from '@sentinel/ui/components/StatusDot';
+import StatusText from '@sentinel/ui/components/StatusText';
 import { PublicGatewayApiKey } from '@sentinel/contracts/keys/domain';
 import { count } from '@sentinel/ui/utils/format/format-metrics';
 import { keyPath } from '@/modules/tower/utils/paths';
@@ -30,8 +30,9 @@ const KeyRow = ({ apiKey, requests, fraction, isSelected }: KeyRowProps) => {
                 to={keyPath(apiKey.id)}
                 label={apiKey.name}
                 isSelected={isSelected}
-                leading={apiKey.isActive ? undefined : <StatusDot tone='neutral' label='Off' />}
-                trailing={<ShareMeter fraction={fraction} label={requestsLabel(requests)} isLabelShown={isSelected} />}
+                trailing={apiKey.isActive
+                    ? <ShareMeter fraction={fraction} label={requestsLabel(requests)} />
+                    : <StatusText tone='neutral'>Off</StatusText>}
             />
         </KeyActions>
     );

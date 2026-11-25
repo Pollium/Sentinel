@@ -15,7 +15,7 @@ interface FactListProps{
 const FactList = ({ facts }: FactListProps) => (
     <dl className='flex flex-col'>
         {facts.map((fact) => (
-            <div key={fact.term} title={fact.source} className='flex items-baseline justify-between gap-4 border-b border-foreground/[0.05] py-2 text-[0.75rem] last:border-b-0'>
+            <div key={fact.term} title={fact.source} className='flex items-baseline justify-between gap-4 border-b border-line py-2 text-[0.75rem] last:border-b-0'>
                 <dt className='shrink-0 text-muted'>{fact.term}</dt>
                 <dd className={`min-w-0 truncate text-right tabular-nums ${fact.tone === 'warning' ? 'text-warning' : 'text-foreground'}`}>
                     {fact.value}

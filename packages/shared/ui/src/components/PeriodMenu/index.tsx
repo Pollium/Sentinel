@@ -1,5 +1,4 @@
 import { Button, DropdownItem, DropdownItemIndicator, DropdownMenu, DropdownPopover, DropdownRoot, DropdownSection } from '@heroui/react';
-import { ChevronDown } from 'lucide-react';
 
 interface PeriodMenuProps<T extends string>{
     value: T;
@@ -10,9 +9,9 @@ interface PeriodMenuProps<T extends string>{
 
 const PeriodMenu = <T extends string>({ value, periods, labelOf, onChange }: PeriodMenuProps<T>) => (
     <DropdownRoot>
-        <Button size='sm' variant='ghost' aria-label={`Period: ${labelOf(value)}`} className='shrink-0 gap-1 text-muted'>
+        <Button size='sm' variant='ghost' aria-label={`Period: ${labelOf(value)}`} className='shrink-0 gap-1'>
             {labelOf(value)}
-            <ChevronDown className='size-3 opacity-60' aria-hidden='true' />
+            <span aria-hidden='true' className='text-[0.625rem]'>▾</span>
         </Button>
 
         <DropdownPopover placement='bottom end'>

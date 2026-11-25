@@ -23,7 +23,7 @@ const ProviderPanel = ({ provider, slice, share, onRemoved }: ProviderPanelProps
     const isChat = provider.kind === 'chat';
 
     return (
-        <div className='flex flex-col gap-10'>
+        <div className='flex flex-col'>
             <ProviderHeader provider={provider} share={share} onRemoved={onRemoved} />
 
             <PanelGrid>

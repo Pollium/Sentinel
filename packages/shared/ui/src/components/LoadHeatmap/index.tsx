@@ -1,7 +1,7 @@
 import { HeatCell } from '../../contracts/metrics';
 import { heatFill, mixFill } from '../../utils/format/heat-fill';
+import { WEEKDAYS } from '../../utils/format/weekdays';
 
-const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as const;
 const HOURS_PER_DAY = 24;
 const HOURS = Array.from({ length: HOURS_PER_DAY }, (_, hour) => hour);
 const HOUR_TICKS = new Set([0, 3, 6, 9, 12, 15, 18, 21]);

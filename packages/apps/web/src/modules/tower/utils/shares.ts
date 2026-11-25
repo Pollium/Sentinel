@@ -6,7 +6,7 @@ import { sum } from '@sentinel/ui/utils/metrics/period';
 
 const NO_SHARE = '—';
 
-export const SERVED_SPLIT: ChartSplitLabels = { done: 'Served', failed: 'Failed', unit: 'attempts' };
+export const SERVED_SPLIT: ChartSplitLabels = { failed: 'failed', unit: 'attempts' };
 
 interface KindServed{
     served: number;

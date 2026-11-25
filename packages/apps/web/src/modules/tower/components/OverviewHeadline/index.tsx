@@ -7,7 +7,7 @@ import { liveTiles, periodTiles } from '@/modules/tower/utils/headline';
 import { useState } from 'react';
 
 const FIRST_TILE = 'requests';
-const ROW = 'grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-3 lg:grid-cols-5';
+const ROW = 'grid grid-cols-2 overflow-hidden border-b border-line sm:grid-cols-3 lg:grid-cols-5';
 
 interface OverviewHeadlineProps{
     overview: GatewayOverview;
@@ -22,17 +22,17 @@ const OverviewHeadline = ({ overview }: OverviewHeadlineProps) => {
     const period = periodTiles(overview);
     const now = liveTiles(overview.live);
     const chosen = [...period, ...now].find((metric) => metric.key === selected) ?? period[0];
-    const tileOf = (metric: HeadlineMetric) => (
-        <HeadlineTile key={metric.key} metric={metric} isSelected={metric.key === chosen.key} onSelect={() => setSelected(metric.key)} />
+    const tileOf = (isCompact: boolean) => (metric: HeadlineMetric) => (
+        <HeadlineTile key={metric.key} metric={metric} isSelected={metric.key === chosen.key} isCompact={isCompact} onSelect={() => setSelected(metric.key)} />
     );
 
     return (
-        <section aria-label='Headline' className='flex flex-col gap-6'>
-            <div role='tablist' aria-label='Headline figures' className='flex flex-col gap-5'>
-                <div className={ROW}>{period.map(tileOf)}</div>
-                <div className={ROW}>{now.map(tileOf)}</div>
+        <section aria-label='Headline'>
+            <div role='tablist' aria-label='Headline figures'>
+                <div className={ROW}>{period.map(tileOf(false))}</div>
+                <div className={ROW}>{now.map(tileOf(true))}</div>
             </div>
-            <div role='tabpanel' aria-label={chosen.label}>
+            <div role='tabpanel' aria-label={chosen.label} className='px-5 pb-6 pt-4'>
                 <TrendLines key={`${chosen.key}:${overview.window}`} lines={linesOf(chosen)} format={chosen.format} />
             </div>
         </section>

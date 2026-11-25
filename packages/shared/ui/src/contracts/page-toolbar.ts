@@ -4,3 +4,8 @@ export interface PageToolbarState{
     setTitleSlot: (slot: HTMLElement | null) => void;
     setActionsSlot: (slot: HTMLElement | null) => void;
 }
+
+export interface PageDetail{
+    label: string;
+    parent: string;
+}

@@ -9,6 +9,7 @@ import { useLiveOverview } from '@/modules/tower/hooks/use-live-overview';
 import { useLiveProviders } from '@/modules/tower/hooks/use-live-providers';
 import { usePeriod } from '@/modules/tower/hooks/use-period';
 import { Outlet, useMatch, useParams } from 'react-router-dom';
+import { REQUEST_INTERRUPTED } from '@sentinel/ui/utils/format/state-copy';
 
 const SKELETON_ROWS = 8;
 
@@ -22,7 +23,7 @@ const ModelsLayout = () => {
 
     return (
         <>
-            <PageToolbar title='Models'>
+            <PageToolbar title='Models' detail={params.model === undefined ? undefined : { label: params.model, parent: '/models' }}>
                 <TowerPeriodMenu />
             </PageToolbar>
 
@@ -32,8 +33,8 @@ const ModelsLayout = () => {
                     <QueryState
                         query={overview}
                         errorTitle='The models could not be listed'
-                        errorDescription='Something interrupted the request. Check that the gateway is running and try again.'
-                        skeleton={<SkeletonList count={SKELETON_ROWS} className='flex flex-col gap-2 px-3' itemClassName='h-7 w-full rounded-lg' />}
+                        errorDescription={REQUEST_INTERRUPTED}
+                        skeleton={<SkeletonList count={SKELETON_ROWS} />}
                     >
                         {(loaded) => (
                             <ModelList
