@@ -13,7 +13,8 @@
   "dependencies": {
     "@heroui/react": "^3.2.2",
     "@heroui/styles": "^3.2.2",
-    "@pollium/readable-contracts": "^0.2.0",
+    "@pollium/readable-contracts": "^0.4.0",
+    "@pollium/readable-react": "^0.4.0",
     "@sentinel/contracts": "workspace:*",
     "@sentinel/ui": "workspace:*",
     "alova": "^3.5.2",
@@ -34,6 +35,7 @@
     "oxlint": "^1.71.0",
     "tailwindcss": "^4.3.2",
     "typescript": "~6.0.2",
-    "vite": "^8.1.5"
+    "vite": "^8.1.5",
+    "vitest": "^4.1.10"
   }
 }
