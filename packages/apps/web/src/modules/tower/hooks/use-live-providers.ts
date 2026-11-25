@@ -1,11 +1,10 @@
 import { GatewayKind, PublicGatewayProvider } from '@sentinel/contracts/providers/domain';
 import { towerGateway } from '@sentinel/contracts/live/gateway';
 import { providerRoutes } from '@sentinel/contracts/providers/routes';
+import { useChannel } from '@pollium/readable-react/live/useChannel';
 import { Query, useQuery } from '@pollium/readable-react/query/useQuery';
-import { useChannel } from '@sentinel/ui/hooks/socket/use-channel';
 import { LiveProviders } from '@/modules/tower/contracts/tower-outlet';
 import { KINDS } from '@/modules/tower/utils/kinds';
-import '@/modules/tower/contracts/channel';
 
 export const useLiveProviders = (): LiveProviders => {
     const byKind: Record<GatewayKind, Query<PublicGatewayProvider[]>> = {
@@ -15,7 +14,7 @@ export const useLiveProviders = (): LiveProviders => {
     };
     const lists = KINDS.map((kind) => byKind[kind]);
 
-    useChannel(towerGateway.channel, {
+    useChannel(towerGateway, {
         'tower.provider.health': ({ providerId, health }) => {
             for(const list of lists){
                 if(list.data?.some((provider) => provider.id === providerId)){

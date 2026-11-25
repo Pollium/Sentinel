@@ -38,6 +38,9 @@ importers:
         specifier: ^12.1.1
         version: 12.1.1(@types/node@26.1.1)(typescript@6.0.3)
     devDependencies:
+      '@pollium/readable-contracts':
+        specifier: ^0.4.0
+        version: 0.4.0
       '@types/node':
         specifier: ^26.1.1
         version: 26.1.1

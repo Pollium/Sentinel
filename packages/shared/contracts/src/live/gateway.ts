@@ -1,13 +1,18 @@
 import { GatewayProviderHealth } from '../providers/domain';
 import { GatewayOverview, UsageWindow } from '../usage/domain';
+import { gateway } from '@pollium/readable-contracts/gateway';
 
 export const towerGateway = {
-    channel: '/tower/live',
+    ...gateway<TowerFrames, TowerMessages>('/tower/live'),
     room: (window: UsageWindow) => `tower:overview:${window}`
-} as const;
+};
 
 export interface TowerWatchPayload{
     window: UsageWindow;
+}
+
+export interface TowerMessages{
+    'tower.watch': TowerWatchPayload;
 }
 
 export interface ProviderHealthChange{
