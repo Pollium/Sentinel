@@ -20,7 +20,7 @@ interface KeyPanelProps{
 }
 
 const KeyPanel = ({ apiKey, slice, onRevoked }: KeyPanelProps) => (
-    <div className='flex flex-col gap-10'>
+    <div className='flex flex-col'>
         <KeyHeader apiKey={apiKey} onRevoked={onRevoked} />
 
         <PanelGrid>

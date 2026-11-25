@@ -1,10 +1,9 @@
 import ChartTip from '../ChartTip';
+import Meter from '../Meter';
 import PanelScroll from '../PanelScroll';
+import RankRow from '../RankRow';
 import { ChartBar } from '../../contracts/chart';
 import { useChartTip } from '../../hooks/chrome/use-chart-tip';
-
-const PERCENT = 100;
-const SMALLEST_WIDTH = 2;
 
 interface RankedBarsProps{
     bars: ChartBar[];
@@ -18,24 +17,14 @@ const RankedBars = ({ bars, max }: RankedBarsProps) => {
     return (
         <div ref={setRoot} className='relative'>
             <PanelScroll onScroll={hide}>
-                <ul className='flex flex-col gap-3'>
+                <ul className='flex flex-col'>
                     {bars.map((bar) => (
                         <li
                             key={bar.key}
-                            className='flex flex-col gap-1.5'
                             onMouseEnter={(event) => show(event, { label: bar.label, value: bar.display, note: bar.note })}
                             onMouseLeave={hide}
                         >
-                            <div className='flex items-baseline justify-between gap-3 text-[0.75rem]'>
-                                <span className='min-w-0 truncate text-foreground'>{bar.label}</span>
-                                <span className='shrink-0 tabular-nums text-muted'>{bar.display}</span>
-                            </div>
-                            <div className='h-2'>
-                                <div
-                                    className='h-full rounded-r-[4px] rounded-l-[1px] bg-foreground/80'
-                                    style={{ width: `${Math.max(SMALLEST_WIDTH, (bar.value / top) * PERCENT)}%` }}
-                                />
-                            </div>
+                            <RankRow label={bar.label} meter={<Meter fill={bar.value / top} failed={0} />} value={bar.display} />
                         </li>
                     ))}
                 </ul>

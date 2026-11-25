@@ -4,12 +4,12 @@ import PanelCell from '@sentinel/ui/components/PanelCell';
 import { GatewayUsageSlice } from '@sentinel/contracts/usage/domain';
 import { dayLabel, fullLabel } from '@sentinel/ui/utils/format/chart-labels';
 import { count, usd } from '@sentinel/ui/utils/format/format-metrics';
+import { NOTHING_SPENT } from '@/modules/tower/utils/empty-copy';
 
 const LABELLED_DAYS = 14;
 const PER_THOUSAND = 1000;
 
-const captionOf = (costUsd: number, requests: number, unpricedRequests: number): string => {
-    if(unpricedRequests > 0) return `per day · ${count(unpricedRequests)} requests had no price`;
+const captionOf = (costUsd: number, requests: number): string => {
     if(requests === 0) return 'per day';
     return `per day · ${usd((costUsd / requests) * PER_THOUSAND)} per 1,000 requests`;
 };
@@ -26,12 +26,12 @@ const SpendCell = ({ slice }: SpendCellProps) => {
         <PanelCell
             title='Spend'
             figure={usd(costUsd)}
-            caption={captionOf(costUsd, requests, unpricedRequests)}
+            caption={captionOf(costUsd, requests)}
             tone={unpricedRequests === 0 ? undefined : 'warning'}
+            attention={unpricedRequests === 0 ? undefined : `${count(unpricedRequests)} requests had no price and count as $0`}
         >
-            {costUsd === 0 ? <EmptyChart>Nothing was spent in this period.</EmptyChart> : (
+            {costUsd === 0 ? <EmptyChart>{NOTHING_SPENT}</EmptyChart> : (
                 <Columns
-                    isQuiet
                     columns={slice.days.map((day) => ({
                         key: day.date,
                         label: isLabelled ? dayLabel(day.date) : '',

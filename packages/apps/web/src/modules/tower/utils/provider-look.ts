@@ -1,4 +1,4 @@
-import { StatusTone } from '@sentinel/ui/components/StatusDot';
+import { StatusTone } from '@sentinel/ui/contracts/status';
 import { PublicGatewayProvider } from '@sentinel/contracts/providers/domain';
 
 interface ProviderLook{

@@ -3,6 +3,7 @@ import ListGroup from '@sentinel/ui/components/ListGroup';
 import ListRow from '@sentinel/ui/components/ListRow';
 import { PublicGatewayApiKey } from '@sentinel/contracts/keys/domain';
 import { GatewayShare } from '@sentinel/contracts/usage/domain';
+import { count } from '@sentinel/ui/utils/format/format-metrics';
 import { sum } from '@sentinel/ui/utils/metrics/period';
 import { isQuiet } from '@/modules/tower/utils/keys';
 
@@ -28,11 +29,9 @@ const KeyList = ({ keys, shares, selectedId, isAllSelected }: KeyListProps) => {
 
     return (
         <>
-            <div className='lg:hidden'>
-                <ListRow to='/keys/all' label='All keys' isSelected={isAllSelected} />
-            </div>
-            {inUse.length === 0 ? null : <ListGroup label='In use' total={inUse.length} tone={null}>{inUse.map(rowOf)}</ListGroup>}
-            {quiet.length === 0 ? null : <ListGroup label='Quiet for 30 days' total={quiet.length} tone={null}>{quiet.map(rowOf)}</ListGroup>}
+            <ListRow to='/keys/all' label='All keys' isSelected={isAllSelected} trailing={count(keys.length)} />
+            {inUse.length === 0 ? null : <ListGroup label='In use' total={inUse.length}>{inUse.map(rowOf)}</ListGroup>}
+            {quiet.length === 0 ? null : <ListGroup label='Quiet for 30 days' total={quiet.length}>{quiet.map(rowOf)}</ListGroup>}
         </>
     );
 };

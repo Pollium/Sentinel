@@ -2,9 +2,9 @@ import ListGroup from '@sentinel/ui/components/ListGroup';
 import ListRow from '@sentinel/ui/components/ListRow';
 import ProviderRow from '@/modules/tower/components/ProviderRow';
 import { GatewayShare } from '@sentinel/contracts/usage/domain';
+import { count } from '@sentinel/ui/utils/format/format-metrics';
 import { PublicGatewayProvider } from '@sentinel/contracts/providers/domain';
 import { KIND_LABEL, KINDS } from '@/modules/tower/utils/kinds';
-import { flaggedOf, worstTone } from '@/modules/tower/utils/provider-look';
 import { kindFraction, kindShare } from '@/modules/tower/utils/shares';
 
 interface ProviderListProps{
@@ -14,22 +14,15 @@ interface ProviderListProps{
     isAllSelected: boolean;
 }
 
-const ProviderList = ({ providers, shares, selectedId, isAllSelected }: ProviderListProps) => {
-    const now = Date.now();
-
-    return (
-        <>
-            <div className='lg:hidden'>
-                <ListRow to='/providers/all' label='All providers' isSelected={isAllSelected} />
-            </div>
+const ProviderList = ({ providers, shares, selectedId, isAllSelected }: ProviderListProps) => (
+    <>
+        <ListRow to='/providers/all' label='All providers' isSelected={isAllSelected} trailing={count(providers.length)} />
             {KINDS.map((kind) => {
                 const own = providers.filter((provider) => provider.kind === kind).sort((a, b) => a.name.localeCompare(b.name));
                 if(own.length === 0) return null;
 
-                const tone = worstTone(flaggedOf(own, now).map(({ look }) => look.tone));
-
                 return (
-                    <ListGroup key={kind} label={KIND_LABEL[kind]} total={own.length} tone={tone ?? null}>
+                    <ListGroup key={kind} label={KIND_LABEL[kind]} total={own.length}>
                         {own.map((provider) => (
                             <ProviderRow
                                 key={provider.id}
@@ -42,8 +35,7 @@ const ProviderList = ({ providers, shares, selectedId, isAllSelected }: Provider
                     </ListGroup>
                 );
             })}
-        </>
-    );
-};
+    </>
+);
 
 export default ProviderList;

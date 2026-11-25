@@ -2,8 +2,9 @@ import EmptyChart from '@sentinel/ui/components/EmptyChart';
 import LoadHeatmap from '@sentinel/ui/components/LoadHeatmap';
 import PanelCell from '@sentinel/ui/components/PanelCell';
 import { GatewayLoadCell } from '@sentinel/contracts/usage/domain';
+import { NO_REQUEST } from '@/modules/tower/utils/empty-copy';
+import { WEEKDAYS } from '@sentinel/ui/utils/format/weekdays';
 
-const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const HOUR_DIGITS = 2;
 
 interface LoadCellProps{
@@ -21,7 +22,7 @@ const LoadCell = ({ title, hours }: LoadCellProps) => {
             figure={isQuiet ? '—' : `${WEEKDAYS[busiest.isoWeekday - 1]} ${String(busiest.hour).padStart(HOUR_DIGITS, '0')}:00`}
             caption='busiest hour, UTC · requests per hour'
         >
-            {isQuiet ? <EmptyChart>No request in this period.</EmptyChart> : <LoadHeatmap cells={hours.map((cell) => ({ ...cell, value: cell.requests }))} unit='req' />}
+            {isQuiet ? <EmptyChart>{NO_REQUEST}</EmptyChart> : <LoadHeatmap cells={hours.map((cell) => ({ ...cell, value: cell.requests }))} unit='req' />}
         </PanelCell>
     );
 };

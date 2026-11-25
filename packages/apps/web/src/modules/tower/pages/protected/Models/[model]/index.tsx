@@ -1,7 +1,6 @@
 import ModelPanel from '@/modules/tower/components/ModelPanel';
-import BackLink from '@sentinel/ui/components/BackLink';
+import PanelSkeleton from '@sentinel/ui/components/PanelSkeleton';
 import QueryState from '@sentinel/ui/components/QueryState';
-import Skeleton from '@sentinel/ui/components/Skeleton';
 import { TowerOutlet } from '@/modules/tower/contracts/tower-outlet';
 import { usageRoutes } from '@sentinel/contracts/usage/routes';
 import { useQuery } from '@pollium/readable-react/query/useQuery';
@@ -19,13 +18,9 @@ const Model = () => {
     const kind = overview.data?.models.find((share) => share.id === model)?.kind ?? routes.at(0)?.provider.kind ?? 'chat';
 
     return (
-        <div className='flex flex-col gap-4'>
-            <BackLink to='/models' label='Models' className='lg:hidden' />
-
-            <QueryState query={usage} errorTitle='This model could not be measured' errorDescription={null} skeleton={<Skeleton className='h-[28rem] w-full rounded-2xl' />}>
-                {(slice) => <ModelPanel model={model} kind={kind} slice={slice} routes={routes} />}
-            </QueryState>
-        </div>
+        <QueryState query={usage} errorTitle='This model could not be measured' errorDescription={null} skeleton={<PanelSkeleton />}>
+            {(slice) => <ModelPanel model={model} kind={kind} slice={slice} routes={routes} />}
+        </QueryState>
     );
 };
 

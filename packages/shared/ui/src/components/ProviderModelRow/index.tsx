@@ -3,7 +3,6 @@ import ProviderReasoningField from '../ProviderReasoningField';
 import { ProviderModel } from '@sentinel/contracts/providers/domain';
 import { MODEL_GRID } from '../../utils/format/provider-models';
 import { Button, Input, TextField } from '@heroui/react';
-import { X } from 'lucide-react';
 
 const PRICE = {
     minValue: 0,
@@ -93,7 +92,7 @@ const ProviderModelRow = ({ model, upstreamId, position, canRemove, onChange, on
             isDisabled={!canRemove}
             onPress={onRemove}
         >
-            <X className='size-4' />
+            <span aria-hidden='true' className='text-base leading-none'>×</span>
         </Button>
     </div>
 );

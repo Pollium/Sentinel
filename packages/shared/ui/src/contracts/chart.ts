@@ -16,7 +16,6 @@ export interface ChartMeter{
 }
 
 export interface ChartSplitLabels{
-    done: string;
     failed: string;
     unit: string;
 }

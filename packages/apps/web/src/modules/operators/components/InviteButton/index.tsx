@@ -5,7 +5,6 @@ import { CreatedInvitation } from '@sentinel/contracts/invitations/domain';
 import { formatDate } from '@sentinel/ui/utils/format/format-date';
 import { errorCopy } from '@/modules/operators/utils/error-copy';
 import { Button } from '@heroui/react';
-import { UserPlus } from 'lucide-react';
 import { useState } from 'react';
 
 interface InviteButtonProps{
@@ -23,10 +22,7 @@ const InviteButton = ({ joinedEmails }: InviteButtonProps) => {
 
     return (
         <>
-            <Button size='sm' variant='ghost' aria-label='Invite an operator' className='shrink-0 gap-1.5 text-muted hover:text-foreground max-sm:px-2' onPress={() => setOpen(true)}>
-                <UserPlus className='size-4' aria-hidden='true' />
-                <span className='hidden sm:inline'>Invite</span>
-            </Button>
+            <Button size='sm' variant='outline' className='shrink-0' onPress={() => setOpen(true)}>Invite</Button>
 
             <Modal isOpen={isOpen} onOpenChange={(next) => next ? setOpen(true) : close()} title={created === null ? 'Invite an operator' : 'Copy the link now'}>
                 {created === null ? (

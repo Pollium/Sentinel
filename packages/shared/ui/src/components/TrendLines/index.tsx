@@ -31,6 +31,7 @@ const TrendLines = ({ lines, format }: TrendLinesProps) => {
         .map((point, index) => `${index === 0 ? 'M' : 'L'}${xOf(index).toFixed(1)},${yOf(point.value).toFixed(1)}`)
         .join(' ');
     const ticks = [0, Math.floor((length - 1) / 2), length - 1];
+    const hoverShare = hover === null ? 0 : hover / Math.max(1, length - 1);
 
     return (
         <div className='flex flex-col gap-2'>
@@ -58,8 +59,8 @@ const TrendLines = ({ lines, format }: TrendLinesProps) => {
                 onMouseLeave={() => setHover(null)}
             >
                 <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} preserveAspectRatio='none' className='absolute inset-0 size-full overflow-visible text-foreground'>
-                    <line x1='0' x2={WIDTH} y1={HEIGHT} y2={HEIGHT} stroke='currentColor' strokeOpacity='0.12' vectorEffect='non-scaling-stroke' />
-                    <line x1='0' x2={WIDTH} y1={HEIGHT / 2} y2={HEIGHT / 2} stroke='currentColor' strokeOpacity='0.06' vectorEffect='non-scaling-stroke' />
+                    <line x1='0' x2={WIDTH} y1={HEIGHT} y2={HEIGHT} stroke='var(--line)' vectorEffect='non-scaling-stroke' />
+                    <line x1='0' x2={WIDTH} y1={HEIGHT / 2} y2={HEIGHT / 2} stroke='var(--line)' vectorEffect='non-scaling-stroke' />
                     {lines.map((line) => (
                         <path
                             key={line.key}
@@ -76,18 +77,22 @@ const TrendLines = ({ lines, format }: TrendLinesProps) => {
                 </svg>
                 {hover === null ? null : (
                     <>
-                        <span className='pointer-events-none absolute inset-y-0 w-px bg-foreground/15' style={{ left: `${(hover / Math.max(1, length - 1)) * PERCENT}%` }} />
+                        <span className='pointer-events-none absolute inset-y-0 w-px bg-subtle/60' style={{ left: `${hoverShare * PERCENT}%` }} />
+                        <span
+                            className='pointer-events-none absolute size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground ring-2 ring-panel'
+                            style={{ left: `${hoverShare * PERCENT}%`, top: (yOf(lead.points[hover].value) / HEIGHT) * PLOT_PX }}
+                        />
                         <ChartTip
                             label={tickOf(lead.points[hover].date)}
                             value={`${lead.label} ${format(lead.points[hover].value)}`}
                             note={rest.length === 0 ? undefined : rest.map((line) => `${line.label} ${format(line.points[hover].value)}`).join(' · ')}
-                            x={Math.min(Math.max((hover / Math.max(1, length - 1)) * width, TIP_HALF_WIDTH), width - TIP_HALF_WIDTH)}
+                            x={Math.min(Math.max(hoverShare * width, TIP_HALF_WIDTH), width - TIP_HALF_WIDTH)}
                             y={(yOf(lead.points[hover].value) / HEIGHT) * PLOT_PX}
                         />
                     </>
                 )}
             </div>
-            <div className='flex justify-between text-[0.6875rem] tabular-nums text-muted'>
+            <div className='flex justify-between text-[0.6875rem] tabular-nums text-subtle'>
                 {ticks.map((index) => <span key={index}>{tickOf(lead.points[index].date)}</span>)}
             </div>
         </div>
