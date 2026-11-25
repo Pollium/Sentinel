@@ -14,7 +14,6 @@ RUN pnpm install --frozen-lockfile --filter @sentinel/web...
 
 COPY packages/shared/contracts packages/shared/contracts
 COPY packages/shared/ui packages/shared/ui
-COPY packages/apps/tsconfig.app.base.json packages/apps/tsconfig.node.base.json packages/apps/
 COPY packages/apps/web packages/apps/web
 
 ARG VITE_API_URL=
