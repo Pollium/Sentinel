@@ -52,7 +52,7 @@ const Operators = () => {
                 errorTitle='The invitations could not be loaded'
                 errorDescription='Something interrupted the request. Check that the gateway is running and try again.'
                 skeleton={SKELETON}
-                isEmpty={(loaded) => loaded?.length === 0}
+                empty={null}
             >
                 {(loaded) => (
                     <ListGroup label='Invited' total={loaded.length} tone={null}>

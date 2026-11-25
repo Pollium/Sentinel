@@ -41,7 +41,6 @@ const KeysLayout = () => {
                         errorTitle='The keys could not be loaded'
                         errorDescription='Something interrupted the request. Check that the gateway is running and try again.'
                         skeleton={<SkeletonList count={SKELETON_ROWS} className='flex flex-col gap-2 px-3' itemClassName='h-7 w-full rounded-lg' />}
-                        isEmpty={(loaded) => !loaded?.length}
                         empty={<EmptyState icon={KeyRound} title='No keys issued yet' description='Nobody can reach the gateway until one exists.' />}
                     >
                         {(loaded) => <KeyList keys={loaded} shares={overview.data?.keys ?? []} selectedId={params.id} isAllSelected={params.id === undefined} onChanged={keys.reload} />}
