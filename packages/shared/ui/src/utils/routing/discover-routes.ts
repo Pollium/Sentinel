@@ -1,5 +1,5 @@
 import { DiscoveredRoute, PageLoader } from '../../contracts/route';
-import { defineErrors } from '../../errors/define-errors';
+import { defineErrors } from '@pollium/readable-contracts/errors';
 import { parseRouteFile } from './parse-route-file';
 import { registerRouteLoader } from './route-prefetch';
 

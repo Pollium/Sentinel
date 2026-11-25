@@ -1,5 +1,5 @@
-import { ErrorCopy } from '../../contracts/errors';
 import { useCopy } from '../../hooks/chrome/use-copy';
+import { ErrorCopy } from '@pollium/readable-react/errors/copy';
 import { Button } from '@heroui/react';
 import { Check, Copy } from 'lucide-react';
 

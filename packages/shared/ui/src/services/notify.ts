@@ -1,5 +1,5 @@
-import { ErrorCopy } from '../contracts/errors';
 import { ErrorNotice } from '../contracts/notice';
+import { ErrorCopy } from '@pollium/readable-react/errors/copy';
 import { toError } from '@pollium/readable-react/http/ApiError';
 import { sileo, SileoOptions } from 'sileo';
 
@@ -41,7 +41,7 @@ const buttonOf = (key: string, retry: (() => void) | undefined): SileoOptions['b
     };
 };
 
-const optionsOf = (key: string, description: string, { title, retry }: ErrorNotice): KeyedOptions => {
+const optionsOf = (key: string, description: string | null, { title, retry }: ErrorNotice): KeyedOptions => {
     const duration = LIFETIME_MS + (retry === undefined ? 0 : ACTION_GRACE_MS);
 
     return {

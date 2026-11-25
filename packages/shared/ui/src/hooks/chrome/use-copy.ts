@@ -1,6 +1,6 @@
 import { Copyable } from '../../contracts/copy';
-import { ErrorCopy } from '../../contracts/errors';
 import { copyText } from '../../services/clipboard';
+import { ErrorCopy } from '@pollium/readable-react/errors/copy';
 import { useState } from 'react';
 
 const COPIED_MS = 2000;

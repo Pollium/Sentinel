@@ -1,14 +1,11 @@
-import { AuthErrorCode } from '@sentinel/contracts/auth/errors';
-import { RateLimitErrorCode, RequestErrorCode } from '@pollium/readable-contracts/errors';
-import { lookupError } from '@sentinel/ui/utils/format/lookup-error';
-import { SHARED_ERROR_COPY } from '@sentinel/ui/utils/format/shared-error-copy';
+import { AuthErrors } from '@sentinel/contracts/auth/errors';
+import { copyFor } from '@pollium/readable-react/errors/copy';
+import { SESSION_ENDED } from '@sentinel/ui/utils/format/app-copy';
 
-type CopiedCode = AuthErrorCode | RateLimitErrorCode | RequestErrorCode;
-
-export const errorCopy = lookupError<CopiedCode>({
-    ...SHARED_ERROR_COPY,
-    'Auth::InvalidCredentials': 'Wrong email or password.',
-    'Auth::SetupClosed': 'Sentinel already has an operator. Sign in instead.',
-    'Auth::WrongPassword': 'That is not your current password.',
-    'RateLimit::TooManyRequests': 'Too many attempts. Wait a minute and try again.'
+export const errorCopy = copyFor(AuthErrors, {
+    Unauthorized: SESSION_ENDED,
+    InvalidToken: SESSION_ENDED,
+    InvalidCredentials: 'Wrong email or password.',
+    SetupClosed: 'Sentinel already has an operator. Sign in instead.',
+    WrongPassword: 'That is not your current password.'
 });

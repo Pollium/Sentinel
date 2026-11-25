@@ -1,5 +1,5 @@
 import { ParsedRoute, RouteTier } from '../../contracts/route';
-import { defineErrors } from '../../errors/define-errors';
+import { defineErrors } from '@pollium/readable-contracts/errors';
 
 const RouteError = defineErrors({
     domain: 'Route',
