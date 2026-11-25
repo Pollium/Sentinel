@@ -10,11 +10,13 @@ configures the providers, issues the keys and shows the traffic live. pnpm monor
 | `packages/apps/api` (`@sentinel/api`) | the only backend: the vendor paths clients call (`/v1/...`, `/res/v1/...`), the operator accounts, the `/tower/*` routes the console reads and writes, and the `/tower/live` socket | 8080 |
 | `packages/apps/web` (`@sentinel/web`) | the console (React + Vite + HeroUI): overview, providers, models, API keys, operators | 5175 (https) |
 | `packages/shared/contracts` (`@sentinel/contracts`) | every wire type, route table and error table, one folder per domain | — |
-| `packages/shared/ui` (`@sentinel/ui`) | the console plumbing and components: api client (`call`), `useQuery`/`useMutation`, socket channel, session and theme stores, route discovery, the chrome | — |
+| `packages/shared/ui` (`@sentinel/ui`) | the console's components and chrome: the `QueryState` and form wrappers, the form hook, the theme and page-toolbar stores, the app's error copy, notices and formatters | — |
 
 The api is built on [`@pollium/readable`](https://github.com/Pollium/Readable), the HTTP/WS framework from
 npm: `Application`, module discovery, decorators, errors, `BaseModel`, JWT and passwords, `SecretCipher`, the
-Redis event bus.
+Redis event bus. The web is built on `@pollium/readable-react` from the same repo: `mount`, page discovery
+and the guards, the session, `call`, `useQuery`/`useMutation`, `useChannel`, `copyFor` and the Vite config.
+Its guide ships at `node_modules/@pollium/readable-react/AGENTS.md`.
 
 Modules are auto-discovered from the filesystem by folder convention — there is no registry file
 to edit. Modules talk to each other through services, models and `eventBus`; nothing in Sentinel
@@ -50,7 +52,7 @@ pnpm infra                                    # Postgres :5443, Redis :6390 (com
 pnpm dev                                      # infra + api (:8080) + web (https://localhost:5175)
 pnpm --filter @sentinel/api test              # Vitest, inside the package
 pnpm typecheck && pnpm lint && pnpm test      # the gates a change must pass
-pnpm --filter @sentinel/web build             # tsc -b && vite build
+pnpm --filter @sentinel/web build             # tsc --noEmit && vite build
 docker compose up -d --build                  # the self-hosted stack: web on :8081, api on :8080
 ```
 
@@ -84,9 +86,8 @@ This file is a router, not a manual. Read the file that matches your task before
 
 - **Vitest runs inside the package.** Running it from the repo root picks up every package's config
   at once. `cd packages/apps/api && npx vitest run`.
-- **Never `tsc -b` in the api.** It sets no `outDir`; typecheck with `tsc --noEmit`.
-  `tsc -b` is correct in `packages/apps/web` (its `build` script) and rebuilds the contracts' and
-  ui's declarations the web reads from `packages/shared/{contracts,ui}/dist`.
+- **Never `tsc -b` in the api.** It sets no `outDir`; typecheck with `tsc --noEmit`. The web does
+  the same: its tsconfig is readable-react's, and it reads the contracts' and ui's sources directly.
 - **After editing contracts**, clear the api's typia cache
   (`rm -rf packages/apps/api/node_modules/.cache/unplugin_typia`) and restart the web dev server.
 - **`BaseModel` ids default to Postgres 18's `uuidv7()`.** The compose image is `postgres:18-alpine`;

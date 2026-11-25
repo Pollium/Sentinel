@@ -38,7 +38,7 @@ new string.
 `controllers/` default export — no registry line. A controller mounts under `/<module>`; the
 `/tower/*` ones declare `@Controller('/tower')`. Vendor paths live at the root and send the vendor
 body from an overridden `register()` (see `chat/controllers/Chat.ts`). The `/tower/*` routes keep
-the `{ data }` envelope; the web unwraps it through `@sentinel/ui`.
+the `{ data }` envelope; the web unwraps it through `@pollium/readable-react`.
 
 **There is no pool entity.** A pool is just "the active providers of a kind", read by
 `activeProviders(kind)`. Nobody configures pools; operators configure providers.
@@ -53,9 +53,9 @@ the `{ data }` envelope; the web unwraps it through `@sentinel/ui`.
 - Setup creates the first operator inside an advisory lock and answers `Auth::SetupClosed` once
   one exists. Sign-in is limited to 5 a minute per address.
 - Changing the password and removing an operator call `sessionCutoffs.cut()`: every older token
-  stops working, and an open socket closes with `ACCESS_REVOKED`
-  (`@sentinel/contracts/shared/socket`) at the next 30-second re-check. A socket whose token reaches
-  its `exp` closes with `SESSION_EXPIRED` at that moment. A re-check that cannot run (Redis or
+  stops working, and an open socket closes with `SocketClose.AccessRevoked` (4403,
+  `@pollium/readable-contracts/gateway`) at the next 30-second re-check. A socket whose token reaches
+  its `exp` closes with `SocketClose.SessionExpired` (4401) at that moment. A re-check that cannot run (Redis or
   Postgres down) closes with 1011 instead, which the console reconnects on. The password change
   returns a fresh session for the caller.
 - Invitations expire after 7 days and only the sha256 of the token is stored. Inviting the same
@@ -118,7 +118,9 @@ so bounds go to Postgres as ISO strings, never as `Date`s the driver would shift
 
 ## Live, which the web watches
 
-`TowerGateway` (`admin/gateways`) is `/tower/live`, operators only. A socket sends
+`TowerGateway` (`admin/gateways`) is `/tower/live`, operators only, mounted at the channel of
+`towerGateway`, the `gateway<TowerFrames, TowerMessages>` contract in `@sentinel/contracts/live/gateway`
+that also names each window's room. A socket sends
 `tower.watch { window }`, gets the overview back and joins that window's room. Every
 `usageRecorder` write emits `providers.usage.recorded` (and every `failureRecorder` write,
 `providers.failure.recorded`); each process recomputes only the windows its own sockets watch,
@@ -127,7 +129,7 @@ recomputes of a window at once), and sends `tower.overview`. The live minutes (t
 with requests, errors, failed attempts, tokens, the slowest 5% and the requests open on average)
 slide with the clock, so a watched window that still holds recent traffic or an open request is
 pushed again every `LIVE_REFRESH_MS` until it goes quiet. `ProviderHealth` emits
-`providers.health.changed` on every transition and the web overlays it on the providers list; the
+`providers.health.changed` on every transition and the web merges it into the providers lists; the
 cooldown ends on screen at `cooldownUntil`. The bus crosses processes over Redis; health itself
 stays per process.
 

@@ -450,7 +450,7 @@ pnpm install --frozen-lockfile
 pnpm typecheck                       (strict; no new any, no new suppressions)
 pnpm lint                            (oxlint --deny-warnings in every package)
 pnpm test                            (with pnpm infra running)
-pnpm --filter @sentinel/web build    (tsc -b && vite build)
+pnpm --filter @sentinel/web build    (tsc --noEmit && vite build)
 ```
 
 - A new test that fails before your change, if you fixed a bug.
