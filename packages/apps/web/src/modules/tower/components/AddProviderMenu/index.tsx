@@ -6,13 +6,9 @@ import { Button, DropdownItem, DropdownMenu, DropdownPopover, DropdownRoot } fro
 import { ChevronDown, Plus } from 'lucide-react';
 import { useState } from 'react';
 
-interface AddProviderMenuProps{
-    onAdded: () => void;
-}
-
 const isKind = (key: unknown): key is GatewayKind => KINDS.some((kind) => kind === key);
 
-const AddProviderMenu = ({ onAdded }: AddProviderMenuProps) => {
+const AddProviderMenu = () => {
     const [adding, setAdding] = useState<GatewayKind | null>(null);
 
     return (
@@ -38,14 +34,7 @@ const AddProviderMenu = ({ onAdded }: AddProviderMenuProps) => {
                 width={adding === 'chat' ? 'wide' : 'default'}
             >
                 {adding === null ? null : (
-                    <ProviderForm
-                        kind={adding}
-                        provider={null}
-                        onSaved={() => {
-                            setAdding(null);
-                            onAdded();
-                        }}
-                    />
+                    <ProviderForm kind={adding} provider={null} onSaved={() => setAdding(null)} />
                 )}
             </Modal>
         </>

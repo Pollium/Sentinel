@@ -16,13 +16,12 @@ import { trendCaption } from '@/modules/tower/utils/windows';
 interface KeyPanelProps{
     apiKey: PublicGatewayApiKey;
     slice: GatewayUsageSlice;
-    onChanged: () => void;
     onRevoked: () => void;
 }
 
-const KeyPanel = ({ apiKey, slice, onChanged, onRevoked }: KeyPanelProps) => (
+const KeyPanel = ({ apiKey, slice, onRevoked }: KeyPanelProps) => (
     <div className='flex flex-col gap-10'>
-        <KeyHeader apiKey={apiKey} onChanged={onChanged} onRevoked={onRevoked} />
+        <KeyHeader apiKey={apiKey} onRevoked={onRevoked} />
 
         <PanelGrid>
             <RequestsCell slice={slice} caption={trendCaption(slice.window)} />

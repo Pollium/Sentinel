@@ -9,11 +9,10 @@ import { lookOf } from '@/modules/tower/utils/provider-look';
 interface ProviderHeaderProps{
     provider: PublicGatewayProvider;
     share: string;
-    onChanged: () => void;
     onRemoved: () => void;
 }
 
-const ProviderHeader = ({ provider, share, onChanged, onRemoved }: ProviderHeaderProps) => {
+const ProviderHeader = ({ provider, share, onRemoved }: ProviderHeaderProps) => {
     const isCoolingDown = useCoolingDown(provider.cooldownUntil);
     const look = lookOf(provider, isCoolingDown);
     const back = isCoolingDown && provider.cooldownUntil !== null ? ` · back ${formatAgo(provider.cooldownUntil)}` : '';
@@ -30,7 +29,7 @@ const ProviderHeader = ({ provider, share, onChanged, onRemoved }: ProviderHeade
                 </p>
             </div>
 
-            <ProviderActions provider={provider} onChanged={onChanged} onRemoved={onRemoved} />
+            <ProviderActions provider={provider} onRemoved={onRemoved} />
         </header>
     );
 };

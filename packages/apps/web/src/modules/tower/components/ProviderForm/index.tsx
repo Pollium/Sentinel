@@ -5,9 +5,9 @@ import Form from '@sentinel/ui/components/Form';
 import InlineError from '@sentinel/ui/components/InlineError';
 import SwitchField from '@sentinel/ui/components/SwitchField';
 import { GatewayKind, PublicGatewayProvider } from '@sentinel/contracts/providers/domain';
-import { useMutation } from '@sentinel/ui/hooks/api/use-mutation';
+import { providerRoutes } from '@sentinel/contracts/providers/routes';
+import { useMutation } from '@pollium/readable-react/query/useMutation';
 import { useForm } from '@sentinel/ui/hooks/forms/use-form';
-import { towerApi } from '@/modules/tower/api/api';
 import { NewProviderFormValues, ProviderFormValues } from '@/modules/tower/contracts/provider-form';
 import { errorCopy } from '@/modules/tower/utils/error-copy';
 import { blankRoute, modelMapOf, modelsOf, toRoutes, withDiscovered, ModelRoute } from '@/modules/tower/utils/model-routes';
@@ -34,6 +34,8 @@ interface ProviderFormProps{
 }
 
 const ProviderForm = ({ kind, provider, onSaved }: ProviderFormProps) => {
+    const create = useMutation(providerRoutes.createProvider, { path: { kind } });
+    const update = useMutation(providerRoutes.updateProvider, { path: { id: provider?.id }, invalidates: [providerRoutes.providers] });
     const form = useForm<ProviderFormValues>({
         validate: provider === null ? validateNew : validateExisting,
         submitErrorMessage: errorCopy,
@@ -46,12 +48,12 @@ const ProviderForm = ({ kind, provider, onSaved }: ProviderFormProps) => {
         },
         onSubmit: async ({ apiKey, routes, ...profile }) => {
             const settled = { ...profile, models: modelsOf(routes), modelMap: modelMapOf(routes) };
-            if(provider === null) await towerApi.createProvider(kind, { ...settled, apiKey });
-            else await towerApi.updateProvider(provider.id, apiKey === '' ? settled : { ...settled, apiKey });
+            if(provider === null) await create.run({ body: { ...settled, apiKey } });
+            else await update.run({ body: apiKey === '' ? settled : { ...settled, apiKey } });
             onSaved();
         }
     });
-    const detect = useMutation(towerApi.discoverModels);
+    const detect = useMutation(providerRoutes.discoverModels);
     const { baseUrl, apiKey, routes } = form.values;
     const active = form.field('isActive');
     const placeholders = PLACEHOLDERS[kind];
@@ -60,7 +62,7 @@ const ProviderForm = ({ kind, provider, onSaved }: ProviderFormProps) => {
 
     const discover = () => {
         void detect
-            .run({ baseUrl: baseUrl.trim(), ...(apiKey === '' ? { providerId: provider?.id } : { apiKey }) })
+            .run({ body: { baseUrl: baseUrl.trim(), ...(apiKey === '' ? { providerId: provider?.id } : { apiKey }) } })
             .then((discovered) => {
                 const merged = withDiscovered(form.values.routes, discovered.models);
                 form.setValues({ routes: merged.length === 0 ? [blankRoute()] : merged });

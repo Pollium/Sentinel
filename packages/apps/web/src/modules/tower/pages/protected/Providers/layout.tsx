@@ -35,7 +35,7 @@ const ProvidersLayout = () => {
                 {providers.data === null ? null : (
                     <span className='hidden text-[0.8125rem] tabular-nums text-muted sm:inline'>{count(serving)} of {count(providers.data.length)} serving</span>
                 )}
-                <AddProviderMenu onAdded={providers.reload} />
+                <AddProviderMenu />
                 <TowerPeriodMenu />
             </PageToolbar>
 
@@ -55,7 +55,6 @@ const ProvidersLayout = () => {
                                 shares={overview.data?.providers ?? []}
                                 selectedId={selectedId}
                                 isAllSelected={selectedId === undefined}
-                                onChanged={providers.reload}
                             />
                         )}
                     </QueryState>

@@ -4,8 +4,9 @@ import Form from '@sentinel/ui/components/Form';
 import SwitchField from '@sentinel/ui/components/SwitchField';
 import { IssuedGatewayApiKey, PublicGatewayApiKey } from '@sentinel/contracts/keys/domain';
 import { CreateApiKeyInput } from '@sentinel/contracts/keys/http';
+import { keyRoutes } from '@sentinel/contracts/keys/routes';
+import { useMutation } from '@pollium/readable-react/query/useMutation';
 import { useForm } from '@sentinel/ui/hooks/forms/use-form';
-import { towerApi } from '@/modules/tower/api/api';
 import { errorCopy } from '@/modules/tower/utils/error-copy';
 import { Button } from '@heroui/react';
 
@@ -17,17 +18,19 @@ interface ApiKeyFormProps{
 }
 
 const ApiKeyForm = ({ apiKey, onDone }: ApiKeyFormProps) => {
+    const create = useMutation(keyRoutes.createKey);
+    const update = useMutation(keyRoutes.updateKey, { path: { id: apiKey?.id } });
     const form = useForm<CreateApiKeyInput>({
         validate,
         submitErrorMessage: errorCopy,
         initialValues: { name: apiKey?.name ?? '', isActive: apiKey?.isActive ?? true },
         onSubmit: async (values) => {
             if(apiKey === null){
-                onDone(await towerApi.createKey(values));
+                onDone(await create.run({ body: values }));
                 return;
             }
 
-            await towerApi.updateKey(apiKey.id, values);
+            await update.run({ body: values });
             onDone(null);
         }
     });

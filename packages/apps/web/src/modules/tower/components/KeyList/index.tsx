@@ -11,17 +11,16 @@ interface KeyListProps{
     shares: GatewayShare[];
     selectedId: string | undefined;
     isAllSelected: boolean;
-    onChanged: () => void;
 }
 
-const KeyList = ({ keys, shares, selectedId, isAllSelected, onChanged }: KeyListProps) => {
+const KeyList = ({ keys, shares, selectedId, isAllSelected }: KeyListProps) => {
     const now = Date.now();
     const requests = new Map(shares.map((share) => [share.id, share.requests]));
     const total = sum([...requests.values()]);
     const rowOf = (key: PublicGatewayApiKey) => {
         const served = requests.get(key.id) ?? 0;
 
-        return <KeyRow key={key.id} apiKey={key} requests={served} fraction={served === 0 ? 0 : served / total} isSelected={key.id === selectedId} onChanged={onChanged} />;
+        return <KeyRow key={key.id} apiKey={key} requests={served} fraction={served === 0 ? 0 : served / total} isSelected={key.id === selectedId} />;
     };
     const byUse = [...keys].sort((a, b) => Date.parse(b.lastUsedAt ?? b.createdAt) - Date.parse(a.lastUsedAt ?? a.createdAt));
     const inUse = byUse.filter((key) => !isQuiet(key, now));

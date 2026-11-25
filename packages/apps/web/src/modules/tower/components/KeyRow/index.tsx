@@ -12,18 +12,16 @@ interface KeyRowProps{
     requests: number;
     fraction: number;
     isSelected: boolean;
-    onChanged: () => void;
 }
 
 const requestsLabel = (requests: number): string => `${count(requests)} ${requests === 1 ? 'request' : 'requests'}`;
 
-const KeyRow = ({ apiKey, requests, fraction, isSelected, onChanged }: KeyRowProps) => {
+const KeyRow = ({ apiKey, requests, fraction, isSelected }: KeyRowProps) => {
     const navigate = useNavigate();
 
     return (
         <KeyActions
             apiKey={apiKey}
-            onChanged={onChanged}
             onRevoked={() => {
                 if(isSelected) void navigate('/keys');
             }}

@@ -3,15 +3,15 @@ import ConfirmDialog from '../ConfirmDialog';
 import ContextMenu from '../ContextMenu';
 import Modal from '../Modal';
 import { ErrorCopy } from '../../contracts/errors';
-import { useMutation } from '../../hooks/api/use-mutation';
 import { notifyWith } from '../../services/notify';
+import { Mutation } from '@pollium/readable-react/query/useMutation';
 import { DropdownItem } from '@heroui/react';
 import { ComponentProps, ReactNode, useState } from 'react';
 
 interface RecordRemoval{
     label: string;
     description: string;
-    run: () => PromiseLike<unknown>;
+    mutation: Mutation<never, unknown>;
 }
 
 interface RecordActionsProps{
@@ -21,9 +21,8 @@ interface RecordActionsProps{
     editTitle: string;
     editWidth?: 'default' | 'wide';
     errorCopy: ErrorCopy;
-    onSetActive: (isActive: boolean) => PromiseLike<unknown>;
+    update: Mutation<{ isActive: boolean }, unknown>;
     remove: RecordRemoval;
-    onChanged: () => void;
     renderForm: (onSaved: () => void) => ReactNode;
     children?: ComponentProps<typeof ContextMenu>['children'];
 }
@@ -35,37 +34,23 @@ const RecordActions = ({
     editTitle,
     editWidth,
     errorCopy,
-    onSetActive,
+    update,
     remove,
-    onChanged,
     renderForm,
     children
 }: RecordActionsProps) => {
     const [editing, setEditing] = useState(false);
     const [removing, setRemoving] = useState(false);
 
-    const update = useMutation(onSetActive, { onSuccess: onChanged });
-    const discard = useMutation(remove.run, {
-        onSuccess: () => {
-            setRemoving(false);
-            onChanged();
-        }
-    });
-
     const toggleActive = () => {
-        void update.run(!isActive)
+        void update.run({ body: { isActive: !isActive } })
             .catch(notifyWith(errorCopy, {
                 title: isActive ? `Couldn't turn off the ${noun}` : `Couldn't turn on the ${noun}`,
                 retry: toggleActive
             }));
     };
 
-    const closeForm = () => {
-        setEditing(false);
-        onChanged();
-    };
-
-    const isBusy = update.loading || discard.loading;
+    const isBusy = update.loading || remove.mutation.loading;
     const items = (
         <>
             <DropdownItem isDisabled={isBusy} onAction={() => setEditing(true)}>Edit</DropdownItem>
@@ -83,7 +68,7 @@ const RecordActions = ({
             )}
 
             <Modal isOpen={editing} onOpenChange={setEditing} title={editTitle} width={editWidth}>
-                {renderForm(closeForm)}
+                {renderForm(() => setEditing(false))}
             </Modal>
 
             <ConfirmDialog
@@ -92,9 +77,9 @@ const RecordActions = ({
                 title={`${remove.label} ${name}?`}
                 description={remove.description}
                 confirmLabel={remove.label}
-                isPending={discard.loading}
-                error={errorCopy(discard.error)}
-                onConfirm={() => { void discard.run().catch(() => undefined); }}
+                isPending={remove.mutation.loading}
+                error={errorCopy(remove.mutation.error)}
+                onConfirm={() => { void remove.mutation.run().then(() => setRemoving(false), () => undefined); }}
             />
         </>
     );

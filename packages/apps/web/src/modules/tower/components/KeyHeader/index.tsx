@@ -5,11 +5,10 @@ import { formatAgo } from '@sentinel/ui/utils/format/format-date';
 
 interface KeyHeaderProps{
     apiKey: PublicGatewayApiKey;
-    onChanged: () => void;
     onRevoked: () => void;
 }
 
-const KeyHeader = ({ apiKey, onChanged, onRevoked }: KeyHeaderProps) => {
+const KeyHeader = ({ apiKey, onRevoked }: KeyHeaderProps) => {
     const used = apiKey.lastUsedAt === null ? 'Never used' : `Used ${formatAgo(apiKey.lastUsedAt)}`;
 
     return (
@@ -22,7 +21,7 @@ const KeyHeader = ({ apiKey, onChanged, onRevoked }: KeyHeaderProps) => {
                 </p>
             </div>
 
-            <KeyActions apiKey={apiKey} onChanged={onChanged} onRevoked={onRevoked} />
+            <KeyActions apiKey={apiKey} onRevoked={onRevoked} />
         </header>
     );
 };
