@@ -1,8 +1,8 @@
 import ActionMenu from '@sentinel/ui/components/ActionMenu';
 import ConfirmDialog from '@sentinel/ui/components/ConfirmDialog';
 import { Operator } from '@sentinel/contracts/operators/domain';
-import { useMutation } from '@sentinel/ui/hooks/api/use-mutation';
-import { operatorsApi } from '@/modules/operators/api/api';
+import { operatorRoutes } from '@sentinel/contracts/operators/routes';
+import { useMutation } from '@pollium/readable-react/query/useMutation';
 import { errorCopy } from '@/modules/operators/utils/error-copy';
 import { DropdownItem } from '@heroui/react';
 import { useState } from 'react';
@@ -10,16 +10,13 @@ import { useState } from 'react';
 interface OperatorActionsProps{
     operator: Operator;
     isSelf: boolean;
-    onRemoved: () => void;
 }
 
-const OperatorActions = ({ operator, isSelf, onRemoved }: OperatorActionsProps) => {
+const OperatorActions = ({ operator, isSelf }: OperatorActionsProps) => {
     const [confirming, setConfirming] = useState(false);
-    const remove = useMutation(operatorsApi.remove, {
-        onSuccess: () => {
-            setConfirming(false);
-            onRemoved();
-        }
+    const remove = useMutation(operatorRoutes.remove, {
+        path: { operatorId: operator.id },
+        onSuccess: () => setConfirming(false)
     });
 
     return (
@@ -38,7 +35,7 @@ const OperatorActions = ({ operator, isSelf, onRemoved }: OperatorActionsProps) 
                 confirmLabel='Remove'
                 isPending={remove.loading}
                 error={errorCopy(remove.error)}
-                onConfirm={() => { void remove.run(operator.id).catch(() => undefined); }}
+                onConfirm={() => { void remove.run().catch(() => undefined); }}
             />
         </>
     );
