@@ -12,10 +12,9 @@ type AccountSheet = 'name' | 'password';
 
 interface AccountMenuProps{
     operator: Operator;
-    onRenamed: () => void;
 }
 
-const AccountMenu = ({ operator, onRenamed }: AccountMenuProps) => {
+const AccountMenu = ({ operator }: AccountMenuProps) => {
     const [sheet, setSheet] = useState<AccountSheet | null>(null);
 
     const open = (next: AccountSheet) => (isOpen: boolean) => setSheet(isOpen ? next : null);
@@ -52,13 +51,7 @@ const AccountMenu = ({ operator, onRenamed }: AccountMenuProps) => {
             </DropdownRoot>
 
             <Modal isOpen={sheet === 'name'} onOpenChange={open('name')} title='Change name'>
-                <NameForm
-                    name={operator.name}
-                    onSaved={() => {
-                        setSheet(null);
-                        onRenamed();
-                    }}
-                />
+                <NameForm name={operator.name} onSaved={() => setSheet(null)} />
             </Modal>
 
             <Modal isOpen={sheet === 'password'} onOpenChange={open('password')} title='Change password'>

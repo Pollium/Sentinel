@@ -28,7 +28,7 @@ const TowerLayout = () => {
 
                             <div className='flex shrink-0 items-center gap-1'>
                                 <ThemeToggle />
-                                <AccountMenu operator={session.operator} onRenamed={session.reloadOperator} />
+                                <AccountMenu operator={session.operator} />
                             </div>
                         </div>
                     </header>

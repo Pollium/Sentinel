@@ -29,7 +29,7 @@ const SessionGate = () => {
 
     if(operator.data === null) return <Loader label='Checking your session' className='h-dvh bg-canvas' />;
 
-    return <Outlet context={{ operator: operator.data, reloadOperator: operator.reload } satisfies SessionOutlet} />;
+    return <Outlet context={{ operator: operator.data } satisfies SessionOutlet} />;
 };
 
 export default SessionGate;

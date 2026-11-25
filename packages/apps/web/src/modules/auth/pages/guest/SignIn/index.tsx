@@ -4,24 +4,26 @@ import Field from '@sentinel/ui/components/Field';
 import Form from '@sentinel/ui/components/Form';
 import AuthHeading from '@/modules/auth/components/AuthHeading';
 import { SignInInput } from '@sentinel/contracts/auth/http';
-import { useQuery } from '@sentinel/ui/hooks/api/use-query';
+import { authRoutes } from '@sentinel/contracts/auth/routes';
+import { call } from '@pollium/readable-react/http/call';
+import { useQuery } from '@pollium/readable-react/query/useQuery';
+import { session } from '@pollium/readable-react/session/session';
 import { useForm } from '@sentinel/ui/hooks/forms/use-form';
-import { authApi } from '@/modules/auth/api/api';
 import { errorCopy } from '@/modules/auth/utils/error-copy';
-import { startSession } from '@/modules/auth/utils/start-session';
 import { Button } from '@heroui/react';
 import { Navigate } from 'react-router-dom';
 
 const validate = typia.createValidate<SignInInput>();
 
 const SignIn = () => {
-    const setup = useQuery(authApi.setupStatus, []);
+    const setup = useQuery(authRoutes.setupStatus);
     const form = useForm<SignInInput>({
         validate,
         submitErrorMessage: errorCopy,
         initialValues: { email: '', password: '' },
         onSubmit: async (values) => {
-            await startSession(await authApi.signIn(values));
+            const { token } = await call(authRoutes.signIn, { body: values });
+            session.start(token);
         }
     });
 

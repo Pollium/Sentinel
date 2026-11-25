@@ -2,9 +2,10 @@ import typia from 'typia';
 import Field from '@sentinel/ui/components/Field';
 import Form from '@sentinel/ui/components/Form';
 import { ChangePasswordInput } from '@sentinel/contracts/auth/http';
+import { authRoutes } from '@sentinel/contracts/auth/routes';
+import { call } from '@pollium/readable-react/http/call';
 import { useForm } from '@sentinel/ui/hooks/forms/use-form';
 import { session } from '@pollium/readable-react/session/session';
-import { authApi } from '@/modules/auth/api/api';
 import { errorCopy } from '@/modules/auth/utils/error-copy';
 import { Button } from '@heroui/react';
 
@@ -20,7 +21,7 @@ const PasswordForm = ({ onChanged }: PasswordFormProps) => {
         submitErrorMessage: errorCopy,
         initialValues: { currentPassword: '', newPassword: '' },
         onSubmit: async (values) => {
-            const { token } = await authApi.changePassword(values);
+            const { token } = await call(authRoutes.changePassword, { body: values });
             session.start(token);
             onChanged();
         }
