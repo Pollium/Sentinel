@@ -4,7 +4,7 @@ import { env } from '../config/env';
 import { ApiError } from '../services/ApiError';
 import { answerOf, NETWORK_FAILED } from './answer';
 import { requestAuth } from './request-auth';
-import { useSessionStore } from '../store/session';
+import { session } from '@pollium/readable-react/session/session';
 import { createAlova } from 'alova';
 
 export const alova = createAlova({
@@ -17,7 +17,7 @@ export const alova = createAlova({
 
     beforeRequest(method){
         const isJson = method.data !== undefined;
-        const token = useSessionStore.getState().token;
+        const token = session.token;
 
         method.config.headers['Content-Type'] = isJson ? 'application/json' : '';
         method.meta = { token };

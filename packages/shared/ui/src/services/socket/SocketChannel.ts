@@ -1,7 +1,7 @@
 import { ACCESS_REVOKED, SESSION_EXPIRED } from '@sentinel/contracts/shared/socket';
 import { env } from '../../config/env';
 import { endSession } from '../end-session';
-import { useSessionStore } from '../../store/session';
+import { session } from '@pollium/readable-react/session/session';
 import { ChannelStatus, MessageHandler, OutboundFrame, StatusHandler } from '../../contracts/channel';
 
 const INITIAL_BACKOFF_MS = 500;
@@ -62,7 +62,7 @@ export default class SocketChannel{
         this.#setStatus(this.#attempts === 0 ? 'connecting' : 'reconnecting');
 
         const url = `${env.apiUrl.replace(/^http/, 'ws')}${this.#path}`;
-        const token = useSessionStore.getState().token;
+        const token = session.token;
         const socket = token ? new WebSocket(url, token) : new WebSocket(url);
         this.#socket = socket;
 
@@ -77,7 +77,7 @@ export default class SocketChannel{
     #onClose(code: number, token: string | null){
         this.#socket = null;
         if(this.#released) return;
-        if(SESSION_ENDED.includes(code) && token === useSessionStore.getState().token){
+        if(SESSION_ENDED.includes(code) && token === session.token){
             void endSession(token);
             return;
         }

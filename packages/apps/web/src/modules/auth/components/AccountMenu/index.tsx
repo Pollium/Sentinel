@@ -3,7 +3,7 @@ import Modal from '@sentinel/ui/components/Modal';
 import NameForm from '@/modules/auth/components/NameForm';
 import PasswordForm from '@/modules/auth/components/PasswordForm';
 import { endSession } from '@sentinel/ui/services/end-session';
-import { useSessionStore } from '@sentinel/ui/store/session';
+import { session } from '@pollium/readable-react/session/session';
 import { Operator } from '@sentinel/contracts/operators/domain';
 import { DropdownItem, DropdownMenu, DropdownPopover, DropdownRoot, DropdownSection, DropdownTrigger, Header, Separator } from '@heroui/react';
 import { useState } from 'react';
@@ -46,7 +46,7 @@ const AccountMenu = ({ operator, onRenamed }: AccountMenuProps) => {
 
                         <Separator />
 
-                        <DropdownItem onAction={() => void endSession(useSessionStore.getState().token)}>Sign out</DropdownItem>
+                        <DropdownItem onAction={() => void endSession(session.token)}>Sign out</DropdownItem>
                     </DropdownMenu>
                 </DropdownPopover>
             </DropdownRoot>

@@ -1,12 +1,12 @@
 import ErrorState from '../ErrorState';
 import Loader from '../Loader';
 import { useOperator } from '../../hooks/session/use-operator';
-import { useSessionStore } from '../../store/session';
 import { SessionOutlet } from '../../contracts/session';
+import { useSession } from '@pollium/readable-react/session/session';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 const SessionGate = () => {
-    const token = useSessionStore((state) => state.token);
+    const token = useSession();
     const operator = useOperator();
     const location = useLocation();
 

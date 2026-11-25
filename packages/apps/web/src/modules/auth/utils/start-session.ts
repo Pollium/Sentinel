@@ -1,8 +1,8 @@
 import { Session } from '@sentinel/contracts/auth/domain';
-import { useSessionStore } from '@sentinel/ui/store/session';
+import { session } from '@pollium/readable-react/session/session';
 import { invalidateCache } from 'alova';
 
-export const startSession = async (session: Session) => {
+export const startSession = async ({ token }: Session) => {
     await invalidateCache();
-    useSessionStore.getState().setToken(session.token);
+    session.start(token);
 };

@@ -3,7 +3,7 @@ import Field from '@sentinel/ui/components/Field';
 import Form from '@sentinel/ui/components/Form';
 import { ChangePasswordInput } from '@sentinel/contracts/auth/http';
 import { useForm } from '@sentinel/ui/hooks/forms/use-form';
-import { useSessionStore } from '@sentinel/ui/store/session';
+import { session } from '@pollium/readable-react/session/session';
 import { authApi } from '@/modules/auth/api/api';
 import { errorCopy } from '@/modules/auth/utils/error-copy';
 import { Button } from '@heroui/react';
@@ -20,8 +20,8 @@ const PasswordForm = ({ onChanged }: PasswordFormProps) => {
         submitErrorMessage: errorCopy,
         initialValues: { currentPassword: '', newPassword: '' },
         onSubmit: async (values) => {
-            const session = await authApi.changePassword(values);
-            useSessionStore.getState().setToken(session.token);
+            const { token } = await authApi.changePassword(values);
+            session.start(token);
             onChanged();
         }
     });
