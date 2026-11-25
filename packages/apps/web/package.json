@@ -13,7 +13,6 @@
   "dependencies": {
     "@heroui/react": "^3.2.2",
     "@heroui/styles": "^3.2.2",
-    "@pollium/readable-contracts": "^0.4.0",
     "@pollium/readable-react": "^0.4.0",
     "@sentinel/contracts": "workspace:*",
     "@sentinel/ui": "workspace:*",
