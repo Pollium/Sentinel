@@ -1,5 +1,5 @@
 import { Tab } from '../TabBar';
-import { prefetchRoute } from '../../../utils/routing/route-prefetch';
+import { prefetchPage } from '@pollium/readable-react/pages/prefetch';
 import { NavLink } from 'react-router-dom';
 
 interface NavTabsProps{
@@ -18,8 +18,8 @@ const NavTabs = ({ label, tabs }: NavTabsProps) => (
             <NavLink
                 key={tab.to}
                 to={tab.to}
-                onPointerEnter={() => void prefetchRoute(tab.to)}
-                onFocus={() => void prefetchRoute(tab.to)}
+                onPointerEnter={() => void prefetchPage(tab.to)}
+                onFocus={() => void prefetchPage(tab.to)}
                 className={({ isActive }) => tabClass(isActive)}
             >
                 {tab.label}

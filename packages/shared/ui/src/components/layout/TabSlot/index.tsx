@@ -1,5 +1,5 @@
-import { prefetchRoute } from '../../../utils/routing/route-prefetch';
 import { Tab } from '../TabBar';
+import { prefetchPage } from '@pollium/readable-react/pages/prefetch';
 import { NavLink } from 'react-router-dom';
 
 const tabClass = (on: boolean) =>
@@ -9,8 +9,8 @@ const TabSlot = ({ icon: Icon, label, to }: Tab) => (
     <NavLink
         to={to}
         aria-label={label}
-        onPointerEnter={() => void prefetchRoute(to)}
-        onFocus={() => void prefetchRoute(to)}
+        onPointerEnter={() => void prefetchPage(to)}
+        onFocus={() => void prefetchPage(to)}
         className={({ isActive }) => tabClass(isActive)}
     >
         {({ isActive }) => (

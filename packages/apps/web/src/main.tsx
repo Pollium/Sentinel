@@ -1,8 +1,26 @@
 import '@/assets/styles/index.css';
-import { configure } from '@pollium/readable-react/app/config';
-import { mountApp } from '@sentinel/ui/app/mount';
+import TowerLayout from '@/app/layouts/TowerLayout';
+import OfflineBanner from '@sentinel/ui/components/OfflineBanner';
+import Toaster from '@sentinel/ui/components/Toaster';
+import { mount } from '@pollium/readable-react/app/mount';
 import { appCopy } from '@sentinel/ui/utils/format/app-copy';
-import { router } from '@/app/router';
+import { initTheme } from '@sentinel/ui/utils/session/theme';
 
-configure({ name: 'sentinel', apiUrl: import.meta.env.VITE_API_URL, copy: appCopy });
-mountApp(router);
+initTheme();
+
+mount({
+    name: 'sentinel',
+    apiUrl: import.meta.env.VITE_API_URL,
+    pages: import.meta.glob('/src/modules/*/pages/**/{index,layout}.tsx'),
+    layout: TowerLayout,
+    signIn: '/sign-in',
+    home: '/',
+    copy: appCopy,
+    wrap: (app) => (
+        <>
+            {app}
+            <OfflineBanner />
+            <Toaster />
+        </>
+    )
+});

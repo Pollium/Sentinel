@@ -7,8 +7,6 @@
     "./components/*": "./src/components/*/index.tsx",
     "./hooks/*/*": "./src/hooks/*/*.ts",
     "./utils/*/*": "./src/utils/*/*.ts",
-    "./utils/routing/assemble-router": "./src/utils/routing/assemble-router.tsx",
-    "./app/mount": "./src/app/mount.tsx",
     "./*": "./src/*.ts"
   },
   "scripts": {
