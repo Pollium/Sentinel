@@ -3,7 +3,6 @@ import PanelCell from '@sentinel/ui/components/PanelCell';
 import RankedBars from '@sentinel/ui/components/RankedBars';
 import { GatewayUsageSlice } from '@sentinel/contracts/usage/domain';
 import { count, percent, usd } from '@sentinel/ui/utils/format/format-metrics';
-import { NOTHING_SPENT } from '@/modules/tower/utils/empty-copy';
 
 interface ModelsCellProps{
     slice: GatewayUsageSlice;
@@ -23,7 +22,7 @@ const ModelsCell = ({ slice }: ModelsCellProps) => {
             attention={unpriced === 0 ? undefined : `${count(unpriced)} requests have no price and count as $0`}
             to='/models'
         >
-            {top === undefined ? <EmptyChart>{NOTHING_SPENT}</EmptyChart> : (
+            {top === undefined ? <EmptyChart>Nothing was spent in this period.</EmptyChart> : (
                 <RankedBars bars={spent.map((model) => ({ key: model.id, label: model.label, value: model.costUsd, display: usd(model.costUsd), note: `${count(model.requests)} requests` }))} />
             )}
         </PanelCell>

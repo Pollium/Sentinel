@@ -1,7 +1,10 @@
-import TowerPhoneNav from '@/app/components/TowerPhoneNav';
-import TowerSidebar from '@/app/components/TowerSidebar';
+import TowerNav from '@/app/components/TowerNav';
+import TowerTabBar from '@/app/components/TowerTabBar';
+import TowerJumpTo from '@/app/components/TowerJumpTo';
+import AccountMenu from '@/modules/auth/components/AccountMenu';
 import ErrorState from '@sentinel/ui/components/ErrorState';
 import Loader from '@sentinel/ui/components/Loader';
+import ThemeToggle from '@sentinel/ui/components/layout/ThemeToggle';
 import { authRoutes } from '@sentinel/contracts/auth/routes';
 import { useQuery } from '@pollium/readable-react/query/useQuery';
 import { usePageToolbar } from '@sentinel/ui/store/page-toolbar';
@@ -15,7 +18,7 @@ const TowerLayout = () => {
 
     if(operator.error){
         return (
-            <div className='flex h-dvh items-center justify-center bg-canvas px-4'>
+            <div className='flex h-dvh items-center justify-center bg-background px-4'>
                 <ErrorState
                     title='Something went wrong'
                     description='We could not check your session. Try again.'
@@ -30,21 +33,31 @@ const TowerLayout = () => {
     const session: SessionOutlet = { operator: operator.data };
 
     return (
-        <div className='flex h-dvh bg-canvas text-foreground'>
-            <TowerSidebar operator={session.operator} />
+        <div className='flex h-dvh bg-background text-foreground'>
+            <div className='chrome-frame flex min-w-0 flex-1'>
+                <div className='chrome-surface flex min-w-0 flex-1 flex-col overflow-hidden'>
+                    <header className='flex h-[var(--app-header-height)] shrink-0 items-center gap-2 px-4 lg:gap-4 lg:px-6 xl:grid xl:grid-cols-[minmax(max-content,1fr)_minmax(12rem,25rem)_minmax(max-content,1fr)]'>
+                        <div ref={setTitleSlot} className='flex min-w-0 flex-1 items-center lg:hidden' />
 
-            <div className='flex min-w-0 flex-1 flex-col lg:py-2 lg:pr-2'>
-                <div className='flex min-h-0 flex-1 flex-col overflow-hidden bg-panel lg:rounded-[10px] lg:border lg:border-line'>
-                    <TowerPhoneNav operator={session.operator} />
+                        <TowerNav />
 
-                    <header className='flex min-h-11 shrink-0 flex-wrap items-center gap-x-2.5 gap-y-1.5 border-b border-line px-4 py-2 lg:flex-nowrap lg:py-0'>
-                        <div ref={setTitleSlot} className='flex min-w-0 items-center gap-2.5' />
-                        <div ref={setActionsSlot} className='ml-auto flex shrink-0 items-center gap-1.5 empty:hidden' />
+                        <TowerJumpTo className='hidden xl:flex' />
+
+                        <div className='ml-auto flex shrink-0 items-center justify-end gap-2'>
+                            <div ref={setActionsSlot} className='flex items-center gap-2 empty:hidden' />
+
+                            <div className='flex shrink-0 items-center gap-1'>
+                                <ThemeToggle />
+                                <AccountMenu operator={session.operator} />
+                            </div>
+                        </div>
                     </header>
 
-                    <main className='flex min-h-0 flex-1 flex-col overflow-y-auto'>
+                    <main className='animate-enter flex min-h-0 flex-1 flex-col overflow-y-auto px-4 py-6 lg:px-6'>
                         <Outlet context={session} />
                     </main>
+
+                    <TowerTabBar />
                 </div>
             </div>
         </div>

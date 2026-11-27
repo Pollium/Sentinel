@@ -1,7 +1,7 @@
 import InviteButton from '@/modules/operators/components/InviteButton';
 import InvitationRow from '@/modules/operators/components/InvitationRow';
-import OperatorGroup from '@/modules/operators/components/OperatorGroup';
 import OperatorRow from '@/modules/operators/components/OperatorRow';
+import ListGroup from '@sentinel/ui/components/ListGroup';
 import PageToolbar from '@sentinel/ui/components/PageToolbar';
 import QueryState from '@sentinel/ui/components/QueryState';
 import SkeletonList from '@sentinel/ui/components/SkeletonList';
@@ -10,11 +10,10 @@ import { operatorRoutes } from '@sentinel/contracts/operators/routes';
 import { useQuery } from '@pollium/readable-react/query/useQuery';
 import { SessionOutlet } from '@sentinel/ui/contracts/session';
 import { useOutletContext } from 'react-router-dom';
-import { REQUEST_INTERRUPTED } from '@sentinel/ui/utils/format/state-copy';
 
 const SKELETON_ROWS = 3;
 
-const SKELETON = <SkeletonList count={SKELETON_ROWS} />;
+const SKELETON = <SkeletonList count={SKELETON_ROWS} className='flex flex-col gap-2 px-3' itemClassName='h-7 w-full rounded-lg' />;
 
 const Operators = () => {
     const operators = useQuery(operatorRoutes.list);
@@ -22,7 +21,7 @@ const Operators = () => {
     const { operator: self } = useOutletContext<SessionOutlet>();
 
     return (
-        <div className='mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 pb-16 pt-7 sm:px-8'>
+        <div className='mx-auto flex w-full max-w-3xl flex-col gap-8'>
             <PageToolbar title='Operators'>
                 <InviteButton joinedEmails={operators.data?.map(({ email }) => email) ?? []} />
             </PageToolbar>
@@ -30,35 +29,39 @@ const Operators = () => {
             <QueryState
                 query={operators}
                 errorTitle='The operators could not be loaded'
-                errorDescription={REQUEST_INTERRUPTED}
+                errorDescription='Something interrupted the request. Check that the gateway is running and try again.'
                 skeleton={SKELETON}
             >
                 {(loaded) => (
-                    <OperatorGroup label='Joined' total={loaded.length}>
-                        {loaded.map((listed) => (
-                            <OperatorRow
-                                key={listed.id}
-                                operator={listed.id === self.id ? self : listed}
-                                isSelf={listed.id === self.id}
-                            />
-                        ))}
-                    </OperatorGroup>
+                    <ListGroup label='Joined' total={loaded.length} tone={null}>
+                        <ul className='flex flex-col'>
+                            {loaded.map((listed) => (
+                                <OperatorRow
+                                    key={listed.id}
+                                    operator={listed.id === self.id ? self : listed}
+                                    isSelf={listed.id === self.id}
+                                />
+                            ))}
+                        </ul>
+                    </ListGroup>
                 )}
             </QueryState>
 
             <QueryState
                 query={invitations}
                 errorTitle='The invitations could not be loaded'
-                errorDescription={REQUEST_INTERRUPTED}
+                errorDescription='Something interrupted the request. Check that the gateway is running and try again.'
                 skeleton={SKELETON}
                 empty={null}
             >
                 {(loaded) => (
-                    <OperatorGroup label='Invited' total={loaded.length}>
-                        {loaded.map((invitation) => (
-                            <InvitationRow key={invitation.id} invitation={invitation} />
-                        ))}
-                    </OperatorGroup>
+                    <ListGroup label='Invited' total={loaded.length} tone={null}>
+                        <ul className='flex flex-col'>
+                            {loaded.map((invitation) => (
+                                <InvitationRow key={invitation.id} invitation={invitation} />
+                            ))}
+                        </ul>
+                    </ListGroup>
                 )}
             </QueryState>
         </div>

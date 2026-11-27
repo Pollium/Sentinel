@@ -1,3 +1,4 @@
+import Avatar from '@sentinel/ui/components/Avatar';
 import Modal from '@sentinel/ui/components/Modal';
 import NameForm from '@/modules/auth/components/NameForm';
 import PasswordForm from '@/modules/auth/components/PasswordForm';
@@ -10,10 +11,9 @@ type AccountSheet = 'name' | 'password';
 
 interface AccountMenuProps{
     operator: Operator;
-    placement: 'top start' | 'bottom end';
 }
 
-const AccountMenu = ({ operator, placement }: AccountMenuProps) => {
+const AccountMenu = ({ operator }: AccountMenuProps) => {
     const [sheet, setSheet] = useState<AccountSheet | null>(null);
 
     const open = (next: AccountSheet) => (isOpen: boolean) => setSheet(isOpen ? next : null);
@@ -23,12 +23,18 @@ const AccountMenu = ({ operator, placement }: AccountMenuProps) => {
             <DropdownRoot>
                 <DropdownTrigger
                     aria-label='Account'
-                    className='flex h-7 min-w-0 max-w-40 items-center rounded-md px-2 font-medium capitalize text-muted transition-colors hover:bg-selected hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground motion-reduce:transition-none'
+                    className='group flex items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground'
                 >
-                    <span className='truncate'>{operator.name}</span>
+                    <span className='max-w-0 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:max-w-44 group-hover:opacity-100 motion-reduce:transition-none [@media(hover:none)]:hidden'>
+                        <span className='block whitespace-nowrap pr-2.5 text-[0.875rem] font-medium capitalize text-foreground'>
+                            {operator.name}
+                        </span>
+                    </span>
+
+                    <Avatar name={operator.name} />
                 </DropdownTrigger>
 
-                <DropdownPopover placement={placement}>
+                <DropdownPopover placement='bottom end'>
                     <DropdownMenu aria-label='Account'>
                         <DropdownSection>
                             <Header>{operator.email}</Header>

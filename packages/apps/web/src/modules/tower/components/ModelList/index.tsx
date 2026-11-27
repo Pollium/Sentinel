@@ -2,11 +2,11 @@ import ContextMenu from '@sentinel/ui/components/ContextMenu';
 import ListGroup from '@sentinel/ui/components/ListGroup';
 import ListRow from '@sentinel/ui/components/ListRow';
 import ShareMeter from '@sentinel/ui/components/ShareMeter';
-import StatusText from '@sentinel/ui/components/StatusText';
+import StatusDot from '@sentinel/ui/components/StatusDot';
 import { GatewayKind, PublicGatewayProvider } from '@sentinel/contracts/providers/domain';
 import { GatewayShare } from '@sentinel/contracts/usage/domain';
 import { copyText } from '@sentinel/ui/services/clipboard';
-import { compact, count, usd } from '@sentinel/ui/utils/format/format-metrics';
+import { compact, usd } from '@sentinel/ui/utils/format/format-metrics';
 import { sum } from '@sentinel/ui/utils/metrics/period';
 import { errorCopy } from '@/modules/tower/utils/error-copy';
 import { KIND_LABEL, KINDS } from '@/modules/tower/utils/kinds';
@@ -46,7 +46,9 @@ const ModelList = ({ shares, providers, selected, isAllSelected }: ModelListProp
 
     return (
         <>
-            <ListRow to='/models/all' label='All models' isSelected={isAllSelected} trailing={count(entries.length)} />
+            <div className='lg:hidden'>
+                <ListRow to='/models/all' label='All models' isSelected={isAllSelected} />
+            </div>
             {KINDS.map((kind) => {
                 const own = entries.filter((entry) => entry.kind === kind).sort((a, b) => figureOf(b) - figureOf(a));
                 if(own.length === 0) return null;
@@ -54,7 +56,7 @@ const ModelList = ({ shares, providers, selected, isAllSelected }: ModelListProp
                 const total = sum(own.map(figureOf));
 
                 return (
-                    <ListGroup key={kind} label={KIND_LABEL[kind]} total={own.length}>
+                    <ListGroup key={kind} label={KIND_LABEL[kind]} total={own.length} tone={null}>
                         {own.map((entry) => {
                             const unpricedOn = unpriced.get(entry.id);
 
@@ -67,10 +69,8 @@ const ModelList = ({ shares, providers, selected, isAllSelected }: ModelListProp
                                         to={modelPath(entry.id)}
                                         label={entry.id}
                                         isSelected={entry.id === selected}
-                                        title={unpricedOn === undefined ? undefined : `No price on ${unpricedOn}`}
-                                        trailing={unpricedOn === undefined
-                                            ? <ShareMeter fraction={fractionOf(entry, total)} label={trailingOf(entry)} />
-                                            : <StatusText tone='warning'>No price</StatusText>}
+                                        leading={unpricedOn === undefined ? undefined : <StatusDot tone='warning' label={`No price on ${unpricedOn}`} />}
+                                        trailing={<ShareMeter fraction={fractionOf(entry, total)} label={trailingOf(entry)} isLabelShown={entry.id === selected} />}
                                     />
                                 </ContextMenu>
                             );

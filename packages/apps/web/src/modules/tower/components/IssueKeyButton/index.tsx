@@ -4,6 +4,7 @@ import Modal from '@sentinel/ui/components/Modal';
 import { IssuedGatewayApiKey } from '@sentinel/contracts/keys/domain';
 import { errorCopy } from '@/modules/tower/utils/error-copy';
 import { Button } from '@heroui/react';
+import { KeyRound } from 'lucide-react';
 import { useState } from 'react';
 
 const KEY_SHOWN_ONCE = 'This is the only time the gateway shows it. Paste it into the client that will call the gateway — as a bearer token for chat, a Deepgram token for voice, or the subscription token for search.';
@@ -19,7 +20,10 @@ const IssueKeyButton = () => {
 
     return (
         <>
-            <Button size='sm' variant='outline' className='shrink-0' onPress={() => setOpen(true)}>Issue key</Button>
+            <Button size='sm' variant='ghost' aria-label='Issue a key' className='shrink-0 gap-1.5 text-muted hover:text-foreground max-sm:px-2' onPress={() => setOpen(true)}>
+                <KeyRound className='size-4' aria-hidden='true' />
+                <span className='hidden sm:inline'>Issue key</span>
+            </Button>
 
             <Modal isOpen={isOpen} onOpenChange={(next) => next ? setOpen(true) : close()} title={issued === null ? 'Issue an API key' : 'Copy the key now'}>
                 {issued === null ? (

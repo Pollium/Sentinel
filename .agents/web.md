@@ -1,7 +1,7 @@
 # Web (`packages/apps/web`)
 
-React 19 + Vite + HeroUI v3 (`@heroui/react`, theme from `@heroui/styles`) + Tailwind v4 utilities, Inter
-and Geist Mono from `@fontsource-variable`, and no icon set. Copy is English, short and calm. The plumbing (calls, queries, mutations, pages and
+React 19 + Vite + HeroUI v3 (`@heroui/react`, theme from `@heroui/styles`) + Tailwind v4 utilities and
+`lucide-react` icons. Copy is English, short and calm. The plumbing (calls, queries, mutations, pages and
 their guards, the session, live data, error copy, the Vite config and the tsconfig) is
 `@pollium/readable-react`, whose guide is `node_modules/@pollium/readable-react/AGENTS.md`; read it first.
 The console's chrome and components come from `@sentinel/ui`; the app itself is the shell and three
@@ -11,9 +11,9 @@ modules.
 
 ```
 main.tsx              mount({ name: 'sentinel', pages, layout, signIn, home, copy, wrap }) after the theme
-app/                  layouts/TowerLayout (reads /tower/me, then the chrome), components/TowerSidebar ·
-                      TowerPhoneNav · TowerNav · TowerJumpTo, navigation/items.ts (the pages in the sidebar)
-assets/styles/        index.css: the whole theme (HeroUI import, fonts, tokens for light and dark)
+app/                  layouts/TowerLayout (reads /tower/me, then the chrome), components/TowerNav ·
+                      TowerTabBar · TowerJumpTo, navigation/items.ts (the header tabs and the phone tab bar)
+assets/styles/        index.css: the whole theme (HeroUI import, tokens, light/dark, glass, chrome motion)
 modules/<name>/       components/<Name>/index.tsx, hooks/use-*.ts, utils/*.ts, contracts/*.ts,
                       pages/{guest,public,protected}/**/{index,layout}.tsx
     auth/             sign-in, first-operator setup, invitation acceptance, the account menu, not found
@@ -29,12 +29,9 @@ modules/<name>/       components/<Name>/index.tsx, hooks/use-*.ts, utils/*.ts, c
   context (`@sentinel/ui/contracts/session`). A `layout.tsx` wraps its sibling pages through
   `<Outlet>` and passes them a typed context (`contracts/tower-outlet.ts`). An unknown path renders
   `auth/pages/public/*/index.tsx`, which readable-react turns into a `*` route ranked ahead of its own
-  catch-all. Add the route to `app/navigation/items.ts` only when it belongs in the sidebar. From `lg` the
-  sidebar holds the workspace name, the jump box (⌘K), the pages and, at its foot, the account menu
-  and the theme switch; the page sits beside it in an inset panel whose 44px bar holds what
-  `PageToolbar` portals in: the breadcrumb (`detail` names the open record and links back to the
-  list), a muted `note`, then the page's actions. Below `lg` the sidebar gives way to a row of page
-  links above the bar.
+  catch-all. Add the route to `app/navigation/items.ts` only when it belongs in the header tabs. There
+  is no sidebar: the tabs sit in the header from `lg`, the jump box joins them from `xl`, and below
+  `lg` the tab bar at the bottom takes over.
 - **Data.** Components pass a contracts route-table row straight to readable-react: read with
   `useQuery(route, { path, query })` (a missing path param keeps it idle) and render it through
   `QueryState` (`@sentinel/ui/components/QueryState`, readable-react's states drawn in the console's
@@ -66,12 +63,10 @@ modules/<name>/       components/<Name>/index.tsx, hooks/use-*.ts, utils/*.ts, c
   space, `interface Name{`, `@/` imports inside the app and `@sentinel/ui/...` or
   `@pollium/readable-react/...` for the packages (no relative imports), kebab-case file names except
   `Component/index.tsx`, one default-exported component per file, no comments, no `!important`.
-- **Look.** Monochrome, after Linear: the ink is the accent, and colour is kept for status, which is
-  coloured text (`StatusText`, the `tone` of a `PanelCell` or `CompactList` row) and never a dot or a
-  badge. No icons, avatars or logos; a menu is `⋯`, a dropdown `▾`. Gray selection, one-line rows,
-  1px rules from the `line` tokens, no glass. Cells sit edge to edge in `PanelGrid`, ruled apart,
-  and a detail pane opens with `PaneHeader`. Reach for an `@sentinel/ui` component (`PanelGrid`,
-  `PanelCell`, `PaneHeader`, `ListGroup`, `ListRow`, `RankRow`, `Meter`, `FactList`, `SplitView`,
+- **Look.** Calm and flat: gray selection, one-line rows, no badges or colour for decoration, glass
+  (`glass-surface`) only on floating chrome. The header tabs are text only: the active page in the
+  foreground colour, the rest muted, with no fill behind either. Reach for an `@sentinel/ui`
+  component (`PanelGrid`, `PanelCell`, `ListGroup`, `ListRow`, `FactList`, `SplitView`,
   `PageToolbar`, `ConfirmDialog`, `CopyOnce`, …) before writing markup again.
 
 ## Checking your work

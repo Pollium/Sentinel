@@ -5,8 +5,8 @@ interface PanelGridProps{
 }
 
 const PanelGrid = ({ children }: PanelGridProps) => (
-    <div className='@container border-y border-line'>
-        <div className='grid grid-cols-1 overflow-hidden @2xl:grid-cols-2 @4xl:grid-cols-3'>{children}</div>
+    <div className='@container'>
+        <div className='grid grid-cols-1 gap-x-12 gap-y-12 @2xl:grid-cols-2 @5xl:grid-cols-3'>{children}</div>
     </div>
 );
 
