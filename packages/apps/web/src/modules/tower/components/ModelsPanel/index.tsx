@@ -3,7 +3,6 @@ import CompactList from '@sentinel/ui/components/CompactList';
 import EmptyChart from '@sentinel/ui/components/EmptyChart';
 import PanelCell from '@sentinel/ui/components/PanelCell';
 import PanelGrid from '@sentinel/ui/components/PanelGrid';
-import PaneHeader from '@sentinel/ui/components/PaneHeader';
 import RankedBars from '@sentinel/ui/components/RankedBars';
 import { GatewayShare, GatewayUsageSlice } from '@sentinel/contracts/usage/domain';
 import { PublicGatewayProvider } from '@sentinel/contracts/providers/domain';
@@ -12,7 +11,6 @@ import { seconds } from '@/modules/tower/utils/latency';
 import { sum } from '@sentinel/ui/utils/metrics/period';
 import { modelPath } from '@/modules/tower/utils/paths';
 import { unpricedRoutes } from '@/modules/tower/utils/prices';
-import { NOTHING_SPENT } from '@/modules/tower/utils/empty-copy';
 
 const PER_THOUSAND = 1000;
 
@@ -32,18 +30,21 @@ const ModelsPanel = ({ slice, providers }: ModelsPanelProps) => {
     const chatInput = sum(chat.map((share) => share.inputTokens));
 
     return (
-        <div className='flex flex-col'>
-            <PaneHeader title='All models' />
+        <div className='flex flex-col gap-10'>
+            <header>
+                <h2 className='text-xl font-semibold text-foreground'>All models</h2>
+                <p className='mt-0.5 text-[0.8125rem] text-muted'>Spend is counted from the prices set on each provider</p>
+            </header>
 
             <PanelGrid>
                 <PanelCell title='Spend' figure={usd(costUsd)} caption='GenAI · by model'>
-                    {spent.length === 0 ? <EmptyChart>{NOTHING_SPENT}</EmptyChart> : (
+                    {spent.length === 0 ? <EmptyChart>Nothing was spent in this period.</EmptyChart> : (
                         <RankedBars bars={spent.map((share) => ({ key: share.id, label: share.label, value: share.costUsd, display: usd(share.costUsd), note: `${count(share.requests)} requests` }))} />
                     )}
                 </PanelCell>
 
                 <PanelCell title='Cost per 1,000 requests' figure={usd(chatRequests === 0 ? 0 : (costUsd / chatRequests) * PER_THOUSAND)} caption='across GenAI · by model'>
-                    {spent.length === 0 ? <EmptyChart>{NOTHING_SPENT}</EmptyChart> : (
+                    {spent.length === 0 ? <EmptyChart>Nothing was spent in this period.</EmptyChart> : (
                         <RankedBars bars={spent
                             .map((share) => ({ key: share.id, label: share.label, value: perRequest(share, share.costUsd) * PER_THOUSAND, display: usd(perRequest(share, share.costUsd) * PER_THOUSAND) }))
                             .sort((a, b) => b.value - a.value)} />

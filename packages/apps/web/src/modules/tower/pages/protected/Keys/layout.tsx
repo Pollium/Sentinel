@@ -11,8 +11,8 @@ import { keyRoutes } from '@sentinel/contracts/keys/routes';
 import { useQuery } from '@pollium/readable-react/query/useQuery';
 import { useLiveOverview } from '@/modules/tower/hooks/use-live-overview';
 import { usePeriod } from '@/modules/tower/hooks/use-period';
+import { KeyRound } from 'lucide-react';
 import { Outlet, useMatch, useParams } from 'react-router-dom';
-import { REQUEST_INTERRUPTED } from '@sentinel/ui/utils/format/state-copy';
 
 const SKELETON_ROWS = 6;
 
@@ -24,15 +24,11 @@ const KeysLayout = () => {
     const overview = useLiveOverview(window);
     const context: KeysOutlet = { keys, overview };
     const live = (keys.data ?? []).filter((key) => key.isActive).length;
-    const selected = keys.data?.find((key) => key.id === params.id);
 
     return (
         <>
-            <PageToolbar
-                title='API keys'
-                detail={selected === undefined ? undefined : { label: selected.name, parent: '/keys' }}
-                note={keys.data === null ? undefined : `${live} live`}
-            >
+            <PageToolbar title='API keys'>
+                {keys.data === null ? null : <span className='hidden text-[0.8125rem] tabular-nums text-muted sm:inline'>{live} live</span>}
                 <IssueKeyButton />
                 <TowerPeriodMenu />
             </PageToolbar>
@@ -43,9 +39,9 @@ const KeysLayout = () => {
                     <QueryState
                         query={keys}
                         errorTitle='The keys could not be loaded'
-                        errorDescription={REQUEST_INTERRUPTED}
-                        skeleton={<SkeletonList count={SKELETON_ROWS} />}
-                        empty={<EmptyState title='No keys issued yet' description='Nobody can reach the gateway until one exists.' />}
+                        errorDescription='Something interrupted the request. Check that the gateway is running and try again.'
+                        skeleton={<SkeletonList count={SKELETON_ROWS} className='flex flex-col gap-2 px-3' itemClassName='h-7 w-full rounded-lg' />}
+                        empty={<EmptyState icon={KeyRound} title='No keys issued yet' description='Nobody can reach the gateway until one exists.' />}
                     >
                         {(loaded) => <KeyList keys={loaded} shares={overview.data?.keys ?? []} selectedId={params.id} isAllSelected={params.id === undefined} />}
                     </QueryState>

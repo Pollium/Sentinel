@@ -1,5 +1,5 @@
 import { ChartBar } from '@sentinel/ui/contracts/chart';
-import { GatewayFailureCause, GatewayFailureCount, GatewayShare } from '@sentinel/contracts/usage/domain';
+import { GatewayFailureCause, GatewayFailureCount } from '@sentinel/contracts/usage/domain';
 import { count } from '@sentinel/ui/utils/format/format-metrics';
 
 const CAUSE_LABEL: Record<Exclude<GatewayFailureCause, 'rejected'>, string> = {
@@ -32,7 +32,3 @@ export const failureBars = (failures: GatewayFailureCount[]): ChartBar[] => {
         .sort((a, b) => b[1] - a[1])
         .map(([label, attempts]) => ({ key: label, label, value: attempts, display: count(attempts) }));
 };
-
-export const SMALLEST_FAILURE_RATE = 0.001;
-
-export const failureRate = (share: GatewayShare): number => share.failedAttempts / Math.max(share.requests + share.failedAttempts, 1);

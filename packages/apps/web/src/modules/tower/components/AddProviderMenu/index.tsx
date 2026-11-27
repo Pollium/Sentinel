@@ -3,6 +3,7 @@ import ProviderForm from '@/modules/tower/components/ProviderForm';
 import { GatewayKind } from '@sentinel/contracts/providers/domain';
 import { KIND_LABEL, KINDS } from '@/modules/tower/utils/kinds';
 import { Button, DropdownItem, DropdownMenu, DropdownPopover, DropdownRoot } from '@heroui/react';
+import { ChevronDown, Plus } from 'lucide-react';
 import { useState } from 'react';
 
 const isKind = (key: unknown): key is GatewayKind => KINDS.some((kind) => kind === key);
@@ -13,9 +14,10 @@ const AddProviderMenu = () => {
     return (
         <>
             <DropdownRoot>
-                <Button size='sm' variant='outline' aria-label='Add a provider' className='shrink-0 gap-1'>
-                    Add provider
-                    <span aria-hidden='true' className='text-[0.625rem]'>▾</span>
+                <Button size='sm' variant='ghost' aria-label='Add a provider' className='shrink-0 gap-1.5 text-muted hover:text-foreground max-sm:px-2'>
+                    <Plus className='size-4' aria-hidden='true' />
+                    <span className='hidden sm:inline'>Add provider</span>
+                    <ChevronDown className='hidden size-3 opacity-60 sm:block' aria-hidden='true' />
                 </Button>
 
                 <DropdownPopover placement='bottom end'>

@@ -1,3 +1,4 @@
+import Avatar from '@sentinel/ui/components/Avatar';
 import OperatorActions from '@/modules/operators/components/OperatorActions';
 import { Operator } from '@sentinel/contracts/operators/domain';
 import { formatAgo } from '@sentinel/ui/utils/format/format-date';
@@ -11,12 +12,11 @@ const OperatorRow = ({ operator, isSelf }: OperatorRowProps) => {
     const seen = operator.lastSignInAt === null ? 'Never signed in' : `Signed in ${formatAgo(operator.lastSignInAt)}`;
 
     return (
-        <li className='flex min-h-13 items-center gap-4 border-b border-line px-4 py-2 last:border-b-0'>
-            <span className='min-w-0 flex-1'>
-                <span className='block truncate font-medium capitalize text-foreground'>{operator.name}</span>
-                <span className='block truncate text-[0.75rem] text-subtle'>{operator.email}</span>
-            </span>
-            <span className={`hidden shrink-0 tabular-nums sm:inline ${isSelf ? 'text-foreground' : 'text-subtle'}`}>{isSelf ? 'You' : seen}</span>
+        <li className='flex h-10 items-center gap-3 px-3'>
+            <Avatar name={operator.name} />
+            <span className='min-w-0 max-w-[60%] truncate text-[0.8125rem] capitalize text-foreground'>{operator.name}</span>
+            <span className='min-w-0 flex-1 truncate text-[0.8125rem] text-muted'>{operator.email}</span>
+            <span className='hidden shrink-0 text-[0.75rem] tabular-nums text-muted sm:inline'>{isSelf ? 'You' : seen}</span>
             <OperatorActions operator={operator} isSelf={isSelf} />
         </li>
     );

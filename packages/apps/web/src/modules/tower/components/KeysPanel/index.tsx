@@ -3,22 +3,23 @@ import EmptyChart from '@sentinel/ui/components/EmptyChart';
 import KeysCell from '@/modules/tower/components/KeysCell';
 import PanelCell from '@sentinel/ui/components/PanelCell';
 import PanelGrid from '@sentinel/ui/components/PanelGrid';
-import PaneHeader from '@sentinel/ui/components/PaneHeader';
 import RankedBars from '@sentinel/ui/components/RankedBars';
-import { GatewayUsageSlice } from '@sentinel/contracts/usage/domain';
+import { GatewayShare, GatewayUsageSlice } from '@sentinel/contracts/usage/domain';
 import { PublicGatewayApiKey } from '@sentinel/contracts/keys/domain';
 import { formatAgo, formatDate } from '@sentinel/ui/utils/format/format-date';
 import { count, usd } from '@sentinel/ui/utils/format/format-metrics';
 import { tenths } from '@sentinel/ui/utils/format/tenths';
-import { failureRate, SMALLEST_FAILURE_RATE } from '@/modules/tower/utils/failures';
 import { isQuiet } from '@/modules/tower/utils/keys';
 import { keyPath } from '@/modules/tower/utils/paths';
-import { NOTHING_SPENT } from '@/modules/tower/utils/empty-copy';
+
+const SMALLEST_RATE = 0.001;
 
 interface KeysPanelProps{
     slice: GatewayUsageSlice;
     keys: PublicGatewayApiKey[];
 }
+
+const failureRate = (share: GatewayShare): number => share.failedAttempts / Math.max(share.requests + share.failedAttempts, 1);
 
 const KeysPanel = ({ slice, keys }: KeysPanelProps) => {
     const spenders = slice.keys.filter((share) => share.costUsd > 0).sort((a, b) => b.costUsd - a.costUsd);
@@ -28,14 +29,17 @@ const KeysPanel = ({ slice, keys }: KeysPanelProps) => {
     const live = quiet.filter((key) => key.isActive);
 
     return (
-        <div className='flex flex-col'>
-            <PaneHeader title='All keys' />
+        <div className='flex flex-col gap-10'>
+            <header>
+                <h2 className='text-xl font-semibold text-foreground'>All keys</h2>
+                <p className='mt-0.5 text-[0.8125rem] text-muted'>Every request presents one, and its usage is reported under that key</p>
+            </header>
 
             <PanelGrid>
                 <KeysCell slice={slice} caption='called the gateway · requests by key' />
 
                 <PanelCell title='Spend' figure={usd(slice.totals.costUsd)} caption='by key'>
-                    {spenders.length === 0 ? <EmptyChart>{NOTHING_SPENT}</EmptyChart> : (
+                    {spenders.length === 0 ? <EmptyChart>Nothing was spent in this period.</EmptyChart> : (
                         <RankedBars bars={spenders.map((share) => ({ key: share.id, label: share.label, value: share.costUsd, display: usd(share.costUsd), note: `${count(share.requests)} requests` }))} />
                     )}
                 </PanelCell>
@@ -47,7 +51,7 @@ const KeysPanel = ({ slice, keys }: KeysPanelProps) => {
                 >
                     {rates.length === 0 ? <EmptyChart>No traffic in this period.</EmptyChart> : (
                         <RankedBars
-                            max={Math.max(...rates.map(failureRate), SMALLEST_FAILURE_RATE)}
+                            max={Math.max(...rates.map(failureRate), SMALLEST_RATE)}
                             bars={rates.map((share) => ({
                                 key: share.id,
                                 label: share.label,

@@ -7,7 +7,6 @@ import ModelTokensCell from '@/modules/tower/components/ModelTokensCell';
 import RequestsCell from '@/modules/tower/components/RequestsCell';
 import SpendCell from '@/modules/tower/components/SpendCell';
 import PanelGrid from '@sentinel/ui/components/PanelGrid';
-import PaneHeader from '@sentinel/ui/components/PaneHeader';
 import { GatewayKind } from '@sentinel/contracts/providers/domain';
 import { GatewayUsageSlice } from '@sentinel/contracts/usage/domain';
 import { count } from '@sentinel/ui/utils/format/format-metrics';
@@ -27,8 +26,11 @@ const ModelPanel = ({ model, kind, slice, routes }: ModelPanelProps) => {
     const serving = isChat ? routes.length : slice.providers.length;
 
     return (
-        <div className='flex flex-col'>
-            <PaneHeader title={model} description={`${KIND_LABEL[kind]} · served by ${count(serving)} ${serving === 1 ? 'provider' : 'providers'}`} />
+        <div className='flex flex-col gap-10'>
+            <header>
+                <h2 className='break-all text-xl font-semibold text-foreground'>{model}</h2>
+                <p className='mt-0.5 text-[0.8125rem] text-muted'>{KIND_LABEL[kind]} · served by {count(serving)} {serving === 1 ? 'provider' : 'providers'}</p>
+            </header>
 
             <PanelGrid>
                 <RequestsCell slice={slice} caption={trendCaption(slice.window)} />

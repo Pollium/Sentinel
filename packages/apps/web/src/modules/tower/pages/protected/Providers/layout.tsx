@@ -13,8 +13,8 @@ import { useLiveOverview } from '@/modules/tower/hooks/use-live-overview';
 import { useLiveProviders } from '@/modules/tower/hooks/use-live-providers';
 import { usePeriod } from '@/modules/tower/hooks/use-period';
 import { isCoolingAt } from '@/modules/tower/utils/provider-look';
+import { Server } from 'lucide-react';
 import { Outlet, useMatch, useParams } from 'react-router-dom';
-import { REQUEST_INTERRUPTED } from '@sentinel/ui/utils/format/state-copy';
 
 const SKELETON_ROWS = 8;
 
@@ -28,15 +28,13 @@ const ProvidersLayout = () => {
     const now = Date.now();
     const serving = providers.data?.filter((provider) => provider.isActive && !isCoolingAt(provider, now)).length ?? 0;
     const selectedId = parseRouteId(params.id);
-    const selected = providers.data?.find((provider) => provider.id === selectedId);
 
     return (
         <>
-            <PageToolbar
-                title='Providers'
-                detail={selected === undefined ? undefined : { label: selected.name, parent: '/providers' }}
-                note={providers.data === null ? undefined : `${count(serving)} of ${count(providers.data.length)} serving`}
-            >
+            <PageToolbar title='Providers'>
+                {providers.data === null ? null : (
+                    <span className='hidden text-[0.8125rem] tabular-nums text-muted sm:inline'>{count(serving)} of {count(providers.data.length)} serving</span>
+                )}
                 <AddProviderMenu />
                 <TowerPeriodMenu />
             </PageToolbar>
@@ -47,9 +45,9 @@ const ProvidersLayout = () => {
                     <QueryState
                         query={providers}
                         errorTitle='The providers could not be loaded'
-                        errorDescription={REQUEST_INTERRUPTED}
-                        skeleton={<SkeletonList count={SKELETON_ROWS} />}
-                        empty={<EmptyState compact title='No providers yet' description='Every request the gateway is asked for answers 503 until one serves it.' />}
+                        errorDescription='Something interrupted the request. Check that the gateway is running and try again.'
+                        skeleton={<SkeletonList count={SKELETON_ROWS} className='flex flex-col gap-2 px-3' itemClassName='h-7 w-full rounded-lg' />}
+                        empty={<EmptyState compact icon={Server} title='No providers yet' description='Every request the gateway is asked for answers 503 until one serves it.' />}
                     >
                         {(loaded) => (
                             <ProviderList
